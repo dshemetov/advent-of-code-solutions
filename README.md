@@ -1,62 +1,56 @@
 # Advent of Code Solutions
 
-[Advent of Code](https://adventofcode.com/) is a great set of Christmas-themed puzzles.
+[Advent of Code](https://adventofcode.com/) is a great set of Christmas-themed coding challenges.
 
-To setup:
+## Usage
 
-```sh
-# Install my tools package (puzzle input fetching and caching utility)
-pip install -e advent_tools
-
-# Get your AoC cookie (login on Advent of Code and inspect your browser session)
-echo "AOC_TOKEN=your_cookie" > ~/.advent_tools/.env
-```
-
-The problem runner can be used as follows:
+Uses [`uv`](https://github.com/astral-sh/uv) for project management.
 
 ```sh
-# Print the answer to 2021 puzzle day 2 part b
-python runner.py -s 2021.2.b
+# Install uv (Linux/MacOS)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Install Python, venv, and dependencies
+uv sync
+
+# Alias the run command for convenience
+alias advent="uv run python -m advent"
+
+# Set AoC cookie in .env
+advent set-cookie
+
+# Print the answer to puzzle 2021 day 2 part b
+advent solve -y 2021 -d 2 -p b
+
+# Print the answer to current year's day 2 (both parts)
+advent solve -d 21
+
+# Clear cached answer and solve again
+advent solve -y 2021 -d 2 -c
+
+# See help for more
+advent solve --help
 ```
 
-The runner caches results by default, you can clear the answer cache and rerun with the `-c` flag:
+## Stats
 
-```sh
-# Clear answer cache
-python runner.py -s 2021.2.b -c
-```
+## Background
 
-## AoC 2021
+I first got into Advent of Code over the 2015 Christmas holiday with my friend Evin at his family home in LA.
+After a few days of only playing SSX Tricky and drinking peppermint schnapps, we were ready to re-engage our brains.
+Evin got functional with JavaScript and I was just getting started with Python.
+Doing puzzles while cozy with friends is one of my favorite things to do.
 
-Python forever.
-
-## AoC 2020
-
-Back to Python!
-
-## AoC 2019
-
-Still in a Mathematica Phase.
-
-## AoC 2018
-
-This year I got through about 13 problems in the set.
-I had a lot of fun learning functional programming with Mathematica's training wheels and finding compact (and sometimes not) ways to solve problems.
-Problems with more complex data structures and non-array logic were a lot harder to write and debug.
-
-Things learned:
-* Mathematica has a built-in function for almost everything (e.g. see the three-line solution to Day 6 with [DistanceMatrix](https://reference.wolfram.com/language/ref/DistanceMatrix.html) and [Nearest](https://reference.wolfram.com/language/ref/Nearest.html)).
-* Even though Mathematica has fast built-ins, Python can be faster for simple for-loops (e.g. see Day 9 and the attached Python solution). I did not have the courage to try to implement a linked-list in Mathematica for Day 9.
-
-If only Mathematica notebooks were GitHub viewable.
-
-## AoC 2015
-
-I got into these puzzles in December 2015 in Los Angeles, while spending time with the Sellin family.
-After a few days of doing not much more than playing SSX Tricky and drinking peppermint schnapps, our brains started to come alive again.
-Evin Sellin was really enjoying functional programming paradigms in JavaScript.
-There was a very large couch.
-It was a very nice time.
-
-I'm going to update these solutions, but you can look at the old versions for fun here.
-It feels nice to look back and see your own growth as a programmer.
+- AoC 2023: 7/50 Python.
+- AoC 2022: 12/50 Python (with Numba and Cython).
+- AoC 2021: 43/50 Python.
+- AoC 2020: 32/50 Python.
+- AoC 2019: 4/50 Python, ??/50 Mathematica.
+- AoC 2018: 13/50 Mathematica. Lessons learned:
+  - Mathematica has a some really cool builtin functions (e.g. see the three-line solution to Day 6 with [DistanceMatrix](https://reference.wolfram.com/language/ref/DistanceMatrix.html) and [Nearest](https://reference.wolfram.com/language/ref/Nearest.html)).
+  - Even though Mathematica has fast built-ins, Python can be faster for simple for-loops (e.g. see Day 9 and the attached Python solution). I did not have the courage to try to implement a linked-list in Mathematica for Day 9.
+  - Mathematica notebooks don't look great on GitHub.
+  - Mathematica [doesn't support lazy iteration natively](https://mathematica.stackexchange.com/questions/226334/breaking-functional-loops-and-doing-lazy-evaluation-in-mathematica).
+  - Mathematica doesn't make it easy to make new data structures (though [these are nice to have](https://reference.wolfram.com/language/guide/DataStructures.html)).
+  - Mathematica debugging isn't easy (and it isn't easy to switch from developing code in a Notebook to Eclipse, where they maintain a debugger plugin).
+- AoC 2015: 6/50 Python.
