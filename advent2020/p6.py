@@ -1,0 +1,24 @@
+from string import ascii_letters
+from advent_tools import Puzzle
+
+def solve_a(s: str) -> int:
+    return sum(count_batch_union(batch) for batch in s.split("\n\n"))
+
+def count_batch_union(s: str) -> int:
+    return len(set().union(*(set(line.strip()) for line in s.split("\n"))))
+
+def count_batch_intersection(s: str) -> int:
+    return len(set(ascii_letters).intersection(*(set(line.strip()) for line in s.split("\n"))))
+
+def solve_b(s: str) -> int:
+    return sum(count_batch_intersection(batch) for batch in s.split("\n\n"))
+
+
+class Solution:
+    @property
+    def answer_a(self) -> int:
+        return solve_a(Puzzle(6, 2020).input_data)
+
+    @property
+    def answer_b(self) -> int:
+        return solve_b(Puzzle(6, 2020).input_data)
