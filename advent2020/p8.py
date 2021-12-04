@@ -1,13 +1,8 @@
-# Part a
-def parse():
-    with open("input8a.txt") as f:
-        for line in f:
-            op, num = line.split(" ")
-            num = int(num)
-            yield op, num
+from advent_tools import Puzzle
 
-def part1():
-    instructions = [x for x in parse()]
+def solve_a(s: str) -> int:
+    lines = (line.split(" ") for line in s.split("\n"))
+    instructions = [(op, int(num)) for op, num in lines]
     acc = 0
     executed_lines = set()
     i = 0
@@ -25,10 +20,6 @@ def part1():
             i += 1
     return acc
 
-print(part1())
-
-
-# Part b
 def execute_instructions(instructions):
     acc = 0
     executed_lines = set()
@@ -51,8 +42,9 @@ def execute_instructions(instructions):
             i += 1
     return acc, last_line_executed
 
-def part2():
-    instructions = [x for x in parse()]
+def solve_b(s: str) -> int:
+    lines = (line.split(" ") for line in s.split("\n"))
+    instructions = [(op, int(num)) for op, num in lines]
     for i, (x, y) in enumerate(instructions):
         modified_instructions = instructions.copy()
         if x in {"nop", "jmp"}:
@@ -62,4 +54,12 @@ def part2():
                 break
     return val
 
-print(part2())
+
+class Solution:
+    @property
+    def answer_a(self) -> int:
+        return solve_a(Puzzle(8, 2020).input_data)
+
+    @property
+    def answer_b(self) -> int:
+        return solve_b(Puzzle(8, 2020).input_data)

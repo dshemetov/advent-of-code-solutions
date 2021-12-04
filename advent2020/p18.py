@@ -23,20 +23,41 @@ def evaluate_simple_additions(expr: str) -> str:
         match = find_simple_addition(expr)
     return expr
 
-def evaluate_simple_expression(expr: str) -> str:
+def evaluate_simple_expression_a(expr: str) -> str:
+    expr = expr.strip("()").split(" ")
+    register, tail = int(expr[0]), expr[1:]
+    for x in tail:
+        if x in ["+", "*"]:
+            op = x
+        else:
+            register = (register * int(x)) if op == "*" else (register + int(x))
+    return str(register)
+
+def evaluate_expression_a(expr: str) -> int:
+    matches = find_simple_expressions(expr)
+    while matches:
+        for match in matches:
+            expr = expr.replace(match, evaluate_simple_expression_a(match))
+        matches = find_simple_expressions(expr)
+    return int(evaluate_simple_expression_a(expr))
+
+def evaluate_simple_expression_b(expr: str) -> str:
     expr = evaluate_simple_additions(expr.strip("()"))
     return str(reduce(mul, (int(x) for x in expr.split(" * "))))
 
-def evaluate_expression(expr: str) -> int:
+def evaluate_expression_b(expr: str) -> int:
     matches = find_simple_expressions(expr)
     while matches:
         for match in find_simple_expressions(expr):
-            expr = expr.replace(match, evaluate_simple_expression(match))
+            expr = expr.replace(match, evaluate_simple_expression_b(match))
         matches = find_simple_expressions(expr)
-    return int(evaluate_simple_expression(expr))
+    return int(evaluate_simple_expression_b(expr))
 
 class Solution:
     @property
-    def answer(self) -> int:
-        # 9966990988262 is correct
-        return sum(evaluate_expression(expr) for expr in Puzzle(18, 2020).input_lines)
+    def answer_a(self) -> int:
+        return sum(evaluate_expression_a(expr) for expr in Puzzle(18, 2020).input_lines)
+
+    @property
+    def answer_b(self) -> int:
+        return sum(evaluate_expression_b(expr) for expr in Puzzle(18, 2020).input_lines)

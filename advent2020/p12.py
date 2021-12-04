@@ -25,7 +25,34 @@ class State:
 def parse_commands(s: str) -> List[Tuple[str, str]]:
     return re.findall("(.)(\d+)", s)
 
-def execute_command(state: State, command: Tuple[str, str]) -> np.ndarray:
+def execute_command_a(state: Tuple[np.ndarray, np.ndarray], command: Tuple[str, str]) -> np.ndarray:
+    pos, dir = state
+    instruction, num = command
+    if instruction == "F":
+        return (pos + int(num) * dir, dir)
+    if instruction == "N":
+        return (pos + int(num) * north, dir)
+    if instruction == "S":
+        return (pos - int(num) * north, dir)
+    if instruction == "W":
+        return (pos + int(num) * west, dir)
+    if instruction == "E":
+        return (pos - int(num) * west, dir)
+    if instruction == "R":
+        return (pos, np.linalg.matrix_power(turn_right, int(num) // 90) @ dir)
+    if instruction == "L":
+        return (pos, np.linalg.matrix_power(-turn_right, int(num) // 90) @ dir)
+
+def solve_a(s: str) -> Tuple[np.ndarray, np.ndarray]:
+    commands = parse_commands(s)
+    state = (origin, -west)
+
+    for command in commands:
+        state = execute_command_a(state, command)
+
+    return int(norm(state[0], ord=1))
+
+def execute_command_b(state: State, command: Tuple[str, str]) -> np.ndarray:
     s_pos, w_pos = state.ship_pos, state.waypoint_pos
     instruction, num = command
     if instruction == "F":
@@ -43,14 +70,21 @@ def execute_command(state: State, command: Tuple[str, str]) -> np.ndarray:
     if instruction == "L":
         return State(s_pos, matrix_power(-turn_right, int(num) // 90) @ w_pos)
 
-def execute_commands(state: State, commands: List[Tuple[str, str]]) -> State:
+def solve_b(s: str) -> Tuple[np.ndarray, np.ndarray]:
+    commands = parse_commands(s)
+    state = State(origin, 10 * east + north)
+
     for command in commands:
-        state = execute_command(state, command)
-    return state
+        state = execute_command_b(state, command)
+
+    return int(norm(state.ship_pos, ord=1))
+
 
 class Solution:
     @property
-    def answer(self) -> int:
-        input_string = parse_commands(Puzzle(12, 2020).input_data)
-        final_state = execute_commands(State(origin, 10 * east + north), input_string)
-        return int(norm(final_state.ship_pos, ord=1))
+    def answer_a(self) -> int:
+        return solve_a(Puzzle(12, 2020).input_data)
+
+    @property
+    def answer_b(self) -> int:
+        return solve_b(Puzzle(12, 2020).input_data)

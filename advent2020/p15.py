@@ -2,12 +2,13 @@ from typing import List, Dict
 
 from advent_tools import Puzzle
 
+
 class GameState:
     def __init__(self, values: List[int]):
         values = values.copy()
         self.turn_number = len(values)
         self.current_value = values.pop()
-        self.last_turn = convert_list_to_last_turn(values)
+        self.last_turn = convert_list_to_last_turn_dict(values)
 
     def advance_game(self, n: int = 1):
         if n < 1:
@@ -31,11 +32,17 @@ class GameState:
     def get_next_number(current_value: int, turn_number: int, last_turn: Dict[int, int]):
         return turn_number - last_turn.get(current_value, turn_number)
 
-def convert_list_to_last_turn(l: List[int]) -> Dict[int, int]:
+def convert_list_to_last_turn_dict(l: List[int]) -> Dict[int, int]:
     return dict({v: i + 1 for i, v in enumerate(l)})
+
 
 class Solution:
     @property
-    def answer(self) -> int:
+    def answer_a(self) -> int:
+        puzzle_input = [int(x) for x in Puzzle(15, 2020).input_data.strip("\n").split(",")]
+        return GameState(puzzle_input).get_nth_spoken_number(2020)
+
+    @property
+    def answer_b(self) -> int:
         puzzle_input = [int(x) for x in Puzzle(15, 2020).input_data.strip("\n").split(",")]
         return GameState(puzzle_input).get_nth_spoken_number(30000000)
