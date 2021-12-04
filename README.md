@@ -30,13 +30,19 @@ python runner.py -s 2021.2.b -c
 
 Python forever.
 
+### TODO:
+
+- Refactor recent 2020 solutions into new single-day format.
+- Refactor old 2020 solutions.
+- Refactor older solutions.
+
 ## AoC 2020
 
 Back to Python!
 
 ## AoC 2019
 
-Still in a Mathematica Phase.
+Still in a Mathematica phase.
 
 ## AoC 2018
 
@@ -53,7 +59,7 @@ If only Mathematica notebooks were GitHub viewable.
 ## AoC 2015
 
 I got into these puzzles in December 2015 in Los Angeles, while spending time with the Sellin family.
-After a few days of doing not much more than playing SSX Tricky and drinking peppermint schnapps, our brains started to come alive again.
+After a few days of doing not much more than playing SSX Tricky and drinking peppermint schnapps, our brains finally felt decompressed from a done semester.
 Evin Sellin was really enjoying functional programming paradigms in JavaScript.
 There was a very large couch.
 It was a very nice time.

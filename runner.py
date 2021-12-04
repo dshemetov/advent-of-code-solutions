@@ -7,11 +7,11 @@ memory = Memory("~/.advent_tools/joblib_cache", verbose=0)
 @memory.cache
 def get_answer(year: int, day: int, part: str) -> int:
     try:
-        solution_module = import_module(f"advent{year}.p{day}{part}")
+        solution_module = import_module(f"advent{year}.p{day}")
         solution_class_ = getattr(solution_module, "Solution")
     except ModuleNotFoundError:
         raise ModuleNotFoundError("Problem not implemented yet.")
-    return solution_class_().answer
+    return getattr(solution_class_(), f"answer_{part}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Get solutions to Advent of Code puzzles.")
