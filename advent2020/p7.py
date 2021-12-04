@@ -2,6 +2,15 @@ import re
 from typing import List, Tuple
 from advent_tools import Puzzle
 
+line = "light salmon bags contain 5 wavy plum bags, 4 drab white bags, 5 muted bronze bags, 5 mirrored beige bags."
+# \w+ matches one or more words
+# the first capture group matches (light salmon)
+# the second capture group grabs the rest of the string
+parent, entries = re.match(r'(\w+ \w+) bags contain (.*)', line).groups()
+# \d+ matches one or more integers (could be two digit integers, for example)
+# The bags? is optional
+print([[int(e.groups()[0]), e.groups()[1]] for e in re.finditer(r'(\d+) (\w+ \w+) bags?', entries)])
+
 def parse_line(line: str) -> Tuple[str, str]:
     container_bag, contained_bags = re.match(r'(\w+ \w+) bags contain (.*)', line).groups()
     contained_bags = [[int(e.groups()[0]), e.groups()[1]] for e in re.finditer(r'(\d+) (\w+ \w+) bags?', contained_bags)]
@@ -24,20 +33,6 @@ def solve_a(s: str) -> int:
         to_traverse |= set(parents) - traversed
     return len(traversed) - 1
 
-
-# Example: regex capture groups!
-line = "light salmon bags contain 5 wavy plum bags, 4 drab white bags, 5 muted bronze bags, 5 mirrored beige bags."
-# \w+ matches one or more words
-# the first capture group matches (light salmon)
-# the second capture group grabs the rest of the string
-parent, entries = re.match(r'(\w+ \w+) bags contain (.*)', line).groups()
-# \d+ matches one or more integers (could be two digit integers, for example)
-# The bags? is optional
-print([[int(e.groups()[0]), e.groups()[1]] for e in re.finditer(r'(\d+) (\w+ \w+) bags?', entries)])
-
-
-
-# Part b
 def get_bags(d, e):
     n = sum(bag[0] * get_bags(d, bag[1]) for bag in d[e]) if len(d[e]) > 0 else 0
     return n + 1
@@ -56,4 +51,11 @@ class Solution:
     def answer_b(self) -> int:
         return solve_b(Puzzle(7, 2020).input_data)
 
-Solution().answer_b
+
+test_input = """shiny gold bags contain 2 dark red bags.
+dark red bags contain 2 dark orange bags.
+dark orange bags contain 2 dark yellow bags.
+dark yellow bags contain 2 dark green bags.
+dark green bags contain 2 dark blue bags.
+dark blue bags contain 2 dark violet bags.
+dark violet bags contain no other bags."""

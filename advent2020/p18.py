@@ -53,6 +53,7 @@ def evaluate_expression_b(expr: str) -> int:
         matches = find_simple_expressions(expr)
     return int(evaluate_simple_expression_b(expr))
 
+
 class Solution:
     @property
     def answer_a(self) -> int:

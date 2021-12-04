@@ -106,6 +106,7 @@ def solve_b(s: str) -> int:
     state = string_to_array(s)
     return count_occupied_seats(update_state_until_fixed(state, "visible"))
 
+
 class Solution:
     @property
     def answer_a(self) -> int:
