@@ -32,9 +32,9 @@ Python forever.
 
 ### TODO:
 
-- Refactor recent 2020 solutions into new single-day format.
-- Refactor old 2020 solutions.
-- Refactor older solutions.
+- Work on 2020 problems.
+- Refactor pre-2020 solutions.
+- Upload the Mathematica solutions.
 
 ## AoC 2020
 
