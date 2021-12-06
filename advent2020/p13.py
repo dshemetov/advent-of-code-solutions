@@ -42,6 +42,7 @@ def solve_b(s: str) -> int:
     bus_schedule = parse_input_b(s)
     return find_timestamp(bus_schedule)
 
+
 class Solution:
     @property
     def answer_a(self) -> int:
