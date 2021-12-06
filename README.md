@@ -6,7 +6,7 @@ To setup:
 
 ```sh
 # Install my tools package (puzzle input fetching and caching utility)
-pip install -e advent_tools
+pip install -r requirements.txt
 
 # Get your AoC cookie (login on Advent of Code and inspect your browser session)
 echo "AOC_TOKEN=your_cookie" > ~/.advent_tools/.env

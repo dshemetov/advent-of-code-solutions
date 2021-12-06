@@ -1,0 +1,4 @@
+-e advent_tools
+sympy
+pytest
+numpy
