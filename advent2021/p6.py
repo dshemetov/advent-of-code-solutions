@@ -2,7 +2,7 @@ from advent_tools import Puzzle
 from collections import Counter
 
 def solve_a(s: str) -> int:
-    fish_ages = Counter([int(x) for x in s.split(",")])
+    fish_ages = Counter(int(x) for x in s.split(","))
     return get_number_fish_after_days(fish_ages, 80)
 
 def get_number_fish_after_days(fish_ages: Counter, n: int) -> int:
@@ -23,7 +23,7 @@ def pass_days(fish_ages: Counter, n: int = 1) -> Counter:
     return fish_ages
 
 def solve_b(s: str) -> int:
-    fish_ages = Counter([int(x) for x in s.split(",")])
+    fish_ages = Counter(int(x) for x in s.split(","))
     return get_number_fish_after_days(fish_ages, 256)
 
 
