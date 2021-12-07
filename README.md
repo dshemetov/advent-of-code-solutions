@@ -5,7 +5,7 @@
 To setup:
 
 ```sh
-# Install my tools package (puzzle input fetching and caching utility)
+# Install dependencies
 pip install -r requirements.txt
 
 # Get your AoC cookie (login on Advent of Code and inspect your browser session)
