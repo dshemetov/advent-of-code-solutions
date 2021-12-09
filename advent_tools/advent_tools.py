@@ -60,3 +60,7 @@ def apply_until_fixed_list(func):
             vals.append(new_val)
         return new_val, vals
     return new_func
+
+def reverse_dict(d: dict) -> dict:
+    """This thing better be a bijection."""
+    return {value: key for key, value in d.items()}
