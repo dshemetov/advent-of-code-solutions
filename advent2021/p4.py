@@ -41,8 +41,6 @@ def solve_b(s: str) -> int:
         for i in range(l):
             board_masks[i][np.where(boards[i] == num)] = 1
             if did_board_win(board_masks[i]):
-                if i in winner_boards:
-                    continue
                 winner_boards |= set([i])
                 if len(winner_boards) == l:
                     break
