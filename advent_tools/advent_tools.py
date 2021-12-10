@@ -64,3 +64,22 @@ def apply_until_fixed_list(func):
 def reverse_dict(d: dict) -> dict:
     """This thing better be a bijection."""
     return {value: key for key, value in d.items()}
+
+def get_gcd(a: int, b: int) -> int:
+    # Euclidean algorithm
+    r, r_ = a, b
+    while r_ > 0:
+        r, r_ = r_, r % r_
+    return r
+
+def get_bezout_coefficients(a: int, b: int) -> int:
+    # Extended Euclidean algorithm
+    s, s_ = 0, 1
+    t, t_ = 1, 0
+    r, r_ = a, b
+    while r_ > 0:
+        q = r // r_
+        r, r_ = r_, r - q * r_
+        s, s_ = s_, s - q * s_
+        t, t_ = t_, t - q * t_
+    return (t, s)
