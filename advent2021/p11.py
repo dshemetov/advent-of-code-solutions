@@ -1,9 +1,7 @@
-from advent_tools import Puzzle
-from typing import List, Tuple
+from advent_tools import Puzzle, get_valid_neighbor_ixs
+from typing import Tuple
 import numpy as np
 from itertools import product
-
-directions = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
 
 def solve_a(s: str) -> int:
     mat = parse_input(s)
@@ -12,12 +10,6 @@ def solve_a(s: str) -> int:
 
 def parse_input(s: str) -> np.ndarray:
     return np.array([list(line) for line in s.split("\n")], dtype=int)
-
-def get_neighbor_values(i: int, j: int, mat: List[List[int]]) -> List[int]:
-    return (mat[i][j] for i, j in get_valid_neighbor_ixs(i, j, mat))
-
-def get_valid_neighbor_ixs(i: int, j: int, mat: List[List[int]]) -> List[Tuple[int, int]]:
-    return ((i + di, j + dj) for di, dj in directions if 0 <= i + di < len(mat) and 0 <= j + dj < len(mat[0]))
 
 def run_octopus_step(mat: np.ndarray) -> Tuple[np.ndarray, int]:
     mat = mat.copy()
@@ -29,7 +21,7 @@ def run_octopus_step(mat: np.ndarray) -> Tuple[np.ndarray, int]:
         i, j = ixs_to_check.pop()
         if mat[i, j] > 9 and (i, j) not in already_flashed:
             already_flashed |= {(i, j)}
-            for i_, j_ in get_valid_neighbor_ixs(i, j, mat):
+            for i_, j_ in get_valid_neighbor_ixs(i, j, mat, diagonals=True):
                 mat[i_, j_] += 1
                 ixs_to_check |= {(i_, j_)}
     mat[np.where(mat > 9)] = 0

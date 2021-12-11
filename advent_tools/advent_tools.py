@@ -1,10 +1,11 @@
 import os
 from os.path import join
-from typing import Dict, List
+from typing import Dict, List, Tuple, Union
 
 from dotenv import load_dotenv
 from joblib import Memory
 import requests
+import numpy as np
 
 ADVENT_TOOLS_PATH = join(os.environ["HOME"], ".advent_tools")
 memory = Memory(join(ADVENT_TOOLS_PATH, "joblib_cache"), verbose=0)
@@ -83,3 +84,12 @@ def get_bezout_coefficients(a: int, b: int) -> int:
         s, s_ = s_, s - q * s_
         t, t_ = t_, t - q * t_
     return (t, s)
+
+def get_neighbor_values(i: int, j: int, mat: Union[List[List[int]], np.ndarray], radius: int = 1, diagonals: bool = False) -> List[int]:
+    return (mat[i][j] for i, j in get_valid_neighbor_ixs(i, j, mat, radius, diagonals))
+
+def get_valid_neighbor_ixs(i: int, j: int, mat: Union[List[List[int]], np.ndarray], radius: int = 1, diagonals: bool = False) -> List[Tuple[int, int]]:
+    directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+    if diagonals:
+        directions += [(1, 1), (1, -1), (-1, 1), (-1, -1)]
+    return ((i + r * di, j + r * dj) for di, dj in directions for r in range(1, radius + 1) if 0 <= i + r * di < len(mat) and 0 <= j + r * dj < len(mat[0]))

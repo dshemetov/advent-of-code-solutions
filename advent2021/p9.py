@@ -1,9 +1,6 @@
 from typing import List, Set, Tuple
-from advent_tools import Puzzle
+from advent_tools import Puzzle, get_valid_neighbor_ixs, get_neighbor_values
 from itertools import product
-
-# directions = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
-directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
 def solve_a(s: str) -> int:
     mat = [[int(x) for x in list(line)] for line in s.split("\n")]
@@ -12,12 +9,6 @@ def solve_a(s: str) -> int:
 
 def is_lowest_point(i: int, j: int, mat: List[List[int]]) -> bool:
     return all(mat[i][j] < v for v in get_neighbor_values(i, j, mat))
-
-def get_neighbor_values(i: int, j: int, mat: List[List[int]]) -> List[int]:
-    return (mat[i][j] for i, j in get_valid_neighbor_ixs(i, j, mat))
-
-def get_valid_neighbor_ixs(i: int, j: int, mat: List[List[int]]) -> List[Tuple[int, int]]:
-    return ((i + di, j + dj) for di, dj in directions if 0 <= i + di < len(mat) and 0 <= j + dj < len(mat[0]))
 
 def solve_b(s: str) -> int:
     mat = [[int(x) for x in list(line)] for line in s.split("\n")]
