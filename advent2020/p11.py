@@ -1,34 +1,34 @@
 from advent_tools import Puzzle, get_valid_neighbor_ixs
-import numpy as np
-from typing import Tuple, Iterable
+from itertools import product
+from typing import List, Tuple, Iterable
 
 def solve_a(s: str) -> int:
     state = string_to_array(s)
     return count_occupied_seats(update_state_until_fixed(state, "nearby"))
 
-def string_to_array(s: str) -> np.ndarray:
-    return np.array([list(x) for x in s.strip("\n").split("\n")])
+def string_to_array(s: str) -> List[List[str]]:
+    return [list(x) for x in s.strip("\n").split("\n")]
 
-def count_occupied_seats(state: np.ndarray) -> int:
-    return len(np.where(state == "#")[0])
+def count_occupied_seats(state: List[List[str]]) -> int:
+    return sum(1 for row in state for x in row if x == "#")
 
-def update_state_until_fixed(state: np.ndarray, method: str) -> np.ndarray:
+def update_state_until_fixed(state: List[List[str]], method: str) -> List[List[str]]:
     current_state = state.copy()
     next_state = state.copy()
     no_changes = False
     while no_changes is False:
         no_changes = True
         newly_occupied_seats, newly_vacant_seats = find_seats_to_update(current_state, method)
-        for ix in newly_occupied_seats:
-            next_state[ix] = "#"
+        for i, j in newly_occupied_seats:
+            next_state[i][j] = "#"
             no_changes = False
-        for ix in newly_vacant_seats:
-            next_state[ix] = "L"
+        for i, j in newly_vacant_seats:
+            next_state[i][j] = "L"
             no_changes = False
         current_state = next_state.copy()
     return next_state
 
-def find_seats_to_update(state: np.ndarray, method: str) -> np.ndarray:
+def find_seats_to_update(state: List[List[str]], method: str) -> List[List[str]]:
     if method == "nearby":
         newly_occupied_seats = ((i, j) for i, j in get_empty_seats(state) if check_nearby_seats_empty(i, j, state))
         newly_vacant_seats = ((i, j) for i, j in get_occupied_seats(state) if check_nearby_seats_crowded(i, j, state))
@@ -37,52 +37,55 @@ def find_seats_to_update(state: np.ndarray, method: str) -> np.ndarray:
         newly_vacant_seats = ((i, j) for i, j in get_occupied_seats(state) if check_visible_seats_crowded(i, j, state))
     return newly_occupied_seats, newly_vacant_seats
 
-def get_empty_seats(state: np.ndarray) -> Iterable[Tuple[int, int]]:
-    return zip(*np.where(state == "L"))
+def get_empty_seats(state: List[List[str]]) -> Iterable[Tuple[int, int]]:
+    n, m = len(state), len(state[0])
+    for i, j in product(range(n), range(m)):
+        if state[i][j] == "L":
+            yield i, j
 
-def get_occupied_seats(state: np.ndarray) -> Iterable[Tuple[int, int]]:
-    return zip(*np.where(state == "#"))
+def get_occupied_seats(state: List[List[str]]) -> Iterable[Tuple[int, int]]:
+    n, m = len(state), len(state[0])
+    for i, j in product(range(n), range(m)):
+        if state[i][j] == "#":
+            yield i, j
 
-def check_nearby_seats_empty(i: int, j: int, state: np.ndarray) -> bool:
+def check_nearby_seats_empty(i: int, j: int, state: List[List[str]]) -> bool:
     for i_, j_ in get_valid_neighbor_ixs(i, j, state, diagonals=True):
-        if state[(i_, j_)] == "#":
+        if state[i_][j_] == "#":
             return False
     return True
 
-def check_nearby_seats_crowded(i: int, j: int, state: np.ndarray) -> bool:
+def check_nearby_seats_crowded(i: int, j: int, state: List[List[str]]) -> bool:
     visible_seats = 0
     for i_, j_ in get_valid_neighbor_ixs(i, j, state, diagonals=True):
-        if state[(i_, j_)] == "#":
+        if state[i_][j_] == "#":
             visible_seats += 1
         if visible_seats >= 4:
             return True
     return False
 
-def check_visible_seats_empty(i: int, j: int, state: np.ndarray) -> bool:
-    up, left = np.array([-1, 0]), np.array([0, -1])
-    directions = [up, -up, left, -left, up + left, up - left, -up + left, -up - left]
-    for direction in directions:
-        if "#" == get_first_visible_object(i, j, direction, state):
+def check_visible_seats_empty(i: int, j: int, state: List[List[str]]) -> bool:
+    directions = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
+    for di, dj in directions:
+        if "#" == get_first_visible_object(i, j, di, dj, state):
             return False
     return True
 
-def check_visible_seats_crowded(i: int, j: int, state: np.ndarray) -> bool:
-    up, left = np.array([-1, 0]), np.array([0, -1])
-    directions = [up, -up, left, -left, up + left, up - left, -up + left, -up - left]
+def check_visible_seats_crowded(i: int, j: int, state: List[List[str]]) -> bool:
+    directions = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
     visible_seats = 0
-    for direction in directions:
-        if "#" == get_first_visible_object(i, j, direction, state):
+    for di, dj in directions:
+        if "#" == get_first_visible_object(i, j, di, dj, state):
             visible_seats += 1
         if visible_seats >= 5:
             return True
     return False
 
-def get_first_visible_object(i: int, j: int, direction: np.ndarray, state: np.ndarray) -> str:
-    x_max, y_max = state.shape
-    di, dj = direction
+def get_first_visible_object(i: int, j: int, di: int, dj: int, state: List[List[str]]) -> str:
+    n, m = len(state), len(state[0])
     i_, j_ = i + di, j + dj
-    while (0 <= i_ < x_max) and (0 <= j_ < y_max):
-        v = state[(i_, j_)]
+    while (0 <= i_ < n) and (0 <= j_ < m):
+        v = state[i_][j_]
         if v != ".":
             return v
         i_, j_ = i_ + di, j_ + dj
