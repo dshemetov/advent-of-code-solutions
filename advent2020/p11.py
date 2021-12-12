@@ -1,4 +1,5 @@
 from advent_tools import Puzzle, get_valid_neighbor_ixs
+from copy import deepcopy
 from itertools import product
 from typing import List, Tuple, Iterable
 
@@ -13,8 +14,8 @@ def count_occupied_seats(state: List[List[str]]) -> int:
     return sum(1 for row in state for x in row if x == "#")
 
 def update_state_until_fixed(state: List[List[str]], method: str) -> List[List[str]]:
-    current_state = state.copy()
-    next_state = state.copy()
+    current_state = deepcopy(state)
+    next_state = deepcopy(state)
     no_changes = False
     while no_changes is False:
         no_changes = True
@@ -25,7 +26,7 @@ def update_state_until_fixed(state: List[List[str]], method: str) -> List[List[s
         for i, j in newly_vacant_seats:
             next_state[i][j] = "L"
             no_changes = False
-        current_state = next_state.copy()
+        current_state = deepcopy(next_state)
     return next_state
 
 def find_seats_to_update(state: List[List[str]], method: str) -> List[List[str]]:
@@ -60,8 +61,8 @@ def check_nearby_seats_crowded(i: int, j: int, state: List[List[str]]) -> bool:
     for i_, j_ in get_valid_neighbor_ixs(i, j, state, diagonals=True):
         if state[i_][j_] == "#":
             visible_seats += 1
-        if visible_seats >= 4:
-            return True
+            if visible_seats >= 4:
+                return True
     return False
 
 def check_visible_seats_empty(i: int, j: int, state: List[List[str]]) -> bool:
@@ -77,8 +78,8 @@ def check_visible_seats_crowded(i: int, j: int, state: List[List[str]]) -> bool:
     for di, dj in directions:
         if "#" == get_first_visible_object(i, j, di, dj, state):
             visible_seats += 1
-        if visible_seats >= 5:
-            return True
+            if visible_seats >= 5:
+                return True
     return False
 
 def get_first_visible_object(i: int, j: int, di: int, dj: int, state: List[List[str]]) -> str:
@@ -86,8 +87,10 @@ def get_first_visible_object(i: int, j: int, di: int, dj: int, state: List[List[
     i_, j_ = i + di, j + dj
     while (0 <= i_ < n) and (0 <= j_ < m):
         v = state[i_][j_]
-        if v != ".":
-            return v
+        if v == "#":
+            return "#"
+        if v == "L":
+            return "L"
         i_, j_ = i_ + di, j_ + dj
     return "."
 

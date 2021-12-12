@@ -1,5 +1,5 @@
 import pytest
-from .p11 import string_to_array, update_state, np, update_state_until_fixed, count_occupied_seats, get_visible_seat_count
+from .p11 import string_to_array, update_state_until_fixed, count_occupied_seats
 
 
 test_string = "L.LL.LL.LL\nLLLLLLL.LL\nL.L.L..L..\nLLLL.LL.LL\nL.LL.LL.LL\nL.LLLLL.LL\n..L.L.....\nLLLLLLLLLL\nL.LLLLLL.L\nL.LLLLL.LL\n"
@@ -18,65 +18,24 @@ next_states_b = [
     "#.L#.L#.L#\n#LLLLLL.LL\nL.L.L..#..\n##L#.#L.L#\nL.L#.#L.L#\n#.L####.LL\n..#.#.....\nLLL###LLL#\n#.LLLLL#.L\n#.L#LL#.L#",
     "#.L#.L#.L#\n#LLLLLL.LL\nL.L.L..#..\n##L#.#L.L#\nL.L#.LL.L#\n#.LLLL#.LL\n..#.L.....\nLLL###LLL#\n#.LLLLL#.L\n#.L#LL#.L#"
 ]
-def test_update_state():
-    # Part a
-    current_state = string_to_array(test_string)
-    current_state = update_state(current_state, "nearby")
-    np.testing.assert_equal(current_state, string_to_array(next_states_a[0]))
-    current_state = update_state(current_state, "nearby")
-    np.testing.assert_equal(current_state, string_to_array(next_states_a[1]))
-    current_state = update_state(current_state, "nearby")
-    np.testing.assert_equal(current_state, string_to_array(next_states_a[2]))
-    current_state = update_state(current_state, "nearby")
-    np.testing.assert_equal(current_state, string_to_array(next_states_a[3]))
-    current_state = update_state(current_state, "nearby")
-    np.testing.assert_equal(current_state, string_to_array(next_states_a[4]))
-
-    # Part b
-    current_state = string_to_array(test_string)
-    current_state = update_state(current_state, "visible")
-    np.testing.assert_equal(current_state, string_to_array(next_states_b[0]))
-    current_state = update_state(current_state, "visible")
-    np.testing.assert_equal(current_state, string_to_array(next_states_b[1]))
-    current_state = update_state(current_state, "visible")
-    np.testing.assert_equal(current_state, string_to_array(next_states_b[2]))
-    current_state = update_state(current_state, "visible")
-    np.testing.assert_equal(current_state, string_to_array(next_states_b[3]))
-    current_state = update_state(current_state, "visible")
-    np.testing.assert_equal(current_state, string_to_array(next_states_b[4]))
-
 def test_update_state_until_fixed():
     # Part a
     current_state = string_to_array(test_string)
     current_state = update_state_until_fixed(current_state, "nearby")
-    np.testing.assert_equal(current_state, string_to_array(next_states_a[4]))
+    assert current_state == string_to_array(next_states_a[4])
 
     # Part b
     current_state = string_to_array(test_string)
     current_state = update_state_until_fixed(current_state, "visible")
-    np.testing.assert_equal(current_state, string_to_array(next_states_b[5]))
+    assert current_state == string_to_array(next_states_b[5])
 
 def test_count_occupied_seats():
     # Part a
     current_state = string_to_array(test_string)
-    current_state = update_state(current_state, "nearby")
-    assert count_occupied_seats(current_state) == 71
+    current_state = update_state_until_fixed(current_state, "nearby")
+    assert count_occupied_seats(current_state) == 37
 
     # Part b
     current_state = string_to_array(test_string)
     current_state = update_state_until_fixed(current_state, "visible")
     assert count_occupied_seats(current_state) == 26
-
-def test_get_visible_seat_count():
-    test = """.......#.\n...#.....\n.#.......\n.........\n..#L....#\n....#....\n.........\n#........\n...#....."""
-    test = string_to_array(test)
-    assert get_visible_seat_count(test, np.array([4, 3])) == 8
-    test = """.............\n.L.L.#.#.#.#.\n............."""
-    test = string_to_array(test)
-    assert get_visible_seat_count(test, np.array([1, 2])) == 0
-    test = """.##.##.\n#.#.#.#\n##...##\n...L...\n##...##\n#.#.#.#\n.##.##."""
-    test = string_to_array(test)
-    assert get_visible_seat_count(test, np.array([3, 3])) == 0
-    test = """.#.#.\n..#..\n.#.#."""
-    test = string_to_array(test)
-    assert get_visible_seat_count(test, np.array([1, 2])) == 4
