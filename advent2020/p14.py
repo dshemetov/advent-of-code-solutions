@@ -1,6 +1,6 @@
-from typing import List
-import re
 from advent_tools import Puzzle
+import re
+from typing import List
 
 def solve_a(s: str) -> int:
     memory = dict()
