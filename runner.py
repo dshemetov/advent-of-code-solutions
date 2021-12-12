@@ -28,6 +28,7 @@ if __name__ == "__main__":
     if args.clear_cache:
         result = get_answer.call_and_shelve(year, day, part)
         result.clear()
-
-    t = time.perf_counter()
-    print(f"Answer: {get_answer(year, day, part)} (elapsed time: {(time.perf_counter() - t):.5f} seconds)")
+        t = time.perf_counter()
+        print(f"Answer: {get_answer(year, day, part)} (elapsed time: {(time.perf_counter() - t):.5f} seconds)")
+    else:
+        print(f"Answer: {get_answer(year, day, part)}")
