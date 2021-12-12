@@ -1,5 +1,5 @@
-import re
 from advent_tools import Puzzle
+import re
 
 def solve_a(s: str) -> int:
     lines = (m.groups() for m in re.finditer("(\d+)-(\d+) (\w): (\w+)", s))

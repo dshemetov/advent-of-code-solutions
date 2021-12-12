@@ -1,5 +1,5 @@
-from itertools import combinations
 from advent_tools import Puzzle
+from itertools import combinations
 
 def solve_a(s: str) -> int:
     nums = [int(n) for n in s.split("\n")]

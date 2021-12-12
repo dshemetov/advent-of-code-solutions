@@ -1,9 +1,5 @@
 from advent_tools import Puzzle
 
-def make_pairs(nums):
-    from itertools import product
-    return set([x + y for x, y in product(nums, repeat=2) if x != y])
-
 def solve_a(s: str) -> int:
     nums = [int(line) for line in s.split("\n")]
     for i, x in enumerate(nums):
@@ -13,6 +9,10 @@ def solve_a(s: str) -> int:
         if not x in valid_nums:
             break
     return x
+
+def make_pairs(nums):
+    from itertools import product
+    return set([x + y for x, y in product(nums, repeat=2) if x != y])
 
 def solve_b(s: str) -> int:
     nums = [int(line) for line in s.split("\n")]

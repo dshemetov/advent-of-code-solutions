@@ -1,18 +1,19 @@
 from advent_tools import Puzzle
 
-# Part a
+def solve_a(s: str) -> int:
+    passports = [str_to_passport_dict(" ".join(batch.split("\n"))) for batch in s.split("\n\n")]
+    return sum(map(validate_passport_a, passports))
+
 def str_to_passport_dict(s: str) -> dict:
     return dict(e.strip().split(":") for e in s.strip().split(" "))
 
 def validate_passport_a(d: dict) -> bool:
     return {"byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"}.issubset(set(d.keys()))
 
-def solve_a(s: str) -> int:
+def solve_b(s: str) -> int:
     passports = [str_to_passport_dict(" ".join(batch.split("\n"))) for batch in s.split("\n\n")]
-    return sum(map(validate_passport_a, passports))
+    return sum(map(validate_passport_b, passports))
 
-
-# Part b
 def validate_passport_b(d: dict) -> bool:
     if not {"byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"}.issubset(set(d.keys())):
         return False
@@ -42,11 +43,6 @@ def validate_passport_b(d: dict) -> bool:
         return False
 
     return all([birth_check, issue_check, expiration_check, height_check, eye_color_check])
-
-def solve_b(s: str) -> int:
-    passports = [str_to_passport_dict(" ".join(batch.split("\n"))) for batch in s.split("\n\n")]
-    return sum(map(validate_passport_b, passports))
-
 
 
 class Solution:

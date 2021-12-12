@@ -27,18 +27,3 @@ class Solution:
     @property
     def answer_b(self) -> int:
         return solve_b(Puzzle(3, 2020).input_data)
-
-test_string = """..##.......
-#...#...#..
-.#....#..#.
-..#.#...#.#
-.#...##..#.
-..#.##.....
-.#.#.#....#
-.#........#
-#.##...#...
-#...##....#
-.#..#...#.#"""
-
-assert solve_a(test_string) == 7
-assert solve_b(test_string) == 336

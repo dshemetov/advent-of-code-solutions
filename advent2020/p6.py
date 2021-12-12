@@ -1,5 +1,5 @@
-from string import ascii_letters
 from advent_tools import Puzzle
+from string import ascii_letters
 
 def solve_a(s: str) -> int:
     return sum(count_batch_union(batch) for batch in s.split("\n\n"))
