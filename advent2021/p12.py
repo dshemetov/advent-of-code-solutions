@@ -1,6 +1,6 @@
-from typing import Dict, List
-from collections import defaultdict
 from advent_tools import Puzzle
+from collections import defaultdict
+from typing import Dict, List
 
 Path = List[str]
 Graph = Dict[str, List[str]]
@@ -16,7 +16,7 @@ def parse_input(s: str) -> Graph:
         node_map[t].append(s)
     return node_map
 
-def get_paths(node_map: Graph, part: str = "a") -> List[Path]:
+def get_paths(node_map: Graph, part: str="a") -> List[Path]:
     finished_paths = []
     unfinished_paths = [["start"]]
     while len(unfinished_paths) > 0:

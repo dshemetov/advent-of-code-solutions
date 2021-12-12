@@ -1,22 +1,6 @@
+from advent_tools import Puzzle
 from copy import copy
 from typing import List
-from advent_tools import Puzzle
-
-def binary_to_num(ls: List[int]) -> int:
-    return sum(2**i * j for i, j in enumerate(reversed(ls)))
-
-def majority_bit(ls: List[int]) -> int:
-    return 1 if sum(ls) >= (len(ls) / 2) else 0
-
-def minority_bit(ls: List[int]) -> int:
-    return 0 if sum(ls) >= (len(ls) / 2) else 1
-
-def extract_column(mat: List[List[int]], col_ix: int) -> int:
-    return [mat[row_ix][col_ix] for row_ix in range(len(mat))]
-
-def filter_rows(mat: List[List[int]], ix: int, val: int) -> List[List[int]]:
-    new_list = [row for row in mat if row[ix] == val]
-    return new_list
 
 def solve_a(s: str) -> int:
     mat = [list(line) for line in s.split("\n")]
@@ -28,6 +12,15 @@ def solve_a(s: str) -> int:
 
     gamma_rate, epsilon_rate = binary_to_num(max_rows), binary_to_num(min_rows)
     return gamma_rate * epsilon_rate
+
+def majority_bit(ls: List[int]) -> int:
+    return 1 if sum(ls) >= (len(ls) / 2) else 0
+
+def extract_column(mat: List[List[int]], col_ix: int) -> int:
+    return [mat[row_ix][col_ix] for row_ix in range(len(mat))]
+
+def binary_to_num(ls: List[int]) -> int:
+    return sum(2**i * j for i, j in enumerate(reversed(ls)))
 
 def solve_b(s: str) -> int:
     mat = [list(line) for line in s.split("\n")]
@@ -53,6 +46,13 @@ def solve_b(s: str) -> int:
     co2_rating = binary_to_num(filtered_mat[0])
 
     return oxygen_rating * co2_rating
+
+def minority_bit(ls: List[int]) -> int:
+    return 0 if sum(ls) >= (len(ls) / 2) else 1
+
+def filter_rows(mat: List[List[int]], ix: int, val: int) -> List[List[int]]:
+    new_list = [row for row in mat if row[ix] == val]
+    return new_list
 
 
 class Solution:

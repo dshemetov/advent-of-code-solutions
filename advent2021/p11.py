@@ -1,11 +1,10 @@
 from advent_tools import Puzzle, get_valid_neighbor_ixs
-from typing import Tuple
-import numpy as np
 from itertools import product
+import numpy as np
+from typing import Tuple
 
 def solve_a(s: str) -> int:
-    mat = parse_input(s)
-    _, flashes = run_octopus_steps(mat, 100)
+    _, flashes = run_octopus_steps(parse_input(s), 100)
     return flashes
 
 def parse_input(s: str) -> np.ndarray:

@@ -1,7 +1,7 @@
-from typing import Dict, List
 from advent_tools import Puzzle, reverse_dict
 from itertools import permutations, product
 import re
+from typing import Dict, List
 
 def solve_a(s: str) -> int:
     matches = (x.groups() for x in re.finditer("(\w+) (\w+) (\w+) (\w+) (\w+) (\w+) (\w+) (\w+) (\w+) (\w+) \| (\w+) (\w+) (\w+) (\w+)", s))
@@ -13,6 +13,7 @@ def solve_b(s: str) -> int:
     lines = ([match[:10], match[10:]] for match in matches)
     return sum(decode_entry(ins, outs) for ins, outs in lines)
 
+# TODO: Permutations enumeration
 def decode_entry2(inputs: List[str], outputs: List[str]) -> int:
     reductions = make_reductions(inputs)
 

@@ -1,7 +1,6 @@
-import re
-from typing import Union
-import numpy as np
 from advent_tools import Puzzle
+import numpy as np
+import re
 
 def solve_a(s: str) -> int:
     matches = (m.groups() for m in re.finditer("(\d+),(\d+) -> (\d+),(\d+)", s))
