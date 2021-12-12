@@ -1,4 +1,5 @@
 import argparse
+import time
 from importlib import import_module
 
 from joblib import Memory
@@ -28,4 +29,5 @@ if __name__ == "__main__":
         result = get_answer.call_and_shelve(year, day, part)
         result.clear()
 
-    print(get_answer(year, day, part))
+    t = time.perf_counter()
+    print(f"Answer: {get_answer(year, day, part)} (elapsed time: {(time.perf_counter() - t):.5f} seconds)")
