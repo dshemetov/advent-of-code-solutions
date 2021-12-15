@@ -1,7 +1,7 @@
 from advent_tools import Puzzle
 import numpy as np
-from typing import List
 import re
+from typing import List
 
 def solve_a(s: str) -> int:
     ixs, folds = s.split("\n\n")
