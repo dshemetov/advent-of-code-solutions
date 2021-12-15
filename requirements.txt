@@ -2,3 +2,5 @@
 sympy
 pytest
 numpy
+scipy
+more_itertools
