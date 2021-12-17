@@ -101,7 +101,7 @@ def pairwise(it: Iterable) -> Iterable:
         yield e
 
 def compose_2(f: Callable, g: Callable) -> Callable:
-    return lambda *a, **kw: f(g(*a, **kw))
+    return lambda *a, **kw: f(*g(*a, **kw))
 
 def compose(*fs: Callable) -> Callable:
     return reduce(compose_2, fs)
