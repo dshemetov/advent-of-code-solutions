@@ -10,8 +10,7 @@ def get_number_fish_after_days(fish_ages: Counter, n: int) -> int:
     return pass_days(fish_ages, n).sum()
 
 def pass_days(fish_ages: Counter, n: int = 1) -> np.ndarray:
-    A = np.diag([1] * 8, k=1)
-    A[8, 0] = A[6, 0] = 1
+    A = np.diag([1] * 8, k=1); A[8, 0] = A[6, 0] = 1
     v = np.array([fish_ages[i] for i in range(9)])
     for _ in range(n):
         v = A @ v
