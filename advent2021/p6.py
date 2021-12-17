@@ -1,26 +1,21 @@
 from advent_tools import Puzzle
 from collections import Counter
+import numpy as np
 
 def solve_a(s: str) -> int:
     fish_ages = Counter(int(x) for x in s.split(","))
     return get_number_fish_after_days(fish_ages, 80)
 
 def get_number_fish_after_days(fish_ages: Counter, n: int) -> int:
-    return sum(pass_days(fish_ages, n).values())
+    return pass_days(fish_ages, n).sum()
 
-def pass_days(fish_ages: Counter, n: int = 1) -> Counter:
+def pass_days(fish_ages: Counter, n: int = 1) -> np.ndarray:
+    A = np.diag([1] * 8, k=1)
+    A[8, 0] = A[6, 0] = 1
+    v = np.array([fish_ages[i] for i in range(9)])
     for _ in range(n):
-        fish_ages_ = fish_ages.copy()
-        for key, value in fish_ages.items():
-            if key == 0:
-                fish_ages_[0] -= value
-                fish_ages_[6] += value
-                fish_ages_[8] += value
-            else:
-                fish_ages_[key] -= value
-                fish_ages_[key-1] += value
-        fish_ages = fish_ages_.copy()
-    return fish_ages
+        v = A @ v
+    return v
 
 def solve_b(s: str) -> int:
     fish_ages = Counter(int(x) for x in s.split(","))
