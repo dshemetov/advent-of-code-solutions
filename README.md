@@ -26,15 +26,16 @@ The runner caches results by default, you can clear the answer cache and rerun w
 python runner.py -s 2021.2.b -c
 ```
 
+## TODO:
+
+- Finish 2021 problems.
+- Work on 2020 problems.
+- Refactor pre-2020 solutions.
+- Upload Mathematica solutions.
+
 ## AoC 2021
 
 Python forever.
-
-### TODO:
-
-- Work on 2020 problems.
-- Refactor pre-2020 solutions.
-- Upload the Mathematica solutions.
 
 ## AoC 2020
 
