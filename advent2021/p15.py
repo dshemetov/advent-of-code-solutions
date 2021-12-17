@@ -20,7 +20,7 @@ def get_minimum_path(start: Tuple[int, int], end: Tuple[int, int], mat: np.ndarr
             cost_ = cost + mat[i_, j_]
             if (i_, j_) in best_cost and best_cost[(i_, j_)] <= cost_:
                 continue
-            best_cost[(i_, j_)] = min(best_cost[(i_, j_)] if (i_, j_) in best_cost else cost_, cost_)
+            best_cost[(i_, j_)] = min(best_cost.get((i_, j_), cost_), cost_)
             heappush(priority_queue, (cost_, (i_, j_)))
         cost, (i, j) = heappop(priority_queue)
 
@@ -42,8 +42,7 @@ def expand_mat(mat):
         for ytile in range(ntile):
             xs, ys = xtile * n, ytile * n
             xe, ye = (xtile+1)* n, (ytile+1) * n
-            z_offset = xtile + ytile
-            graph_tiled[xs:xe, ys:ye] = (mat + z_offset - 1) % 9 + 1
+            graph_tiled[xs:xe, ys:ye] = (mat + xtile + ytile - 1) % 9 + 1
 
     return graph_tiled
 
