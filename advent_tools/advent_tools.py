@@ -1,6 +1,6 @@
 import os
 from os.path import join
-from typing import Any, Callable, Dict, Iterable, List, Tuple, Union
+from typing import Callable, Dict, Iterable, List, Tuple, Union
 
 from dotenv import load_dotenv
 from joblib import Memory
@@ -63,6 +63,9 @@ def apply_until_fixed_list(func):
             vals.append(new_val)
         return new_val, vals
     return new_func
+
+def binary_to_int(ls: List[int]) -> int:
+    return sum(2**i * j for i, j in enumerate(reversed(ls)))
 
 def reverse_dict(d: dict) -> dict:
     """This thing better be a bijection."""
