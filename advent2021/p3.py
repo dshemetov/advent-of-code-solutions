@@ -1,58 +1,36 @@
-from advent_tools import Puzzle
+from advent_tools import Puzzle, binary_to_int
 from copy import copy
-from typing import List
+import numpy as np
 
 def solve_a(s: str) -> int:
-    mat = [list(line) for line in s.split("\n")]
-    n, m = len(mat), len(mat[0])
-    mat = [[int(mat[i][j]) for j in range(m)] for i in range(n)]
-
-    max_rows = [majority_bit(extract_column(mat, ix)) for ix in range(m)]
-    min_rows = [0 if bit == 1 else 1 for bit in max_rows]
-
-    gamma_rate, epsilon_rate = binary_to_num(max_rows), binary_to_num(min_rows)
+    mat = np.array([list(line) for line in s.split("\n")], dtype=int)
+    n, _ = mat.shape
+    max_rows = mat.sum(axis=0) >= n / 2
+    min_rows = ~max_rows
+    gamma_rate, epsilon_rate = binary_to_int(max_rows), binary_to_int(min_rows)
     return gamma_rate * epsilon_rate
 
-def majority_bit(ls: List[int]) -> int:
-    return 1 if sum(ls) >= (len(ls) / 2) else 0
-
-def extract_column(mat: List[List[int]], col_ix: int) -> int:
-    return [mat[row_ix][col_ix] for row_ix in range(len(mat))]
-
-def binary_to_num(ls: List[int]) -> int:
-    return sum(2**i * j for i, j in enumerate(reversed(ls)))
-
 def solve_b(s: str) -> int:
-    mat = [list(line) for line in s.split("\n")]
-    n, m = len(mat), len(mat[0])
-    mat = [[int(mat[i][j]) for j in range(m)] for i in range(n)]
+    mat = np.array([list(line) for line in s.split("\n")], dtype=int)
+    _, m = mat.shape
 
-    filtered_mat = copy(mat)
+    mat_ = copy(mat)
     for ix in range(m):
-        if len(filtered_mat) == 1:
+        if len(mat_) == 1:
             break
+        n, _ = mat_.shape
+        mat_ = mat_[mat_[:, ix] == int(mat_[:, ix].sum() >= n / 2)]
+    oxygen_rating = binary_to_int(mat_[0])
 
-        maj_bit = majority_bit(extract_column(filtered_mat, ix))
-        filtered_mat = filter_rows(filtered_mat, ix, maj_bit)
-    oxygen_rating = binary_to_num(filtered_mat[0])
-
-    filtered_mat = copy(mat)
+    mat_ = copy(mat)
     for ix in range(m):
-        if len(filtered_mat) == 1:
+        if len(mat_) == 1:
             break
-
-        min_bit = minority_bit(extract_column(filtered_mat, ix))
-        filtered_mat = filter_rows(filtered_mat, ix, min_bit)
-    co2_rating = binary_to_num(filtered_mat[0])
+        n, _ = mat_.shape
+        mat_ = mat_[mat_[:, ix] == int(mat_[:, ix].sum() < n / 2)]
+    co2_rating = binary_to_int(mat_[0])
 
     return oxygen_rating * co2_rating
-
-def minority_bit(ls: List[int]) -> int:
-    return 0 if sum(ls) >= (len(ls) / 2) else 1
-
-def filter_rows(mat: List[List[int]], ix: int, val: int) -> List[List[int]]:
-    new_list = [row for row in mat if row[ix] == val]
-    return new_list
 
 
 class Solution:
