@@ -200,6 +200,12 @@ class CubeSlice:
         x, y, z = pt
         return x in self.x and y in self.y and z in self.z
 
+    def __lt__(self, other: 'CubeSlice') -> bool:
+        return self.x < other.x and self.y < other.y and self.z < other.z
+
+    def __le__(self, other: 'CubeSlice') -> bool:
+        return self.x <= other.x and self.y <= other.y and self.z <= other.z
+
     def __repr__(self) -> str:
         on_off = 'on' if self.on else 'off'
         x, y, z = self.x, self.y, self.z
@@ -221,15 +227,8 @@ def solve_b(s: str) -> int:
     cube = Cube()
     for i, cube_slice in enumerate(slices):
         cube.add_slice(cube_slice)
-        # if i > 0 and i % 200 == 0:
-        #     previous_length = len(cube.get_slices())
-        #     cube.set_slices(merge_adjacent_cubes(cube.get_slices()))
-        #     new_length = len(cube.get_slices())
-        #     print(f"Merged cubes, the new length is {new_length} and the previous was {previous_length}.")
-        # print(f'The cube is now: \n{cube} (just added {cube_slice})')
         print(f'Now on cube slice {i} out of {len(slices)}. The cube slice is {"on" if cube_slice.on else "off"}.')
 
-    print(abs(cube))
     return abs(cube)
 
 class Cube:
