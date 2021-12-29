@@ -246,37 +246,40 @@ class Cube:
 
     def _add_slice(self, new_slice: CubeSlice, partitioned_slices: List[CubeSlice]) -> List[CubeSlice]:
         partitioned_slices = deepcopy(partitioned_slices)
-        # new_slice = deepcopy(new_slice)
-        new_slices = [new_slice]
+
+        if new_slice.off:
+            new_slices = []
+            intersecting_partitioned_slices = [pslice for pslice in partitioned_slices if not pslice.disjoint(new_slice)]
+            for pslice in intersecting_partitioned_slices:
+                partitioned_slices.remove(pslice)
+                new_slices.extend(merge_adjacent_cubes(list(generate_all_products(pslice, new_slice))))
+            partitioned_slices.extend(new_slices)
+        else:
+            intersecting_partitioned_slices = [pslice for pslice in partitioned_slices if not pslice.disjoint(new_slice)]
+            for pslice in intersecting_partitioned_slices:
+                partitioned_slices.remove(pslice)
+            partitioned_slices.extend(self.partition_slices([new_slice] + intersecting_partitioned_slices))
+        return partitioned_slices
+
+    def partition_slices(self, cube_slices: List[CubeSlice]) -> List[CubeSlice]:
+        new_slices = deepcopy(cube_slices)
+        partitioned_slices = []
         while len(new_slices) > 0:
             new_slice = new_slices.pop()
-            # print(f'new_slice: {new_slice}')
-            # print(f'new_slices: {new_slices}')
-            if new_slice.off:
-                remove_partitioned_slices = []
-                for pslice in partitioned_slices:
-                    if not pslice.disjoint(new_slice):
-                        remove_partitioned_slices += [pslice]
-                        new_partitioned_cubes = merge_adjacent_cubes(list(generate_all_products(pslice, new_slice)))
-                        new_slices.extend(new_partitioned_cubes)
-                for pslice in remove_partitioned_slices:
-                    partitioned_slices.remove(pslice)
-            else:
-                all_disjoint = True
-                for pslice in partitioned_slices:
-                    if not pslice.disjoint(new_slice):
-                        if new_slice.on and pslice == new_slice:
-                            continue
-                        partitioned_slices.remove(pslice)
-                        # print(f'pslice: {pslice}')
-                        all_disjoint = False
-                        new_partitioned_cubes = merge_adjacent_cubes(list(generate_all_products(pslice, new_slice)))
-                        new_slices.extend(new_partitioned_cubes)
-                        break
+            all_disjoint = True
 
-                if all_disjoint:
-                    if new_slice not in partitioned_slices:
-                        partitioned_slices.append(new_slice)
+            for pslice in partitioned_slices:
+                if not pslice.disjoint(new_slice):
+                    all_disjoint = False
+                    if new_slice <= pslice:
+                        break
+                    partitioned_slices.remove(pslice)
+                    new_slices.extend(merge_adjacent_cubes(list(generate_all_products(pslice, new_slice))))
+                    break
+
+            if all_disjoint:
+                partitioned_slices.append(new_slice)
+
         return partitioned_slices
 
     def points_iter(self) -> Generator:
