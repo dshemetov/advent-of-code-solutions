@@ -1,6 +1,6 @@
 from advent_tools import Puzzle, apply_until_fixed
 from typing import Generator, List, Tuple, Optional
-from itertools import combinations, product, product
+from itertools import chain, combinations, product, product
 import numpy as np
 from copy import deepcopy
 import re
@@ -247,18 +247,15 @@ class Cube:
     def _add_slice(self, new_slice: CubeSlice, partitioned_slices: List[CubeSlice]) -> List[CubeSlice]:
         partitioned_slices = deepcopy(partitioned_slices)
 
+        intersecting_partitioned_slices = [pslice for pslice in partitioned_slices if not pslice.disjoint(new_slice)]
+        for pslice in intersecting_partitioned_slices:
+            partitioned_slices.remove(pslice)
+
         if new_slice.off:
-            new_slices = []
-            intersecting_partitioned_slices = [pslice for pslice in partitioned_slices if not pslice.disjoint(new_slice)]
-            for pslice in intersecting_partitioned_slices:
-                partitioned_slices.remove(pslice)
-                new_slices.extend(merge_adjacent_cubes(list(generate_all_products(pslice, new_slice))))
-            partitioned_slices.extend(new_slices)
+            partitioned_slices.extend(chain(*[merge_adjacent_cubes(list(generate_all_products(pslice, new_slice))) for pslice in intersecting_partitioned_slices]))
         else:
-            intersecting_partitioned_slices = [pslice for pslice in partitioned_slices if not pslice.disjoint(new_slice)]
-            for pslice in intersecting_partitioned_slices:
-                partitioned_slices.remove(pslice)
             partitioned_slices.extend(self.partition_slices([new_slice] + intersecting_partitioned_slices))
+
         return partitioned_slices
 
     def partition_slices(self, cube_slices: List[CubeSlice]) -> List[CubeSlice]:
