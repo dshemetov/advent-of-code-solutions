@@ -1,23 +1,13 @@
 from setuptools import setup
 from setuptools import find_packages
 
-from os import mkdir, environ
-from os.path import exists, join
-
 required = [
-    "more-itertools",
-    "python-dotenv",
     "joblib",
+    "more-itertools",
+    "numpy",
+    "python-dotenv",
     "requests"
 ]
-
-home_dir = environ["HOME"]
-
-if not exists(join(home_dir, ".advent_tools")):
-    mkdir(join(home_dir, ".advent_tools"))
-
-if not exists(join(home_dir, ".advent_tools/joblib_cache")):
-    mkdir(join(home_dir, ".advent_tools/joblib_cache"))
 
 setup(
     name="advent_tools",
@@ -29,7 +19,7 @@ setup(
     classifiers=[
         "Development Status :: 4 - Working Beta",
         "Intended Audience :: Developers",
-        "Programming Language :: Python :: 3.9.7",
+        "Programming Language :: Python :: 3.10.5",
     ],
     packages=find_packages()
 )

@@ -5,11 +5,15 @@
 To setup, use Python 3.9+, and:
 
 ```sh
+# Clone repo
+git clone https://github.com/dshemetov/advent-of-code-solutions
+cd advent-of-code-solutions
+
 # Install dependencies
 pip install -r requirements.txt
 
-# Get your AoC cookie (login on Advent of Code and inspect your browser session)
-echo "AOC_TOKEN=your_cookie" > ~/.advent_tools/.env
+# Get your AoC cookie (log in to https://adventofcode.com/ and inspect your browser session)
+echo "AOC_TOKEN=your_cookie" > .env
 ```
 
 The problem runner can be used as follows:
@@ -26,7 +30,7 @@ The runner caches results by default, you can clear the answer cache and rerun w
 python runner.py -s 2021.2.b -c
 ```
 
-## State
+## Background
 
 I got into these puzzles in December 2015 in Los Angeles, while spending time with the Sellin family.
 After a few days of doing not much more than playing SSX Tricky and drinking peppermint schnapps, my brain was beginning to decompress from a tough school semester.
@@ -43,7 +47,7 @@ It's nice to look back and see yourself grow as a programmer.
   - Mathematica has a some really cool builtin functions (e.g. see the three-line solution to Day 6 with [DistanceMatrix](https://reference.wolfram.com/language/ref/DistanceMatrix.html) and [Nearest](https://reference.wolfram.com/language/ref/Nearest.html)).
   - Even though Mathematica has fast built-ins, Python can be faster for simple for-loops (e.g. see Day 9 and the attached Python solution). I did not have the courage to try to implement a linked-list in Mathematica for Day 9.
   - Mathematica notebooks don't look great on GitHub.
-  - Mathematica doesn't support lazy iteration natively.
-  - Mathematica doesn't make it easy to make new data structures.
-  - Mathematica debugging isn't easy.
+  - Mathematica [doesn't support lazy iteration natively](https://mathematica.stackexchange.com/questions/226334/breaking-functional-loops-and-doing-lazy-evaluation-in-mathematica).
+  - Mathematica doesn't make it easy to make new data structures (though [these are nice to have](https://reference.wolfram.com/language/guide/DataStructures.html)).
+  - Mathematica debugging isn't easy (and it isn't easy to switch from developing code in a Notebook to Eclipse, where they maintain a debugger plugin).
 - AoC 2015: ??/50 Python.
