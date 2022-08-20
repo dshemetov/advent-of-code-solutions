@@ -5,6 +5,7 @@ from os import mkdir, environ
 from os.path import exists, join
 
 required = [
+    "more-itertools",
     "python-dotenv",
     "joblib",
     "requests"

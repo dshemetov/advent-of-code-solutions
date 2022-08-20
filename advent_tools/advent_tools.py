@@ -99,10 +99,6 @@ def get_valid_neighbor_ixs(i: int, j: int, mat: Union[List[List[int]], np.ndarra
         directions += [(1, 1), (1, -1), (-1, 1), (-1, -1)]
     return ((i + r * di, j + r * dj) for di, dj in directions for r in range(1, radius + 1) if 0 <= i + r * di < len(mat) and 0 <= j + r * dj < len(mat[0]))
 
-def pairwise(it: Iterable) -> Iterable:
-    for e in windowed(it, 2):
-        yield e
-
 def compose_2(f: Callable, g: Callable) -> Callable:
     return lambda *a, **kw: f(*g(*a, **kw))
 
