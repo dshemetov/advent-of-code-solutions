@@ -1,4 +1,3 @@
-from typing import Counter as CounterType
 from scipy.sparse import dok_matrix
 from collections import Counter
 
@@ -37,7 +36,7 @@ def char_pair_to_num(c: str) -> int:
 def char_to_num(c: str) -> int:
     return ord(c) - 65
 
-def char_counts(v: dok_matrix, template: str) -> CounterType[int]:
+def char_counts(v: dok_matrix, template: str) -> Counter[int]:
     counts = Counter()
     for i in range(26):
         count = v[26*i:26*(i+1), 0].sum()

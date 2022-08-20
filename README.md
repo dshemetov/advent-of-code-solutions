@@ -2,7 +2,7 @@
 
 [Advent of Code](https://adventofcode.com/) is a great set of Christmas-themed puzzles.
 
-To setup:
+To setup, use Python 3.9+, and:
 
 ```sh
 # Install dependencies
