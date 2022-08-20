@@ -1,3 +1,4 @@
+"""Transparent Origami https://adventofcode.com/2021/day/13"""
 import numpy as np
 import re
 from typing import List
@@ -5,7 +6,7 @@ from typing import List
 def solve_a(s: str) -> int:
     """
     Examples:
-    >>> solve_a(test_strings)
+    >>> solve_a(test_string)
     17
     """
     ixs, folds = s.split("\n\n")

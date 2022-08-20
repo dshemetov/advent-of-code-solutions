@@ -1,3 +1,4 @@
+"""Dumbo Octopus https://adventofcode.com/2021/day/11"""
 from advent_tools import get_valid_neighbor_ixs
 from itertools import product
 import numpy as np
@@ -20,7 +21,7 @@ def run_octopus_step(mat: np.ndarray) -> Tuple[np.ndarray, int]:
         i, j = ixs_to_check.pop()
         if mat[i, j] > 9 and (i, j) not in already_flashed:
             already_flashed |= {(i, j)}
-            for i_, j_ in get_valid_neighbor_ixs(i, j, mat, diagonals=True):
+            for i_, j_ in get_valid_neighbor_ixs((i, j), mat.shape, diagonals=True):
                 mat[i_, j_] += 1
                 ixs_to_check |= {(i_, j_)}
     mat[np.where(mat > 9)] = 0

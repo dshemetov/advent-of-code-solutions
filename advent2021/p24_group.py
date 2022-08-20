@@ -1,16 +1,10 @@
-#welcom to zombocom
-import argparse, importlib, time, re
+"""Arithmetic Logic Unit https://adventofcode.com/2021/day/24"""
+import time
+from re import findall
 from abc import ABC, abstractmethod
-from copy import deepcopy
-import random as rng
-from typing import Generator, List, Tuple, Set, Optional
-from itertools import permutations, product, cycle, product
-from collections import namedtuple, Counter
-from functools import reduce
-from math import inf
-from scipy.spatial import distance_matrix
-import numpy as np
+from typing import List
 from sympy import *
+from advent_tools import Puzzle
 
 class AdventProblem(ABC):
     """
@@ -148,9 +142,8 @@ class ALU:
         b_val = self.get_value(b)
         self.variables[a] = 1*a_val==b_val
 
-def parse_input(fname: str):
-    program_lines = open(fname, 'r').read()
-    program_instructions = re.findall("(inp) (\w)|(add|mod|mul|eql|div) (\w) (-*\d+|\w)", program_lines)
+def parse_input(s: str):
+    program_instructions = findall("(inp) (\w)|(add|mod|mul|eql|div) (\w) (-*\d+|\w)", s)
     program_instructions = [[x if x.isalpha() else int(x) for x in instruction if x != ""] for instruction in program_instructions]
     # print(program_instructions)
     return program_instructions
@@ -158,17 +151,17 @@ def parse_input(fname: str):
 class Day24(AdventProblem):
     def __init__(self, test: bool):
         super().__init__('ALU')
-        program_file = 'test3.txt' if test else 'data.txt'
-        self.ALU = ALU(parse_input(program_file))
+        self.ALU = ALU(Puzzle(24, 2021))
 
-        a = ALU(parse_input("test.txt"))
-        a.execute_instructions([5])
-        assert a.variables["x"] == -5
-        a = ALU(parse_input("test2.txt"))
-        a.execute_instructions([4, 5])
-        assert a.variables["z"] == 0
-        a.execute_instructions([4, 12])
-        assert a.variables["z"] == 1
+        if test:
+            a = ALU(parse_input("test.txt"))
+            a.execute_instructions([5])
+            assert a.variables["x"] == -5
+            a = ALU(parse_input("test2.txt"))
+            a.execute_instructions([4, 5])
+            assert a.variables["z"] == 0
+            a.execute_instructions([4, 12])
+            assert a.variables["z"] == 1
 
     def solve_part1(self) -> str:
         # num = [1,3,5,7,9,2,9,9,9,9,9]
@@ -194,39 +187,13 @@ class Day24(AdventProblem):
         return f'{3}'
 
 def run_day(day: int, test: bool) -> None:
-    module = importlib.import_module('main')
-    class_ = getattr(module, f'Day{day}')
     time1 = time.time()
-    instance: AdventProblem = class_(test)
     time2 = time.time()
+    instance = Day24(test)
     print(f'Creating the class took {time2 - time1:.4f} seconds')
-    print(f'Now solving Day {day} "{instance.name}":')
     part1, time3 = instance.solve_part1(), time.time()
     print(f'Part 1 ({time3 - time2:.4f} s) - {part1}')
     part2, time4 = instance.solve_part2(), time.time()
     print(f'Part 2 ({time4 - time3:.4f} s) - {part2}')
 
-
-# if __name__ == '__main__':
-#     parser = argparse.ArgumentParser("main.py")
-
-#     parser.add_argument(dest='day', help='which day to run')
-#     parser.add_argument('-t',
-#                         '--test',
-#                         dest='test',
-#                         help='run the output on the test data',
-#                         action="store_true")
-#     parser.set_defaults(test=False)
-
-#     args = parser.parse_args()
-
-#     run_day(args.day, args.test)
-
 run_day(24, False)
-
-s = """((a + 6) * (((((0 + (z // 1) * ((0 + 25) * 0 + 1) + ((0 + a) + 6) * 0)) % 26) + 11) == a) == 0))"""
-ls = list(s)
-i = 0
-while i < len(s):
-    if ls[i] == "0" and i < len(s) - 2 and ls[i-2] == "*":
-        stack = []

@@ -1,10 +1,11 @@
-from typing import Tuple
+"""Trick Shot https://adventofcode.com/2021/day/17"""
 import re
+from typing import Tuple
 
 def solve_a(s: str) -> int:
     """
     Examples:
-    >>> solve_a(test_strings)
+    >>> solve_a(test_string)
     45
     """
     xmin, xmax, ymin, ymax = [int(x) for x in re.findall("(-*\d+)", s)]
@@ -58,7 +59,7 @@ def ends_in_target(vx_: int, vy_: int, xmin, xmax, ymin, ymax) -> Tuple[bool, in
 def solve_b(s: str) -> int:
     """
     Examples:
-    >>> solve_b(test_strings)
+    >>> solve_b(test_string)
     112
     """
     xmin, xmax, ymin, ymax = [int(x) for x in re.findall("(-*\d+)", s)]

@@ -1,4 +1,3 @@
-import pytest
 from .p18 import solve_a, solve_b, SnailfishTree
 
 test_string = """"""
@@ -73,4 +72,3 @@ def test_solve_a():
 
 def test_solve_b():
     assert solve_b(test_string) == 0
-

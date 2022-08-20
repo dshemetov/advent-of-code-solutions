@@ -1,3 +1,4 @@
+"""Passage Pathing https://adventofcode.com/2021/day/12"""
 from collections import defaultdict
 from typing import Dict, List
 

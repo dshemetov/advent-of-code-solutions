@@ -1,11 +1,8 @@
-import argparse
-import importlib
+"""Dirac Dice https://adventofcode.com/2021/day/21"""
 import time
 from abc import ABC, abstractmethod
-from typing import List, Tuple, Set
-from scipy.spatial import distance_matrix
-from itertools import permutations, product, cycle, product
-import numpy as np
+from typing import List, Tuple
+from itertools import product, cycle, product
 import copy
 import random as rng
 import re
@@ -163,32 +160,11 @@ class Day21(AdventProblem):
         return f'{max(winning_count)}'
 
 def run_day(day: int, test: bool) -> None:
-    module = importlib.import_module('main')
-    class_ = getattr(module, f'Day{day}')
     time1 = time.time()
-    instance: AdventProblem = class_(test)
     time2 = time.time()
+    instance = Day21()
     print(f'Creating the class took {time2 - time1:.4f} seconds')
-    print(f'Now solving Day {day} "{instance.name}":')
     part1, time3 = instance.solve_part1(), time.time()
     print(f'Part 1 ({time3 - time2:.4f} s) - {part1}')
     part2, time4 = instance.solve_part2(), time.time()
     print(f'Part 2 ({time4 - time3:.4f} s) - {part2}')
-
-
-# if __name__ == '__main__':
-#     parser = argparse.ArgumentParser("main.py")
-
-#     parser.add_argument(dest='day', help='which day to run')
-#     parser.add_argument('-t',
-#                         '--test',
-#                         dest='test',
-#                         help='run the output on the test data',
-#                         action="store_true")
-#     parser.set_defaults(test=False)
-
-#     args = parser.parse_args()
-
-#     run_day(args.day, args.test)
-
-run_day(21, True)

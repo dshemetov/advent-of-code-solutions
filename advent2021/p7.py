@@ -1,3 +1,4 @@
+"""The Treachery of Whales https://adventofcode.com/2021/day/7"""
 import numpy as np
 
 def solve_a(s: str) -> int:

@@ -1,3 +1,4 @@
+"""Sea Cucumber https://adventofcode.com/2021/day/25"""
 import numpy as np
 
 def solve_a(s: str) -> str:

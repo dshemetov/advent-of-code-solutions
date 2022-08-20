@@ -1,4 +1,3 @@
-import pytest
 from .p11 import solve_a, solve_b, parse_input, run_octopus_step, run_octopus_steps, np
 
 test_string_10 = [

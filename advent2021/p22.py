@@ -1,3 +1,4 @@
+"""Reactor Reboot https://adventofcode.com/2021/day/22"""
 from advent_tools import apply_until_fixed
 from typing import Generator, List, Tuple, Optional
 from itertools import combinations, product, product

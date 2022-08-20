@@ -51,14 +51,16 @@ def get_occupied_seats(state: List[List[str]]) -> Iterable[Tuple[int, int]]:
             yield i, j
 
 def check_nearby_seats_empty(i: int, j: int, state: List[List[str]]) -> bool:
-    for i_, j_ in get_valid_neighbor_ixs(i, j, state, diagonals=True):
+    n, m = len(state), len(state[0])
+    for i_, j_ in get_valid_neighbor_ixs((i, j), (n, m), diagonals=True):
         if state[i_][j_] == "#":
             return False
     return True
 
 def check_nearby_seats_crowded(i: int, j: int, state: List[List[str]]) -> bool:
+    n, m = len(state), len(state[0])
     visible_seats = 0
-    for i_, j_ in get_valid_neighbor_ixs(i, j, state, diagonals=True):
+    for i_, j_ in get_valid_neighbor_ixs((i, j), (n, m), diagonals=True):
         if state[i_][j_] == "#":
             visible_seats += 1
             if visible_seats >= 4:

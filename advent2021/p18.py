@@ -1,9 +1,12 @@
-from typing import List, Optional, Union
-from math import floor, ceil
+"""Snailfish https://adventofcode.com/2021/day/18"""
 from copy import deepcopy
+from math import floor, ceil
 import numpy as np
+from typing import List, Optional, Union
 
 def solve_a(s: str) -> int:
+    if not s:
+        return 0
     root_trees = parse_input(s)
     end_tree = root_trees[0]
     for root_tree in root_trees[1:]:
@@ -166,6 +169,8 @@ def parse_input(s: str):
     return root_trees
 
 def solve_b(s: str) -> int:
+    if not s:
+        return 0
     root_trees = parse_input(s)
     max_mag = -np.inf
     for i in range(len(root_trees)):

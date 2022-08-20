@@ -1,6 +1,9 @@
+from bisect import insort
 from functools import reduce
+from itertools import product
 import os
-from typing import Callable, Dict, List, Tuple, Union
+from typing import Callable, Dict, Iterable, List, Tuple, Union
+from numpy.typing import ArrayLike
 
 from dotenv import load_dotenv
 from joblib import Memory
@@ -124,19 +127,53 @@ def get_bezout_coefficients(a: int, b: int) -> int:
         t, t_ = t_, t - q * t_
     return (t, s)
 
-def get_neighbor_values(i: int, j: int, mat: Union[List[List[int]], np.ndarray], radius: int = 1, diagonals: bool = False) -> List[int]:
-    return (mat[i][j] for i, j in get_valid_neighbor_ixs(i, j, mat, radius, diagonals))
+def get_units(n: int) -> np.ndarray:
+    return np.concatenate([np.eye(n, dtype=int), -np.eye(n, dtype=int)])
 
-def get_valid_neighbor_ixs(i: int, j: int, mat: Union[List[List[int]], np.ndarray], radius: int = 1, diagonals: bool = False) -> List[Tuple[int, int]]:
-    directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+def get_units_and_diagonals(n: int) -> np.ndarray:
+    """
+    Examples:
+    >>> get_units_and_diagonals(2)
+    array([[-1, -1],
+           [-1,  0],
+           [-1,  1],
+           [ 0, -1],
+           [ 0,  1],
+           [ 1, -1],
+           [ 1,  0],
+           [ 1,  1]])
+    """
+    zeros = tuple([0] * n)
+    return np.array([tup for tup in product([-1, 0, 1], repeat=n) if tup != zeros])
+
+def get_neighbor_values(ix: ArrayLike, mat: np.ndarray, radius: int = 1, diagonals: bool = False) -> Iterable:
+    return (mat[new_ix] for new_ix in get_valid_neighbor_ixs(ix, mat.shape, radius, diagonals))
+
+def get_valid_neighbor_ixs(ix: ArrayLike, mat_shape: ArrayLike, radius: int = 1, diagonals: bool = False) -> Iterable[Tuple[int, ...]]:
+    """
+    Examples:
+    >>> list(get_valid_neighbor_ixs(np.array([0, 1]), np.array([2, 2]))
+    [(1, 1), (0, 0)]
+    """
     if diagonals:
-        directions += [(1, 1), (1, -1), (-1, 1), (-1, -1)]
-    return ((i + r * di, j + r * dj) for di, dj in directions for r in range(1, radius + 1) if 0 <= i + r * di < len(mat) and 0 <= j + r * dj < len(mat[0]))
+        directions = get_units_and_diagonals(len(ix))
+    else:
+        directions = get_units(len(ix))
+
+    if isinstance(ix, tuple):
+        ix = np.array(ix, dtype=int)
+    if isinstance(mat_shape, tuple):
+        mat_shape = np.array(mat_shape, dtype=int)
+
+    min_ix = np.zeros(len(ix), dtype=int)
+    return (tuple(r * new_ix) for new_ix in (ix + directions) for r in range(1, radius+1) if all((min_ix <= (r * new_ix)) & ((r * new_ix) < mat_shape)))
 
 def compose_multivar_2(f: Callable, g: Callable) -> Callable:
     """
     Examples:
-    >>> compose_multivar_2(lambda x, y: (x+y, x-y), lambda x, y: (x+y, x-y))(1, 1)
+    >>> def f(x, y):
+    ...     return x + y, x - y
+    >>> compose_multivar_2(f, f)(1, 1)
     (2, 2)
     """
     return lambda *a, **kw: f(*g(*a, **kw))
@@ -144,7 +181,30 @@ def compose_multivar_2(f: Callable, g: Callable) -> Callable:
 def compose_multivar(*fs: List[Callable]) -> Callable:
     """
     Examples:
-    >>> compose_multivar(*[lambda x, y: (x+y, x-y)] * 3)(1, 1)
+    >>> def f(x, y):
+    ...     return x + y, x - y
+    >>> compose_multivar(*[f] * 3)(1, 1)
     (4, 0)
     """
     return reduce(compose_multivar_2, fs)
+
+
+class FiniteSortedList:
+    def __init__(self, values: List, max_length: int):
+        assert len(values) <= max_length
+        self.values = sorted(values)
+        self.max_length = max_length
+    
+    def insert(self, el):
+        insort(self.values, el)
+        if len(self.values) > self.max_length:
+            self.values.pop(0)
+
+    def __repr__(self) -> str:
+        return str(self.values)
+
+def get_top_n(it: Iterable, n: int) -> List:
+    fsl = FiniteSortedList([], n)
+    for e in it:
+        fsl.insert(e)
+    return fsl.values

@@ -1,10 +1,11 @@
-from scipy.sparse import dok_matrix
+"""Extended Polymerization https://adventofcode.com/2021/day/14"""
 from collections import Counter
+from scipy.sparse import dok_matrix
 
 def solve_a(s: str) -> int:
     """
     Examples:
-    >>> solve_a(test_strings)
+    >>> solve_a(test_string)
     1588
     """
     template, rules = s.split("\n\n")
@@ -53,7 +54,7 @@ def char_counts(v: dok_matrix, template: str) -> Counter[int]:
 def solve_b(s: str) -> int:
     """
     Examples:
-    >>> solve_b(test_strings)
+    >>> solve_b(test_string)
     2188189693529
     """
     template, rules = s.split("\n\n")

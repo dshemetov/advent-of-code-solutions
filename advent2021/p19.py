@@ -1,17 +1,19 @@
-from typing import Counter, List, Tuple, Set
+"""Beacon Scanner https://adventofcode.com/2021/day/19
+
+I was in flight to Tampa for this one, so this is mostly Jeff and David's code."""
+import copy
 from itertools import permutations, product
 import numpy as np
-import copy
-from advent_tools import Puzzle
 from scipy.spatial.distance import cdist
+from typing import Counter, List, Tuple, Set
 
 # Cube rotation matrices
 # https://en.wikipedia.org/wiki/Octahedral_symmetry#Rotation_matrices
 I = np.identity(3, dtype=int)
 cube_reflections = [I*np.diag(x) for x in product([-1, 1], repeat=3)]
-cube_rotations = [I[list(x)] for x in list(permutations(range(3))) for I in cube_reflections if np.linalg.det(I[list(x)]) > 0]
+cube_rotations = [I[list(x)] for x in permutations(range(3)) for I in cube_reflections if np.linalg.det(I[list(x)]) > 0]
 
-# I was in flight to Tampa for this one, so this is mostly Jeff and David's code
+
 class ScannerRotation:
     def __init__(self, x_flip: bool, y_flip: bool, z_flip: bool, permutation: Tuple[int,int,int]):
         self.x_sign = -1 if x_flip else 1

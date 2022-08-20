@@ -1,3 +1,5 @@
+"""Dive! https://adventofcode.com/2021/day/2"""
+
 def solve_a(s: str) -> int:
     """
     Example:

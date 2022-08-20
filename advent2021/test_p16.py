@@ -1,4 +1,3 @@
-import pytest
 from .p16 import hex_to_bin, read_binary, read_packet_header, solve_a, solve_b
 
 test_strings = [

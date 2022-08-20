@@ -1,4 +1,3 @@
-import pytest
 from .p22 import Cube, CubeSlice, NooiceSlice, generate_all_products, merge_adjacent_cubes, solve_a, solve_b, parse_input
 
 test_strings = [
