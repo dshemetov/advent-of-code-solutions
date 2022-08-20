@@ -2,6 +2,11 @@ from typing import Tuple
 import re
 
 def solve_a(s: str) -> int:
+    """
+    Examples:
+    >>> solve_a(test_strings)
+    45
+    """
     xmin, xmax, ymin, ymax = [int(x) for x in re.findall("(-*\d+)", s)]
     min_vx, max_vx = valid_vxs(xmin, xmax)
     min_vy, max_vy = valid_vys(ymin, ymax)
@@ -51,6 +56,11 @@ def ends_in_target(vx_: int, vy_: int, xmin, xmax, ymin, ymax) -> Tuple[bool, in
     return False, max_y
 
 def solve_b(s: str) -> int:
+    """
+    Examples:
+    >>> solve_b(test_strings)
+    112
+    """
     xmin, xmax, ymin, ymax = [int(x) for x in re.findall("(-*\d+)", s)]
     min_vx, max_vx = valid_vxs(xmin, xmax)
     min_vy, max_vy = valid_vys(ymin, ymax)
@@ -62,3 +72,6 @@ def solve_b(s: str) -> int:
                 valid_vxvys += 1
 
     return valid_vxvys
+
+
+test_string = """target area: x=20..30, y=-10..-5"""

@@ -16,6 +16,11 @@ class LineType(Enum):
     INCOMPLETE = 2
 
 def solve_a(s: str) -> int:
+    """
+    Examples:
+    >>> solve_a(test_string)
+    26397
+    """
     return sum(y for x, y in (parse_line(line) for line in s.split("\n")) if x == LineType.CORRUPTED)
 
 def parse_line(s: str) -> Tuple[LineType, Optional[int]]:
@@ -44,5 +49,22 @@ def get_completion_string_score(s: str) -> int:
     return score
 
 def solve_b(s: str) -> int:
+    """
+    Examples:
+    >>> solve_b(test_string)
+    288957
+    """
     scores = [y for x, y in (parse_line(line) for line in s.split("\n")) if x == LineType.INCOMPLETE]
     return sorted(scores)[len(scores) // 2]
+
+
+test_string = """[({(<(())[]>[[{[]{<()<>>
+[(()[<>])]({[<{<<[]>>(
+{([(<{}[<>[]}>{[]{[(<()>
+(((({<>}<{<{<>}{[]{[]{}
+[[<[([]))<([[{}[[()]]]
+[{[{({}]{}}([{[{{{}}([]
+{<[[]]>}<{[{[{[]{()[[[]
+[<(<(<(<{}))><([]([]()
+<{([([[(<>()){}]>(<<{{
+<{([{{}}[<[[[<>{}]]]>[]]"""

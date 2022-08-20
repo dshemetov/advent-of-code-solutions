@@ -5,6 +5,15 @@ Path = List[str]
 Graph = Dict[str, List[str]]
 
 def solve_a(s: str) -> int:
+    """
+    Examples:
+    >>> solve_a(test_strings[0])
+    10
+    >>> solve_a(test_strings[1])
+    19
+    >>> solve_a(test_strings[2])
+    226
+    """
     return len(get_paths(parse_input(s)))
 
 def parse_input(s: str) -> Graph:
@@ -43,4 +52,52 @@ def get_valid_steps(path: Path, node_map: Dict, part: str) -> List[str]:
     raise ValueError("Not implemented.")
 
 def solve_b(s: str) -> int:
+    """
+    Examples:
+    >>> solve_b(test_strings[0])
+    36
+    >>> solve_b(test_strings[1])
+    103
+    >>> solve_b(test_strings[2])
+    3509
+    """
     return len(get_paths(parse_input(s), part="b"))
+
+
+test_strings = [
+"""start-A
+start-b
+A-c
+A-b
+b-d
+A-end
+b-end""",
+"""dc-end
+HN-start
+start-kj
+dc-start
+dc-HN
+LN-dc
+HN-end
+kj-sa
+kj-HN
+kj-dc""",
+"""fs-end
+he-DX
+fs-he
+start-DX
+pj-DX
+end-zg
+zg-sl
+zg-pj
+pj-he
+RW-he
+fs-DX
+pj-RW
+zg-RW
+start-pj
+he-WI
+zg-he
+pj-fs
+start-RW"""
+]

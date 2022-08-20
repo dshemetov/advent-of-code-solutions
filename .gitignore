@@ -3,5 +3,5 @@ __pycache__
 .vscode
 *.egg-info
 .python-version
-.env
 .joblib_cache
+.env
