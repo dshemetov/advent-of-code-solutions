@@ -1,6 +1,7 @@
 from advent_tools import Puzzle, apply_until_fixed
 from typing import Generator, List, Tuple, Optional
-from itertools import chain, combinations, product, product
+from itertools import combinations, product, product
+from more_itertools import flatten
 import numpy as np
 from copy import deepcopy
 import re
@@ -157,10 +158,12 @@ class CubeSlice:
 
     def intersect(self, other: 'CubeSlice') -> Optional['CubeSlice']:
         x_inter = self.x & other.x
-        y_inter = self.y & other.y
-        z_inter = self.z & other.z
-        if (x_inter != NooiceSlice(0, 0)) and (y_inter != NooiceSlice(0, 0)) and (z_inter != NooiceSlice(0, 0)):
-            return CubeSlice(True, x_inter, y_inter, z_inter)
+        if x_inter != NooiceSlice(0, 0):
+            y_inter = self.y & other.y
+            if y_inter != NooiceSlice(0, 0):
+                z_inter = self.z & other.z
+                if z_inter != NooiceSlice(0, 0):
+                    return CubeSlice(True, x_inter, y_inter, z_inter)
         return None
 
     def __and__(self, other: 'CubeSlice') -> Optional['CubeSlice']:
@@ -241,22 +244,15 @@ class Cube:
     def set_slices(self, new_slices):
         self.__slices = new_slices
 
-    def add_slice(self, new_slice: CubeSlice) -> None:
-        self.__slices = self._add_slice(new_slice, self.__slices)
-
-    def _add_slice(self, new_slice: CubeSlice, partitioned_slices: List[CubeSlice]) -> List[CubeSlice]:
-        partitioned_slices = deepcopy(partitioned_slices)
-
-        intersecting_partitioned_slices = [pslice for pslice in partitioned_slices if not pslice.disjoint(new_slice)]
+    def add_slice(self, new_slice: CubeSlice):
+        intersecting_partitioned_slices = [pslice for pslice in self.__slices if not pslice.disjoint(new_slice)]
         for pslice in intersecting_partitioned_slices:
-            partitioned_slices.remove(pslice)
+            self.__slices.remove(pslice)
 
         if new_slice.off:
-            partitioned_slices.extend(chain(*[merge_adjacent_cubes(list(generate_all_products(pslice, new_slice))) for pslice in intersecting_partitioned_slices]))
+            self.__slices.extend(flatten(merge_adjacent_cubes(list(generate_all_products(pslice, new_slice))) for pslice in intersecting_partitioned_slices))
         else:
-            partitioned_slices.extend(self.partition_slices([new_slice] + intersecting_partitioned_slices))
-
-        return partitioned_slices
+            self.__slices.extend(self.partition_slices([new_slice] + intersecting_partitioned_slices))
 
     def partition_slices(self, cube_slices: List[CubeSlice]) -> List[CubeSlice]:
         new_slices = deepcopy(cube_slices)
@@ -283,9 +279,6 @@ class Cube:
         for cube_slice in self.get_slices():
             for pt in cube_slice.points_iter():
                 yield pt
-
-    def bonferroni(self):
-        return sum(map(lambda a: a.own_size(), self.__slices))
 
     def intersections_size(self):
         inters = []
