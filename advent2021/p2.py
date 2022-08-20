@@ -1,6 +1,11 @@
 from advent_tools import Puzzle
 
 def solve_a(s: str) -> int:
+    """
+    Example:
+    >>> solve_a(test_string)
+    150
+    """
     x, y = 0, 0
     for dir, n in (line.split(" ") for line in s.split("\n")):
         if dir == "forward":
@@ -12,6 +17,11 @@ def solve_a(s: str) -> int:
     return abs(x * y)
 
 def solve_b(s: str) -> int:
+    """
+    Example:
+    >>> solve_b(test_string)
+    900
+    """
     x, y, aim = 0, 0, 0
     for dir, n in (line.split(" ") for line in s.split("\n")):
         if dir == "forward":
@@ -32,3 +42,10 @@ class Solution:
     @property
     def answer_b(self) -> int:
         return solve_b(Puzzle(2, 2021).input_data)
+
+test_string = """forward 5
+down 5
+forward 8
+up 3
+down 8
+forward 2"""
