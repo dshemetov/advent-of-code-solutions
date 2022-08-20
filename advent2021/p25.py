@@ -1,6 +1,5 @@
 #welcom to zombocom
 import numpy as np
-from advent_tools import Puzzle
 
 def solve_a(s: str) -> str:
     return CucumberAutomata(parse_input(s)).update_until_stopped()
@@ -42,13 +41,3 @@ class CucumberAutomata:
 
 def solve_b(s: str) -> str:
     return f'{3}'
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(25, 2021).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(25, 2021).input_data)

@@ -1,6 +1,5 @@
 from typing import List
 import numpy as np
-from advent_tools import Puzzle
 from scipy.signal import convolve2d
 
 class ImageEnhancementAutomata:
@@ -58,13 +57,3 @@ def solve_b(s) -> str:
     for _ in range(50):
         image_ca.update()
     return f'{image_ca.count_state()}'
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(20, 2021).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(20, 2021).input_data)

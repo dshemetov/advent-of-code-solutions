@@ -17,15 +17,17 @@ import time
 from joblib import Memory
 memory = Memory("~/.advent_tools/joblib_cache", verbose=0)
 
+from advent_tools import Puzzle
+
 
 @memory.cache
 def get_answer(year: int, day: int, part: str) -> int:
     try:
         solution_module = import_module(f"advent{year}.p{day}")
-        solution_class_ = getattr(solution_module, "Solution")
+        solution_method = getattr(solution_module, f"solve_{part}")
     except ModuleNotFoundError:
         raise ModuleNotFoundError("Problem not implemented yet.")
-    return getattr(solution_class_(), f"answer_{part}")
+    return solution_method(Puzzle(day, year).input_data)
 
 def is_cached(year: int, day: int, part: str) -> int:
     """Return the list of inputs and outputs from `mem` (joblib.Memory cache).

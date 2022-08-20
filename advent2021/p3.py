@@ -1,4 +1,4 @@
-from advent_tools import Puzzle, binary_to_int
+from advent_tools import binary_to_int
 from copy import copy
 import numpy as np
 
@@ -31,13 +31,3 @@ def solve_b(s: str) -> int:
     co2_rating = binary_to_int(mat_[0])
 
     return oxygen_rating * co2_rating
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(3, 2021).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(3, 2021).input_data)

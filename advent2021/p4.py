@@ -1,4 +1,3 @@
-from advent_tools import Puzzle
 import numpy as np
 
 def solve_a(s: str) -> int:
@@ -48,13 +47,3 @@ def solve_b(s: str) -> int:
             break
 
     return get_board_score(boards[i], board_masks[i], num)
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(4, 2021).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(4, 2021).input_data)

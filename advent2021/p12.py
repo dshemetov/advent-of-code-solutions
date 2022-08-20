@@ -1,4 +1,3 @@
-from advent_tools import Puzzle
 from collections import defaultdict
 from typing import Dict, List
 
@@ -45,13 +44,3 @@ def get_valid_steps(path: Path, node_map: Dict, part: str) -> List[str]:
 
 def solve_b(s: str) -> int:
     return len(get_paths(parse_input(s), part="b"))
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(12, 2021).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(12, 2021).input_data)

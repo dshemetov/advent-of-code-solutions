@@ -1,4 +1,4 @@
-from advent_tools import Puzzle, reverse_dict
+from advent_tools import reverse_dict
 from itertools import permutations, product
 import re
 from typing import Dict, List
@@ -68,13 +68,3 @@ digit_to_segments = dict({
 })
 
 segments_to_digit = reverse_dict(digit_to_segments)
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(8, 2021).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(8, 2021).input_data)

@@ -1,4 +1,3 @@
-from advent_tools import Puzzle
 from collections import Counter
 import numpy as np
 
@@ -19,13 +18,3 @@ def pass_days(fish_ages: Counter, n: int = 1) -> np.ndarray:
 def solve_b(s: str) -> int:
     fish_ages = Counter(int(x) for x in s.split(","))
     return get_number_fish_after_days(fish_ages, 256)
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(6, 2021).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(6, 2021).input_data)

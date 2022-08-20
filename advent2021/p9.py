@@ -1,5 +1,5 @@
 from typing import List, Set, Tuple
-from advent_tools import Puzzle, get_valid_neighbor_ixs, get_neighbor_values
+from advent_tools import get_valid_neighbor_ixs, get_neighbor_values
 from itertools import product
 
 def solve_a(s: str) -> int:
@@ -36,13 +36,3 @@ def get_basin_at_index(i: int, j: int, mat: List[List[int]]) -> Set[Tuple[int, i
         unexplored_ixs |= {x for x, val in neighbor_ixs_vals if val != 9} - explored_ixs
         explored_ixs |= {(i_, j_)}
     return explored_ixs
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(9, 2021).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(9, 2021).input_data)

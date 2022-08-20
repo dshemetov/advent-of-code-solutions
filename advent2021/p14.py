@@ -1,4 +1,3 @@
-from advent_tools import Puzzle
 from scipy.sparse import dok_matrix
 from collections import Counter
 
@@ -54,13 +53,3 @@ def solve_b(s: str) -> int:
         result = A @ result
     counts = char_counts(result, template)
     return max(counts.values()) - min(counts.values())
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(14, 2021).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(14, 2021).input_data)

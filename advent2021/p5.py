@@ -1,4 +1,3 @@
-from advent_tools import Puzzle
 import numpy as np
 import re
 
@@ -37,13 +36,3 @@ def solve_b(s: str) -> int:
         grid[xs, ys] += 1
 
     return (grid > 1).sum()
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(5, 2021).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(5, 2021).input_data)

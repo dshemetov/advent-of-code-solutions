@@ -1,4 +1,4 @@
-from advent_tools import Puzzle, reverse_dict
+from advent_tools import reverse_dict
 from enum import Enum
 from typing import Optional, Tuple
 
@@ -46,13 +46,3 @@ def get_completion_string_score(s: str) -> int:
 def solve_b(s: str) -> int:
     scores = [y for x, y in (parse_line(line) for line in s.split("\n")) if x == LineType.INCOMPLETE]
     return sorted(scores)[len(scores) // 2]
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(10, 2021).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(10, 2021).input_data)

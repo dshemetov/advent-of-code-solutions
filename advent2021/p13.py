@@ -1,4 +1,3 @@
-from advent_tools import Puzzle
 import numpy as np
 import re
 from typing import List
@@ -39,13 +38,3 @@ def solve_b(s: str) -> str:
         mat = fold_mat(along, mat)
 
     return "\n".join(["".join(["1" if x else " " for x in row]) for row in mat])
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(13, 2021).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(13, 2021).input_data)

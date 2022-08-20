@@ -1,4 +1,4 @@
-from advent_tools import Puzzle, get_valid_neighbor_ixs
+from advent_tools import get_valid_neighbor_ixs
 from itertools import product
 import numpy as np
 from typing import Tuple
@@ -43,13 +43,3 @@ def solve_b(s: str) -> int:
             break
         i += 1
     return i
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(11, 2021).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(11, 2021).input_data)

@@ -1,4 +1,3 @@
-from advent_tools import Puzzle
 from typing import Counter, List, Tuple, Set
 from itertools import permutations, product
 import numpy as np
@@ -134,13 +133,3 @@ def largest_distance(scanners):
         for y in scanners[ii:]:
             maxdist = max(np.linalg.norm(x.offset-y.offset,ord=1),maxdist)
     return maxdist
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(19, 2021).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(19, 2021).input_data)

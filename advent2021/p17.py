@@ -1,5 +1,4 @@
 from typing import Tuple
-from advent_tools import Puzzle
 import re
 
 def solve_a(s: str) -> int:
@@ -63,13 +62,3 @@ def solve_b(s: str) -> int:
                 valid_vxvys += 1
 
     return valid_vxvys
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(17, 2021).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(17, 2021).input_data)

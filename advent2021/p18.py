@@ -1,4 +1,3 @@
-from advent_tools import Puzzle
 from typing import List, Optional, Union
 from math import floor, ceil
 from copy import deepcopy
@@ -181,13 +180,3 @@ def solve_b(s: str) -> int:
                 max_mag = max(max_mag,out.magnitude)
 
     return f'{max_mag}'
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(18, 2021).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(18, 2021).input_data)

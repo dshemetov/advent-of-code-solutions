@@ -1,7 +1,7 @@
 from typing import Tuple
-from advent_tools import Puzzle, get_valid_neighbor_ixs
-import numpy as np
 from heapq import heappush, heappop
+from advent_tools import get_valid_neighbor_ixs
+import numpy as np
 
 def solve_a(s: str) -> int:
     mat = np.array([list(line) for line in s.split("\n")], dtype=int)
@@ -45,13 +45,3 @@ def expand_mat(mat):
             graph_tiled[xs:xe, ys:ye] = (mat + xtile + ytile - 1) % 9 + 1
 
     return graph_tiled
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(15, 2021).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(15, 2021).input_data)

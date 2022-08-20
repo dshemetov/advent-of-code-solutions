@@ -1,4 +1,4 @@
-from advent_tools import Puzzle, apply_until_fixed
+from advent_tools import apply_until_fixed
 from typing import Generator, List, Tuple, Optional
 from itertools import combinations, product, product
 from more_itertools import flatten
@@ -338,13 +338,3 @@ def merge_adjacent_cubes(cubes: List[CubeSlice]) -> List[CubeSlice]:
             merged_cubes.append(cube)
 
     return merged_cubes
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(22, 2021).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(22, 2021).input_data)
