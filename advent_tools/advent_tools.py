@@ -1,13 +1,12 @@
+from functools import reduce
 import os
 from os.path import join
-from typing import Callable, Dict, Iterable, List, Tuple, Union
+from typing import Callable, Dict, List, Tuple, Union
 
 from dotenv import load_dotenv
 from joblib import Memory
 import requests
 import numpy as np
-from more_itertools import windowed
-from functools import reduce
 
 ADVENT_TOOLS_PATH = join(os.environ["HOME"], ".advent_tools")
 memory = Memory(join(ADVENT_TOOLS_PATH, "joblib_cache"), verbose=0)

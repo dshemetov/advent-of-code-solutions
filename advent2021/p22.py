@@ -230,7 +230,7 @@ def solve_b(s: str) -> int:
     cube = Cube()
     for i, cube_slice in enumerate(slices):
         cube.add_slice(cube_slice)
-        print(f'Now on cube slice {i} out of {len(slices)}. The cube slice is {"on" if cube_slice.on else "off"}.')
+        # print(f'Now on cube slice {i} out of {len(slices)}. The cube slice is {"on" if cube_slice.on else "off"}.')
 
     return abs(cube)
 

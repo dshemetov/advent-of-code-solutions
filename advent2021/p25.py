@@ -1,11 +1,10 @@
-#welcom to zombocom
 import numpy as np
 
 def solve_a(s: str) -> str:
     return CucumberAutomata(parse_input(s)).update_until_stopped()
 
-def parse_input(fname: str):
-    lines = open(fname, 'r').readlines()
+def parse_input(s: str):
+    lines = s.split("\n")
     cucumber_array = np.array([list(line.strip("\n")) for line in lines])
     return cucumber_array
 
@@ -40,4 +39,4 @@ class CucumberAutomata:
         return i + 1
 
 def solve_b(s: str) -> str:
-    return f'{3}'
+    return 0

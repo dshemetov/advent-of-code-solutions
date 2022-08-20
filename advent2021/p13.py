@@ -23,7 +23,7 @@ def fold_mat(along: str, mat: List[List[str]]) -> List[List[str]]:
         new_mat = mat[:, 0:m//2] | mat[:, :m//2:-1]
     return new_mat
 
-def solve_b(s: str) -> str:
+def solve_b(s: str) -> int:
     ixs, folds = s.split("\n\n")
     ixs = [line.split(",") for line in ixs.strip("\n").split("\n")]
     ixs = [(int(x), int(y)) for y, x in ixs]
@@ -36,5 +36,5 @@ def solve_b(s: str) -> str:
     folds = [re.match("fold along (\w)=(\d+)", line).groups() for line in folds.split("\n")]
     for along, _ in folds:
         mat = fold_mat(along, mat)
-
-    return "\n".join(["".join(["1" if x else " " for x in row]) for row in mat])
+    print("\n".join(["".join(["1" if x else " " for x in row]) for row in mat]))
+    return 0

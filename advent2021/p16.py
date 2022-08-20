@@ -1,6 +1,7 @@
 from typing import List, Tuple
 
 def solve_a(s: str) -> int:
+    return 0
     bs = hex_to_bin(s)
     versions, _ = read_binary(bs)
     return sum(versions)
