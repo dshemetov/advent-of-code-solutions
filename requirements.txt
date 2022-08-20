@@ -1,6 +1,7 @@
 -e advent_tools
-sympy
-pytest
-numpy
-scipy
+docopt
 more_itertools
+numpy
+pytest
+scipy
+sympy

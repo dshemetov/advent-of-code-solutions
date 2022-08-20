@@ -1,4 +1,16 @@
-import argparse
+"""Run Advent of Code solutions.
+
+Usage:
+    runner.py <year.day.part> [-c | --clear-cache]
+    runner.py -h | --help
+    runner.py --version
+
+Options:
+    -h --help            Show this screen.
+    --version            Show version.
+    -c --clear-cache     Clear cached solutions, if already computed.
+"""
+from docopt import docopt
 from importlib import import_module
 import time
 
@@ -15,10 +27,12 @@ def get_answer(year: int, day: int, part: str) -> int:
         raise ModuleNotFoundError("Problem not implemented yet.")
     return getattr(solution_class_(), f"answer_{part}")
 
-# Non-public API: https://github.com/joblib/joblib/blob/754433f617793bc950be40cfaa265a32aed11d7d/joblib/memory.py#L758
-# and an answer that led me there https://stackoverflow.com/a/69361221
 def is_cached(year: int, day: int, part: str) -> int:
-    """Return the list of inputs and outputs from `mem` (joblib.Memory cache)."""
+    """Return the list of inputs and outputs from `mem` (joblib.Memory cache).
+    
+    Uses non-public API: https://github.com/joblib/joblib/blob/754433f617793bc950be40cfaa265a32aed11d7d/joblib/memory.py#L758
+    and the answer that led me there https://stackoverflow.com/a/69361221.
+    """
     args = [year, day, part]
     func_id, args_id = get_answer._get_output_identifiers(*args)
     try:
@@ -29,17 +43,12 @@ def is_cached(year: int, day: int, part: str) -> int:
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Get solutions to Advent of Code puzzles.")
-    parser.add_argument("-s", "--string", dest="string", type=str, action="store", required=True,
-                        help="specify the problem as a contiguous string: {year}.{day}.{part}")
-    parser.add_argument("-c", "--clear-cache", dest="clear_cache", action="store_true",
-                        help="clear the answer cache for problem")
-    args = parser.parse_args()
+    args = docopt(__doc__, version='Advent of Code Solution Runner v0.1.0')
 
-    year, day, part = args.string.split(".")
+    year, day, part = args["<year.day.part>"].split(".")
     year, day = int(year), int(day)
 
-    if args.clear_cache and is_cached(year, day, part):
+    if args["--clear-cache"] and is_cached(year, day, part):
         result = get_answer.call_and_shelve(year, day, part).clear()
         t = time.perf_counter()
         print(f"Recalculating answer to year {year}, day {day}, part {part}...")
