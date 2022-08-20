@@ -4,6 +4,11 @@ import re
 from typing import List
 
 def solve_a(s: str) -> int:
+    """
+    Examples:
+    >>> solve_a(test_strings)
+    17
+    """
     ixs, folds = s.split("\n\n")
     ixs = np.array([line.split(",") for line in ixs.strip("\n").split("\n")], dtype=int)[:,::-1].T
     n, m = ixs.max(axis=1) + 1
@@ -49,3 +54,25 @@ class Solution:
     @property
     def answer_b(self) -> int:
         return solve_b(Puzzle(13, 2021).input_data)
+
+test_string = """6,10
+0,14
+9,10
+0,3
+10,4
+4,11
+6,0
+6,12
+4,1
+0,13
+10,12
+3,4
+3,0
+8,4
+1,10
+2,14
+8,10
+9,0
+
+fold along y=7
+fold along x=5"""

@@ -1,9 +1,19 @@
 from advent_tools import Puzzle
 
 def solve_a(s: str) -> int:
+    """
+    Examples:
+    >>> solve_a(test_string)
+    0
+    """
     return 0
 
 def solve_b(s: str) -> int:
+    """
+    Examples:
+    >>> solve_b(test_string)
+    0
+    """
     return 0
 
 
@@ -15,3 +25,6 @@ class Solution:
     @property
     def answer_b(self) -> int:
         return solve_b(Puzzle().input_data)
+
+test_string = """
+"""

@@ -3,6 +3,11 @@ from scipy.sparse import dok_matrix
 from collections import Counter
 
 def solve_a(s: str) -> int:
+    """
+    Examples:
+    >>> solve_a(test_strings)
+    1588
+    """
     template, rules = s.split("\n\n")
     A, v = rules_to_matrix(rules), template_to_vector(template)
     result = v
@@ -47,6 +52,11 @@ def char_counts(v: dok_matrix, template: str) -> Counter[str, int]:
     return counts
 
 def solve_b(s: str) -> int:
+    """
+    Examples:
+    >>> solve_b(test_strings)
+    2188189693529
+    """
     template, rules = s.split("\n\n")
     A, v = rules_to_matrix(rules), template_to_vector(template)
     result = v
@@ -64,3 +74,22 @@ class Solution:
     @property
     def answer_b(self) -> int:
         return solve_b(Puzzle(14, 2021).input_data)
+
+test_string = """NNCB
+
+CH -> B
+HH -> N
+CB -> H
+NH -> C
+HB -> C
+HC -> B
+HN -> C
+NN -> C
+BH -> H
+NC -> B
+NB -> B
+BN -> B
+BB -> N
+BC -> B
+CC -> N
+CN -> C"""

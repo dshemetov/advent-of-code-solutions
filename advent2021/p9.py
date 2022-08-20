@@ -3,6 +3,11 @@ from advent_tools import Puzzle, get_valid_neighbor_ixs, get_neighbor_values
 from itertools import product
 
 def solve_a(s: str) -> int:
+    """
+    Examples:
+    >>> solve_a(test_string)
+    15
+    """
     mat = [[int(x) for x in list(line)] for line in s.split("\n")]
     n, m = len(mat), len(mat[0])
     return sum(mat[i][j]+1 for i, j in product(range(n), range(m)) if is_lowest_point(i, j, mat))
@@ -11,6 +16,11 @@ def is_lowest_point(i: int, j: int, mat: List[List[int]]) -> bool:
     return all(mat[i][j] < v for v in get_neighbor_values(i, j, mat))
 
 def solve_b(s: str) -> int:
+    """
+    Examples:
+    >>> solve_b(test_string)
+    1134
+    """
     mat = [[int(x) for x in list(line)] for line in s.split("\n")]
     a, b, c = sorted([len(basin) for basin in get_basins(mat)], reverse=True)[:3]
     return a * b * c
@@ -46,3 +56,9 @@ class Solution:
     @property
     def answer_b(self) -> int:
         return solve_b(Puzzle(9, 2021).input_data)
+
+test_string = """2199943210
+3987894921
+9856789892
+8767896789
+9899965678"""

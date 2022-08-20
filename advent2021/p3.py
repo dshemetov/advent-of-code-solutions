@@ -3,6 +3,11 @@ from copy import copy
 import numpy as np
 
 def solve_a(s: str) -> int:
+    """
+    Examples:
+    >>> solve_a(test_string)
+    198
+    """
     mat = np.array([list(line) for line in s.split("\n")], dtype=int)
     n, _ = mat.shape
     max_rows = mat.sum(axis=0) >= n / 2
@@ -11,6 +16,11 @@ def solve_a(s: str) -> int:
     return gamma_rate * epsilon_rate
 
 def solve_b(s: str) -> int:
+    """
+    Examples:
+    >>> solve_b(test_string)
+    230
+    """
     mat = np.array([list(line) for line in s.split("\n")], dtype=int)
     _, m = mat.shape
 
@@ -41,3 +51,16 @@ class Solution:
     @property
     def answer_b(self) -> int:
         return solve_b(Puzzle(3, 2021).input_data)
+
+test_string = """00100
+11110
+10110
+10111
+10101
+01111
+00111
+11100
+10000
+11001
+00010
+01010"""

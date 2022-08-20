@@ -4,6 +4,11 @@ import numpy as np
 from heapq import heappush, heappop
 
 def solve_a(s: str) -> int:
+    """
+    Examples:
+    >>> solve_a(test_strings)
+    40
+    """
     mat = np.array([list(line) for line in s.split("\n")], dtype=int)
     n, m = mat.shape
     actual_cost, _ = get_minimum_path((0, 0), (n-1, m-1), mat)
@@ -27,6 +32,11 @@ def get_minimum_path(start: Tuple[int, int], end: Tuple[int, int], mat: np.ndarr
     return cost, (i, j)
 
 def solve_b(s: str) -> int:
+    """
+    Examples:
+    >>> solve_b(test_strings)
+    315
+    """
     mat = np.array([list(line) for line in s.split("\n")], dtype=int)
     big_mat = expand_mat(mat)
     n, m = big_mat.shape
@@ -55,3 +65,15 @@ class Solution:
     @property
     def answer_b(self) -> int:
         return solve_b(Puzzle(15, 2021).input_data)
+
+
+test_string = """1163751742
+1381373672
+2136511328
+3694931569
+7463417111
+1319128137
+1359912421
+3125421639
+1293138521
+2311944581"""
