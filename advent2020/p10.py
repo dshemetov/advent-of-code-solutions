@@ -1,7 +1,7 @@
 from advent_tools import Puzzle
 from functools import reduce
-from itertools import chain, islice, tee
-from functools import reduce
+from itertools import chain
+from more_itertools import pairwise
 from sympy import symbols, Poly
 
 def solve_a(s: str) -> int:
@@ -21,11 +21,6 @@ def solve_b(s: str) -> int:
     # The length of the 1-sequence [a, b] is (b - a - 1)
     diffs = (integer_composition(x-1) for x in diff(ixs))
     return reduce(lambda x, y: x * y, diffs)
-
-def pairwise(iterable):
-    """s -> (s0,s1), (s1,s2), (s2, s3), ..."""
-    a, b = tee(iterable)
-    return zip(a, islice(b, 1, None))
 
 def diff(iterable):
     """s -> s1-s0, s2-s1, s3-s2, ..."""
