@@ -17,14 +17,16 @@ The problem runner can be used as follows:
 
 ```sh
 # Print the answer to 2021 puzzle day 2 part b
-python runner.py -s 2021.2.b
-```
+python runner.py solution 2021.2.b
 
-The runner caches results by default, you can clear the answer cache and rerun with the `-c` flag:
+# Print the answers to 2021 puzzle day 2 problems
+python runner.py day 2021.2
 
-```sh
-# Clear answer cache
-python runner.py -s 2021.2.b -c
+# Print the answers to 2021 problems
+python runner.py year 2021
+
+# Clear cached answer
+python runner.py day 2021.2.b -c
 ```
 
 Test and format (with black)
