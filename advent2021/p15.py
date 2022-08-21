@@ -4,6 +4,7 @@ from heapq import heappush, heappop
 import numpy as np
 from typing import Tuple
 
+
 def solve_a(s: str) -> int:
     """
     Examples:
@@ -12,8 +13,9 @@ def solve_a(s: str) -> int:
     """
     mat = np.array([list(line) for line in s.split("\n")], dtype=int)
     n, m = mat.shape
-    actual_cost, _ = get_minimum_path(mat, (0, 0), (n-1, m-1))
+    actual_cost, _ = get_minimum_path(mat, (0, 0), (n - 1, m - 1))
     return actual_cost
+
 
 def get_minimum_path(mat: np.ndarray, start_ix: Tuple[int, int], end_ix: Tuple[int, int]) -> np.ndarray:
     ix = start_ix
@@ -32,6 +34,7 @@ def get_minimum_path(mat: np.ndarray, start_ix: Tuple[int, int], end_ix: Tuple[i
 
     return cost, ix
 
+
 def solve_b(s: str) -> int:
     """
     Examples:
@@ -41,8 +44,9 @@ def solve_b(s: str) -> int:
     mat = np.array([list(line) for line in s.split("\n")], dtype=int)
     big_mat = expand_mat(mat)
     n, m = big_mat.shape
-    actual_cost, _ = get_minimum_path(big_mat, (0, 0), (n-1, m-1))
+    actual_cost, _ = get_minimum_path(big_mat, (0, 0), (n - 1, m - 1))
     return actual_cost
+
 
 def expand_mat(mat):
     n, _ = mat.shape
@@ -52,7 +56,7 @@ def expand_mat(mat):
     for xtile in range(ntile):
         for ytile in range(ntile):
             xs, ys = xtile * n, ytile * n
-            xe, ye = (xtile+1)* n, (ytile+1) * n
+            xe, ye = (xtile + 1) * n, (ytile + 1) * n
             graph_tiled[xs:xe, ys:ye] = (mat + xtile + ytile - 1) % 9 + 1
 
     return graph_tiled

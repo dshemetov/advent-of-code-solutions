@@ -8,6 +8,7 @@ from copy import deepcopy
 import re
 from math import inf
 
+
 def solve_a(s: str) -> int:
     slices = parse_input(s)
     xmin_ = ymin_ = zmin_ = -50
@@ -25,8 +26,10 @@ def solve_a(s: str) -> int:
 
     return np.sum(region)
 
+
 class NooiceSlice:
     """A class implementing the algebra of left-closed integer intervals [a, b)."""
+
     def __init__(self, start: int = -inf, stop: int = inf):
         self.check_start_stop(start, stop)
         self.__start = start
@@ -141,7 +144,8 @@ class NooiceSlice:
         return self.stop - self.start
 
     def __repr__(self) -> str:
-        return f'[{self.start} to {self.stop-1}]'
+        return f"[{self.start} to {self.stop-1}]"
+
 
 class CubeSlice:
     def __init__(self, on: bool, xslice: NooiceSlice, yslice: NooiceSlice, zslice: NooiceSlice):
@@ -154,10 +158,10 @@ class CubeSlice:
     def off(self):
         return not self.on
 
-    def __eq__(self, other: 'CubeSlice'):
+    def __eq__(self, other: "CubeSlice"):
         return self.x == other.x and self.y == other.y and self.z == other.z
 
-    def intersect(self, other: 'CubeSlice') -> Optional['CubeSlice']:
+    def intersect(self, other: "CubeSlice") -> Optional["CubeSlice"]:
         x_inter = self.x & other.x
         if x_inter != NooiceSlice(0, 0):
             y_inter = self.y & other.y
@@ -167,22 +171,22 @@ class CubeSlice:
                     return CubeSlice(True, x_inter, y_inter, z_inter)
         return None
 
-    def __and__(self, other: 'CubeSlice') -> Optional['CubeSlice']:
+    def __and__(self, other: "CubeSlice") -> Optional["CubeSlice"]:
         return self.intersect(other)
 
-    def adjacent(self, other: 'CubeSlice') -> bool:
+    def adjacent(self, other: "CubeSlice") -> bool:
         return self._adjacent_x(other) or self._adjacent_y(other) or self._adjacent_z(other)
 
-    def _adjacent_x(self, other: 'CubeSlice') -> bool:
+    def _adjacent_x(self, other: "CubeSlice") -> bool:
         return self.x.adjacent(other.x) and self.y == other.y and self.z == other.z
 
-    def _adjacent_y(self, other: 'CubeSlice') -> bool:
+    def _adjacent_y(self, other: "CubeSlice") -> bool:
         return self.y.adjacent(other.y) and self.x == other.x and self.z == other.z
 
-    def _adjacent_z(self, other: 'CubeSlice') -> bool:
+    def _adjacent_z(self, other: "CubeSlice") -> bool:
         return self.z.adjacent(other.z) and self.x == other.x and self.y == other.y
 
-    def combine(self, other: 'CubeSlice') -> 'CubeSlice':
+    def combine(self, other: "CubeSlice") -> "CubeSlice":
         if self._adjacent_x(other):
             return CubeSlice(True, self.x.combine(other.x), self.y, self.z)
         if self._adjacent_y(other):
@@ -204,27 +208,29 @@ class CubeSlice:
         x, y, z = pt
         return x in self.x and y in self.y and z in self.z
 
-    def __lt__(self, other: 'CubeSlice') -> bool:
+    def __lt__(self, other: "CubeSlice") -> bool:
         return self.x < other.x and self.y < other.y and self.z < other.z
 
-    def __le__(self, other: 'CubeSlice') -> bool:
+    def __le__(self, other: "CubeSlice") -> bool:
         return self.x <= other.x and self.y <= other.y and self.z <= other.z
 
     def __repr__(self) -> str:
-        on_off = 'on' if self.on else 'off'
+        on_off = "on" if self.on else "off"
         x, y, z = self.x, self.y, self.z
-        return f'{on_off} x={x.start}..{x.stop},y={y.start}..{y.stop},z={z.start}..{z.stop}'
+        return f"{on_off} x={x.start}..{x.stop},y={y.start}..{y.stop},z={z.start}..{z.stop}"
+
 
 def parse_input(s: str) -> List[CubeSlice]:
     cube_slices = re.findall("(on|off) x=(-*\d+)..(-*\d+),y=(-*\d+)..(-*\d+),z=(-*\d+)..(-*\d+)", s)
     slices = []
     for on_off, xmin, xmax, ymin, ymax, zmin, zmax in cube_slices:
-        x = NooiceSlice(int(xmin), int(xmax)+1)
-        y = NooiceSlice(int(ymin), int(ymax)+1)
-        z = NooiceSlice(int(zmin), int(zmax)+1)
-        slc = CubeSlice(on_off == 'on', x, y, z)
+        x = NooiceSlice(int(xmin), int(xmax) + 1)
+        y = NooiceSlice(int(ymin), int(ymax) + 1)
+        z = NooiceSlice(int(zmin), int(zmax) + 1)
+        slc = CubeSlice(on_off == "on", x, y, z)
         slices.append(slc)
     return slices
+
 
 def solve_b(s: str) -> int:
     slices = parse_input(s)
@@ -234,6 +240,7 @@ def solve_b(s: str) -> int:
         # print(f'Now on cube slice {i} out of {len(slices)}. The cube slice is {"on" if cube_slice.on else "off"}.')
 
     return abs(cube)
+
 
 class Cube:
     def __init__(self):
@@ -294,10 +301,11 @@ class Cube:
         return sum(abs(cube_slice) for cube_slice in self.get_slices())
 
     def __repr__(self) -> str:
-        ret_val = ''
+        ret_val = ""
         for slc in self.__slices:
-            ret_val += f'{slc}\n'
+            ret_val += f"{slc}\n"
         return ret_val
+
 
 def generate_all_products(cube1: CubeSlice, cube2: CubeSlice) -> Generator:
     """Partition the cubes into a refinement of their intersection.
@@ -317,8 +325,9 @@ def generate_all_products(cube1: CubeSlice, cube2: CubeSlice) -> Generator:
         # The extra cubes can be detected by taking a corner point and testing if it belongs to one of the previous cubes
         if (xs_new, ys_new, zs_new) in cube1 and not (cube2.off and (xs_new, ys_new, zs_new) in cube2):
             yield CubeSlice(True, NooiceSlice(xs_new, xe_new), NooiceSlice(ys_new, ye_new), NooiceSlice(zs_new, ze_new))
-        elif (cube2.on and (xs_new, ys_new, zs_new) in cube2):
+        elif cube2.on and (xs_new, ys_new, zs_new) in cube2:
             yield CubeSlice(True, NooiceSlice(xs_new, xe_new), NooiceSlice(ys_new, ye_new), NooiceSlice(zs_new, ze_new))
+
 
 @apply_until_fixed
 def merge_adjacent_cubes(cubes: List[CubeSlice]) -> List[CubeSlice]:

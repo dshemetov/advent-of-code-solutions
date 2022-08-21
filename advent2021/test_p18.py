@@ -10,34 +10,34 @@ def test_example1():
         """[[[[0,7],4],[15,[0,13]]],[1,1]]""",
         """[[[[0,7],4],[[7,8],[0,13]]],[1,1]]""",
         """[[[[0,7],4],[[7,8],[0,[6,7]]]],[1,1]]""",
-        """[[[[0,7],4],[[7,8],[6,0]]],[8,1]]"""
+        """[[[[0,7],4],[[7,8],[6,0]]],[8,1]]""",
     ]
     i = 0
     root_tree = SnailfishTree()
     root_tree.parse(eval(s[i]))
     root_tree.reduce()
-    assert str(root_tree) == s[i+1]
+    assert str(root_tree) == s[i + 1]
     i = 1
     root_tree = SnailfishTree()
     root_tree.parse(eval(s[i]))
     root_tree.reduce()
 
-    assert str(root_tree) == s[i+1]
+    assert str(root_tree) == s[i + 1]
     i = 2
     root_tree = SnailfishTree()
     root_tree.parse(eval(s[i]))
     root_tree.reduce()
-    assert str(root_tree) == s[i+1]
+    assert str(root_tree) == s[i + 1]
     i = 3
     root_tree = SnailfishTree()
     root_tree.parse(eval(s[i]))
     root_tree.reduce()
-    assert str(root_tree) == s[i+1]
+    assert str(root_tree) == s[i + 1]
     i = 4
     root_tree = SnailfishTree()
     root_tree.parse(eval(s[i]))
     root_tree.reduce()
-    assert str(root_tree) == s[i+1]
+    assert str(root_tree) == s[i + 1]
 
     s = """[[[0,[4,5]],[0,0]],[[[4,5],[2,6]],[9,5]]]
 [7,[[[3,7],[4,3]],[[6,3],[8,8]]]]
@@ -67,8 +67,10 @@ def test_example1():
 
     assert str(end_tree) == expected
 
+
 def test_solve_a():
     assert solve_a(test_string) == 0
+
 
 def test_solve_b():
     assert solve_b(test_string) == 0

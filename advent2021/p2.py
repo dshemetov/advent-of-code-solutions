@@ -1,5 +1,6 @@
 """Dive! https://adventofcode.com/2021/day/2"""
 
+
 def solve_a(s: str) -> int:
     """
     Example:
@@ -15,6 +16,7 @@ def solve_a(s: str) -> int:
         if dir == "down":
             y -= int(n)
     return abs(x * y)
+
 
 def solve_b(s: str) -> int:
     """

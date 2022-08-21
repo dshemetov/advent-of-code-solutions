@@ -5,14 +5,17 @@ import re
 
 from advent_tools import Puzzle
 
+
 def find_simple_expressions(expr: str) -> List[str]:
     """A simple expression contains no parenthetical sub-statements."""
     return re.compile("\([^\(\)]*[^\(\)]\)").findall(expr)
 
+
 def find_simple_addition(expr: str) -> re.Match:
     """A simple addition involves the addition of 2 or more numbers and no parenthetical sub-statements."""
     # return re.compile("(\d+ \+ \d+)").findall(expr)    # only matches additions of 2 numbers
-    return re.search("(\d+\s+[\s\+\d]+\d+)", expr)       # matches all sequences of additions; \d+ matches one or more digits, \s+ matches at least one space to exclude plain numbers
+    return re.search("(\d+\s+[\s\+\d]+\d+)", expr)  # matches all sequences of additions; \d+ matches one or more digits, \s+ matches at least one space to exclude plain numbers
+
 
 def evaluate_simple_additions(expr: str) -> str:
     match = find_simple_addition(expr)
@@ -22,6 +25,7 @@ def evaluate_simple_additions(expr: str) -> str:
         expr = expr.replace(s, total)
         match = find_simple_addition(expr)
     return expr
+
 
 def evaluate_simple_expression_a(expr: str) -> str:
     expr = expr.strip("()").split(" ")
@@ -33,6 +37,7 @@ def evaluate_simple_expression_a(expr: str) -> str:
             register = (register * int(x)) if op == "*" else (register + int(x))
     return str(register)
 
+
 def evaluate_expression_a(expr: str) -> int:
     matches = find_simple_expressions(expr)
     while matches:
@@ -41,9 +46,11 @@ def evaluate_expression_a(expr: str) -> int:
         matches = find_simple_expressions(expr)
     return int(evaluate_simple_expression_a(expr))
 
+
 def evaluate_simple_expression_b(expr: str) -> str:
     expr = evaluate_simple_additions(expr.strip("()"))
     return str(reduce(mul, (int(x) for x in expr.split(" * "))))
+
 
 def evaluate_expression_b(expr: str) -> int:
     matches = find_simple_expressions(expr)

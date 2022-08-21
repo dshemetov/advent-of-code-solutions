@@ -1,6 +1,7 @@
 """Giant Squid https://adventofcode.com/2021/day/4"""
 import numpy as np
 
+
 def solve_a(s: str) -> int:
     """
     Examples:
@@ -25,14 +26,18 @@ def solve_a(s: str) -> int:
 
     return get_board_score(boards[i], board_masks[i], num)
 
+
 def board_from_str(s: str) -> np.ndarray:
     return np.array([line.split() for line in s.split("\n")], dtype=int)
+
 
 def did_board_win(board_mask: np.ndarray) -> bool:
     return board_mask.all(axis=0).any() or board_mask.all(axis=1).any()
 
+
 def get_board_score(board: np.ndarray, board_mask: np.ndarray, last_num: int) -> int:
     return board[~board_mask.astype(bool)].sum() * last_num
+
 
 def solve_b(s: str) -> int:
     """

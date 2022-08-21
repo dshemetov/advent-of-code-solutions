@@ -18,6 +18,7 @@ from importlib import import_module
 import time
 
 from joblib import Memory
+
 memory = Memory("~/.advent_tools/joblib_cache", verbose=0)
 
 from advent_tools import Puzzle
@@ -32,9 +33,10 @@ def get_answer(year: int, day: int, part: str) -> int:
         raise ModuleNotFoundError("Problem not implemented yet.")
     return solution_method(Puzzle(day, year).input_data)
 
+
 def is_cached(year: int, day: int, part: str) -> int:
     """Return the list of inputs and outputs from `mem` (joblib.Memory cache).
-    
+
     Uses non-public API: https://github.com/joblib/joblib/blob/754433f617793bc950be40cfaa265a32aed11d7d/joblib/memory.py#L758
     and the answer that led me there https://stackoverflow.com/a/69361221.
     """
@@ -46,13 +48,16 @@ def is_cached(year: int, day: int, part: str) -> int:
     except KeyError:
         return False
 
+
 def timed(func):
     def new_func(*args, **kwargs):
         t = time.perf_counter()
         out = func(*args, **kwargs)
         time_elapsed = time.perf_counter() - t
         return out, time_elapsed
+
     return new_func
+
 
 @timed
 def get_answer_cache(year: int, day: int, part: str, clear_cache: bool, verbose: bool = False) -> int:
@@ -65,6 +70,7 @@ def get_answer_cache(year: int, day: int, part: str, clear_cache: bool, verbose:
         ans = get_answer(year, day, part)
     return ans
 
+
 def get_part_solution(year: int, day: int, part: str, clear_cache: bool, verbose: bool = False) -> Tuple[int, float]:
     try:
         ans, time_taken = get_answer_cache(year, day, part, clear_cache, verbose)
@@ -73,10 +79,12 @@ def get_part_solution(year: int, day: int, part: str, clear_cache: bool, verbose
         ans, time_taken = 0, 0
     return ans, time_taken
 
+
 def get_day_solutions(year: int, day: int, clear_cache: bool, verbose: bool = False) -> Tuple[Tuple[int, float], Tuple[int, float]]:
     ans1, time_taken1 = get_part_solution(year, day, "a", clear_cache, verbose)
     ans2, time_taken2 = get_part_solution(year, day, "b", clear_cache, verbose)
     return (ans1, time_taken1), (ans2, time_taken2)
+
 
 def get_year_solutions(year: int, clear_cache: bool):
     print(f"{year} Solutions:")
@@ -87,8 +95,9 @@ def get_year_solutions(year: int, clear_cache: bool):
         total_time_taken += time_taken1 + time_taken2
     print(f"Total time taken: {total_time_taken}.")
 
+
 if __name__ == "__main__":
-    args = docopt(__doc__, version='Advent of Code Solution Runner v0.1.0')
+    args = docopt(__doc__, version="Advent of Code Solution Runner v0.1.0")
 
     if args.get("problem"):
         year, day, part = args["<year.day.part>"].split(".")

@@ -2,14 +2,17 @@ from advent_tools import Puzzle, get_bezout_coefficients, get_gcd
 from itertools import product
 from typing import Tuple, List
 
+
 def solve_a(s: str) -> int:
     depart_time, bus_schedule = s.split("\n")
     depart_time, bus_schedule = int(depart_time), filter(lambda x: x != "x", bus_schedule.split(","))
     bus_id, next_bus_time = min([(int(bus_id), get_next_bus_time(depart_time, int(bus_id))) for bus_id in bus_schedule], key=lambda x: x[1])
     return bus_id * (next_bus_time - depart_time)
 
+
 def get_next_bus_time(time: int, period: int) -> int:
     return time + get_minutes_until_next_bus(time, period)
+
 
 def get_minutes_until_next_bus(time: int, period: int) -> int:
     if time % period == 0:
@@ -17,10 +20,12 @@ def get_minutes_until_next_bus(time: int, period: int) -> int:
     else:
         return period - time % period
 
+
 def solve_b(s: str) -> int:
     _, bus_schedule = s.split("\n")
     bus_schedule: List[Tuple[int, int]] = list((-offset, int(bus_id)) for offset, bus_id in enumerate(bus_schedule.split(",")) if bus_id != "x")
     return solve_modular_congruence_equations(bus_schedule)
+
 
 def solve_modular_congruence_equations(residue_classes: List[Tuple[int, int]]) -> int:
     """Solve an arbitrary system of modular equations.
@@ -37,6 +42,7 @@ def solve_modular_congruence_equations(residue_classes: List[Tuple[int, int]]) -
         a, b = solve_modular_congruence_equation_pair(bus1, bus2)
         residue_classes_ += [(a, b)]
     return a
+
 
 def solve_modular_congruence_equation_pair(b1: Tuple[int, int], b2: Tuple[int, int]) -> Tuple[int, int]:
     """Solve a system of two modular equations.

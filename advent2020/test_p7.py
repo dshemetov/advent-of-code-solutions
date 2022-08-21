@@ -12,7 +12,7 @@ line = "light salmon bags contain 5 wavy plum bags, 4 drab white bags, 5 muted b
 # \w+ matches one or more words
 # the first capture group matches (light salmon)
 # the second capture group grabs the rest of the string
-parent, entries = re.match(r'(\w+ \w+) bags contain (.*)', line).groups()
+parent, entries = re.match(r"(\w+ \w+) bags contain (.*)", line).groups()
 # \d+ matches one or more integers (could be two digit integers, for example)
 # The bags? is optional
-print([[int(e.groups()[0]), e.groups()[1]] for e in re.finditer(r'(\d+) (\w+ \w+) bags?', entries)])
+print([[int(e.groups()[0]), e.groups()[1]] for e in re.finditer(r"(\d+) (\w+ \w+) bags?", entries)])

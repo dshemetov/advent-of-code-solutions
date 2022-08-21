@@ -1,13 +1,7 @@
 from setuptools import setup
 from setuptools import find_packages
 
-required = [
-    "joblib",
-    "more-itertools",
-    "numpy",
-    "python-dotenv",
-    "requests"
-]
+required = ["joblib", "more-itertools", "numpy", "python-dotenv", "requests"]
 
 setup(
     name="advent_tools",
@@ -21,5 +15,5 @@ setup(
         "Intended Audience :: Developers",
         "Programming Language :: Python :: 3.10.5",
     ],
-    packages=find_packages()
+    packages=find_packages(),
 )

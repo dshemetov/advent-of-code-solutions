@@ -1,4 +1,13 @@
-from .p22 import Cube, CubeSlice, NooiceSlice, generate_all_products, merge_adjacent_cubes, solve_a, solve_b, parse_input
+from .p22 import (
+    Cube,
+    CubeSlice,
+    NooiceSlice,
+    generate_all_products,
+    merge_adjacent_cubes,
+    solve_a,
+    solve_b,
+    parse_input,
+)
 
 test_strings = [
     """on x=10..12,y=10..12,z=10..12
@@ -86,8 +95,9 @@ off x=-37810..49457,y=-71013..-7894,z=-105357..-13188
 off x=-27365..46395,y=31009..98017,z=15428..76570
 off x=-70369..-16548,y=22648..78696,z=-1892..86821
 on x=-53470..21291,y=-120233..-33476,z=-44150..38147
-off x=-93533..-4276,y=-16170..68771,z=-104985..-24507"""
+off x=-93533..-4276,y=-16170..68771,z=-104985..-24507""",
 ]
+
 
 def test_NooiceSlice():
     assert NooiceSlice(2, 5) | NooiceSlice(4, 7) == NooiceSlice(2, 7)
@@ -120,6 +130,7 @@ def test_NooiceSlice():
     assert not NooiceSlice(2, 5).adjacent(NooiceSlice(6, 7))
     assert NooiceSlice(2, 5).combine(NooiceSlice(5, 8)) == NooiceSlice(2, 8)
     assert NooiceSlice(2, 5).to_slice() == slice(2, 5)
+
 
 def test_generate_products():
     # Disjoint cubes
@@ -246,7 +257,7 @@ def test_generate_products():
     assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(0, 1), NooiceSlice(1, 2)) in cube_products
     assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(0, 1), NooiceSlice(2, 3)) in cube_products
     assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(1, 2), NooiceSlice(0, 1)) in cube_products
-    assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(1, 2), NooiceSlice(1, 2)) not in cube_products # Intersection
+    assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(1, 2), NooiceSlice(1, 2)) not in cube_products  # Intersection
     assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(1, 2), NooiceSlice(2, 3)) in cube_products
     assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(2, 3), NooiceSlice(0, 1)) in cube_products
     assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(2, 3), NooiceSlice(1, 2)) in cube_products
@@ -264,19 +275,24 @@ def test_generate_products():
 
     assert len(cube_products) == 26
 
+
 def test_merge_adjacent_cubes():
-    cubes = merge_adjacent_cubes([
-        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(0, 1)),
-        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(1, 2)),
-        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(2, 3)),
-        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(3, 4)),
-    ])
+    cubes = merge_adjacent_cubes(
+        [
+            CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(0, 1)),
+            CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(1, 2)),
+            CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(2, 3)),
+            CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(3, 4)),
+        ]
+    )
     assert cubes == [CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(0, 4))]
     assert merge_adjacent_cubes([]) == []
+
 
 def test_solve_a():
     assert solve_a(test_strings[0]) == 39
     assert solve_a(test_strings[1]) == 590784
+
 
 expected_points_strs = [
     """10,10,10
@@ -306,7 +322,7 @@ expected_points_strs = [
 12,12,10
 12,12,11
 12,12,12""",
-"""11,11,13
+    """11,11,13
 11,12,13
 11,13,11
 11,13,12
@@ -325,19 +341,21 @@ expected_points_strs = [
 13,13,11
 13,13,12
 13,13,13""",
-"""10,10,10
+    """10,10,10
 10,10,11
 10,11,10
 10,11,11
 11,10,10
 11,10,11
 11,11,10
-11,11,11"""
+11,11,11""",
 ]
+
 
 def read_points_str(s: str):
     lines = [line.split(",") for line in s.split("\n")]
     return set([(int(x), int(y), int(z)) for x, y, z in lines])
+
 
 def test_solve_b():
     cubes = parse_input(test_strings[0])

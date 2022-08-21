@@ -1,5 +1,6 @@
 from advent_tools import FiniteSortedList
 
+
 def test_FiniteSortedList():
     t = FiniteSortedList([5, 4, 3], 5)
     t.insert(10)

@@ -1,9 +1,9 @@
-f = open("/home/dmitron/code/adventofcode/aoc5.txt",'r')
+f = open("aoc5.txt", "r")
 s = f.read()
 a = s.split("\n")
 
-alphabet = [chr(i) for i in range(97,123)]
-alphabet2 = [str(i)+str(i) for i in alphabet]
+alphabet = [chr(i) for i in range(97, 123)]
+alphabet2 = [str(i) + str(i) for i in alphabet]
 print(alphabet2)
 
 nice = 0

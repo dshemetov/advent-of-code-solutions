@@ -11,9 +11,11 @@ mem[42] = 100
 mask = 00000000000000000000000000000000X0XX
 mem[26] = 1"""
 
+
 def test_solve_a():
     assert int_to_bits(11) == 32 * [0] + [1, 0, 1, 1]
     assert solve_a(test_string) == 165
+
 
 def test_solve_b():
     assert solve_b(test_string2) == 208

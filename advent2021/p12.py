@@ -5,6 +5,7 @@ from typing import Dict, List
 Path = List[str]
 Graph = Dict[str, List[str]]
 
+
 def solve_a(s: str) -> int:
     """
     Examples:
@@ -17,6 +18,7 @@ def solve_a(s: str) -> int:
     """
     return len(get_paths(parse_input(s)))
 
+
 def parse_input(s: str) -> Graph:
     node_map = defaultdict(list)
     for line in s.split("\n"):
@@ -25,7 +27,8 @@ def parse_input(s: str) -> Graph:
         node_map[t].append(s)
     return node_map
 
-def get_paths(node_map: Graph, part: str="a") -> List[Path]:
+
+def get_paths(node_map: Graph, part: str = "a") -> List[Path]:
     finished_paths = []
     unfinished_paths = [["start"]]
     while len(unfinished_paths) > 0:
@@ -41,6 +44,7 @@ def get_paths(node_map: Graph, part: str="a") -> List[Path]:
                 unfinished_paths.append(new_path)
     return finished_paths
 
+
 def get_valid_steps(path: Path, node_map: Dict, part: str) -> List[str]:
     if part == "a":
         return (option for option in node_map[path[-1]] if option.isupper() or (option.islower() and option not in path))
@@ -51,6 +55,7 @@ def get_valid_steps(path: Path, node_map: Dict, part: str) -> List[str]:
         else:
             return (option for option in node_map[path[-1]] if option.isupper() or (option.islower() and path.count(option) < 2))
     raise ValueError("Not implemented.")
+
 
 def solve_b(s: str) -> int:
     """
@@ -66,14 +71,14 @@ def solve_b(s: str) -> int:
 
 
 test_strings = [
-"""start-A
+    """start-A
 start-b
 A-c
 A-b
 b-d
 A-end
 b-end""",
-"""dc-end
+    """dc-end
 HN-start
 start-kj
 dc-start
@@ -83,7 +88,7 @@ HN-end
 kj-sa
 kj-HN
 kj-dc""",
-"""fs-end
+    """fs-end
 he-DX
 fs-he
 start-DX
@@ -100,5 +105,5 @@ start-pj
 he-WI
 zg-he
 pj-fs
-start-RW"""
+start-RW""",
 ]

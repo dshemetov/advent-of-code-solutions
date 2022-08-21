@@ -2,7 +2,7 @@ from bisect import insort
 from functools import reduce
 from itertools import product
 import os
-from typing import Callable, Dict, Iterable, List, Tuple, Union
+from typing import Callable, Dict, Iterable, List, Tuple
 from numpy.typing import ArrayLike
 
 from dotenv import load_dotenv
@@ -36,29 +36,35 @@ class Puzzle:
     def input_lines(self) -> List[str]:
         return self.input_data.split("\n")
 
+
 @memory.cache
 def puzzle_input(day: int, year: int, auth: Dict[str, str] = AUTH) -> str:
     print(f"Downloading puzzle input for day {day}, year {year}...")
     request = requests.get(url=f"https://adventofcode.com/{year}/day/{day}/input", cookies=auth)
     return request.text
 
+
 def apply_until_fixed(func):
     """Repeatedly compose a function until the output does not change.
 
     Assumes func has a single non-keyword argument.
     """
+
     def new_func(*args, **kwargs):
         new_val, old_val = func(*args, **kwargs), object()
         while new_val != old_val:
             new_val, old_val = func(new_val, **kwargs), new_val
         return new_val
+
     return new_func
+
 
 def apply_until_fixed_list(func):
     """Repeatedly compose a function until the output does not change; return the list of intermediate values.
 
     Assumes func has a single non-keyword argument.
     """
+
     def new_func(*args, **kwargs):
         new_val, old_val = func(*args, **kwargs), object()
         vals = [new_val]
@@ -66,25 +72,29 @@ def apply_until_fixed_list(func):
             new_val, old_val = func(new_val, **kwargs), new_val
             vals.append(new_val)
         return new_val, vals
+
     return new_func
+
 
 def binary_to_int(ls: List[int]) -> int:
     """Convert a list of 0's and 1's to an integer.
-    
+
     Examples:
     >>> binary_to_int([1, 0, 1])
     5
     """
     return sum(2**i * j for i, j in enumerate(reversed(ls)))
 
+
 def reverse_dict(d: dict) -> dict:
     """This thing better be a bijection.
-    
+
     Examples:
     >>> reverse_dict({'a': 2, 'b': 3})
     {2: 'a', 3: 'b'}
     """
     return {value: key for key, value in d.items()}
+
 
 def get_gcd(a: int, b: int) -> int:
     """Euclidean algorithm greatest common divisor.
@@ -94,7 +104,7 @@ def get_gcd(a: int, b: int) -> int:
     Examples:
     >>> get_gcd(6, 4)
     2
-    >>> get_gcd(4, 6) 
+    >>> get_gcd(4, 6)
     2
     >>> get_gcd(5, 17)
     1
@@ -103,6 +113,7 @@ def get_gcd(a: int, b: int) -> int:
     while r_ > 0:
         r, r_ = r_, r % r_
     return r
+
 
 def get_bezout_coefficients(a: int, b: int) -> int:
     """Extended Euclidean algorithm.
@@ -127,8 +138,10 @@ def get_bezout_coefficients(a: int, b: int) -> int:
         t, t_ = t_, t - q * t_
     return (t, s)
 
+
 def get_units(n: int) -> np.ndarray:
     return np.concatenate([np.eye(n, dtype=int), -np.eye(n, dtype=int)])
+
 
 def get_units_and_diagonals(n: int) -> np.ndarray:
     """
@@ -146,8 +159,10 @@ def get_units_and_diagonals(n: int) -> np.ndarray:
     zeros = tuple([0] * n)
     return np.array([tup for tup in product([-1, 0, 1], repeat=n) if tup != zeros])
 
+
 def get_neighbor_values(ix: ArrayLike, mat: np.ndarray, radius: int = 1, diagonals: bool = False) -> Iterable:
     return (mat[new_ix] for new_ix in get_valid_neighbor_ixs(ix, mat.shape, radius, diagonals))
+
 
 def get_valid_neighbor_ixs(ix: ArrayLike, mat_shape: ArrayLike, radius: int = 1, diagonals: bool = False) -> Iterable[Tuple[int, ...]]:
     """
@@ -166,7 +181,8 @@ def get_valid_neighbor_ixs(ix: ArrayLike, mat_shape: ArrayLike, radius: int = 1,
         mat_shape = np.array(mat_shape, dtype=int)
 
     min_ix = np.zeros(len(ix), dtype=int)
-    return (tuple(r * new_ix) for new_ix in (ix + directions) for r in range(1, radius+1) if all((min_ix <= (r * new_ix)) & ((r * new_ix) < mat_shape)))
+    return (tuple(r * new_ix) for new_ix in (ix + directions) for r in range(1, radius + 1) if all((min_ix <= (r * new_ix)) & ((r * new_ix) < mat_shape)))
+
 
 def compose_multivar_2(f: Callable, g: Callable) -> Callable:
     """
@@ -177,6 +193,7 @@ def compose_multivar_2(f: Callable, g: Callable) -> Callable:
     (2, 2)
     """
     return lambda *a, **kw: f(*g(*a, **kw))
+
 
 def compose_multivar(*fs: List[Callable]) -> Callable:
     """
@@ -194,7 +211,7 @@ class FiniteSortedList:
         assert len(values) <= max_length
         self.values = sorted(values)
         self.max_length = max_length
-    
+
     def insert(self, el):
         insort(self.values, el)
         if len(self.values) > self.max_length:
@@ -202,6 +219,7 @@ class FiniteSortedList:
 
     def __repr__(self) -> str:
         return str(self.values)
+
 
 def get_top_n(it: Iterable, n: int) -> List:
     fsl = FiniteSortedList([], n)

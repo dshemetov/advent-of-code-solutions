@@ -4,6 +4,7 @@ from advent_tools import binary_to_int
 from copy import copy
 import numpy as np
 
+
 def solve_a(s: str) -> int:
     """
     Examples:
@@ -16,6 +17,7 @@ def solve_a(s: str) -> int:
     min_rows = ~max_rows
     gamma_rate, epsilon_rate = binary_to_int(max_rows), binary_to_int(min_rows)
     return gamma_rate * epsilon_rate
+
 
 def solve_b(s: str) -> int:
     """

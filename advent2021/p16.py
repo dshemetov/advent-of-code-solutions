@@ -1,19 +1,23 @@
 """Packet Decoder https://adventofcode.com/2021/day/16"""
 from typing import List, Tuple
 
+
 def solve_a(s: str) -> int:
     return 0
     bs = hex_to_bin(s)
     versions, _ = read_binary(bs)
     return sum(versions)
 
+
 def hex_to_bin(s: str) -> List[int]:
     bs = bin(int(s, 16))[2:]
-    bs = [0] * (-len(bs) % 4) + [int(x) for x in bs] # zero-pad on the left
+    bs = [0] * (-len(bs) % 4) + [int(x) for x in bs]  # zero-pad on the left
     return bs
+
 
 def bin_to_num(ls: List[int]) -> int:
     return sum(2**i * j for i, j in enumerate(reversed(ls)))
+
 
 def read_binary(bs: List[int]):
     bs = bs.copy()
@@ -22,10 +26,12 @@ def read_binary(bs: List[int]):
         bs, numbers, versions = unpack_packet(bs, numbers, versions)
     return versions, numbers
 
+
 def read_packet_header(bs: List[int]) -> Tuple[int, int]:
     version = bin_to_num(bs[:3])
     type_id = bin_to_num(bs[3:6])
     return version, type_id
+
 
 def unpack_packet(bs: List[int], numbers: List[int], versions: List[int]) -> Tuple[List[int], List[int], List[int]]:
     bs = bs.copy()
@@ -41,6 +47,7 @@ def unpack_packet(bs: List[int], numbers: List[int], versions: List[int]) -> Tup
         numbers, bs = unpack_operator_packet(bs, numbers, versions)
     return bs, numbers, versions
 
+
 def unpack_literal_packet(bs: List[int]) -> Tuple[int, List[int]]:
     bs = bs.copy()
     numbers = []
@@ -50,6 +57,7 @@ def unpack_literal_packet(bs: List[int]) -> Tuple[int, List[int]]:
         read_bit = group[0]
         numbers += group[1:]
     return bin_to_num(numbers), bs
+
 
 def unpack_operator_packet(bs: List[int], numbers: List[int], versions: List[int]) -> Tuple[List[int], List[int], List[int]]:
     bs = bs.copy()
@@ -69,6 +77,7 @@ def unpack_operator_packet(bs: List[int], numbers: List[int], versions: List[int
         read_bit = group[0]
         number += group[1:]
     return bin_to_num(number), bs
+
 
 def solve_b(s: str) -> int:
     return 0

@@ -2,6 +2,7 @@ from advent_tools import Puzzle
 import re
 from typing import List, Tuple
 
+
 def solve_a(s: str) -> int:
     d = dict([parse_line(line) for line in s.split("\n")])
     traversed = set()
@@ -13,20 +14,25 @@ def solve_a(s: str) -> int:
         to_traverse |= set(parents) - traversed
     return len(traversed) - 1
 
+
 def parse_line(line: str) -> Tuple[str, str]:
-    container_bag, contained_bags = re.match(r'(\w+ \w+) bags contain (.*)', line).groups()
-    contained_bags = [[int(e.groups()[0]), e.groups()[1]] for e in re.finditer(r'(\d+) (\w+ \w+) bags?', contained_bags)]
+    container_bag, contained_bags = re.match(r"(\w+ \w+) bags contain (.*)", line).groups()
+    contained_bags = [[int(e.groups()[0]), e.groups()[1]] for e in re.finditer(r"(\d+) (\w+ \w+) bags?", contained_bags)]
     return (container_bag, contained_bags)
+
 
 def get_parents(child, d):
     return [e for e in d if child in flatten(d[e])]
 
+
 def flatten(lst: List[List]) -> List:
     return [e for row in lst for e in row]
+
 
 def solve_b(s: str) -> int:
     d = dict([parse_line(line) for line in s.split("\n")])
     return get_bags(d, "shiny gold") - 1
+
 
 def get_bags(d, e):
     n = sum(bag[0] * get_bags(d, bag[1]) for bag in d[e]) if len(d[e]) > 0 else 0

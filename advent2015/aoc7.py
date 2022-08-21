@@ -1,9 +1,11 @@
 import numpy as np
-f = open("/home/dmitron/code/adventofcode/aoc7.txt",'r')
+
+f = open("aoc7.txt", "r")
 s = f.read()
-G = np.zeros((1000,1000))
+G = np.zeros((1000, 1000))
 lines = s.split("\n")
 lines.pop()
+
 
 def srch(var):
     for line in lines:
@@ -33,6 +35,7 @@ def srch(var):
             if var2 == var:
                 return var1, "", var1
 
+
 cmd = "a"
 vararr = ["a"]
 eq = {}
@@ -51,19 +54,19 @@ for i in range(500):
         continue
 
     if cvar in eq.keys():
-        var1,var2,cmdnew = eq[cvar][0],eq[cvar][1],eq[cvar][2]
+        var1, var2, cmdnew = eq[cvar][0], eq[cvar][1], eq[cvar][2]
     else:
-        var1,var2,cmdnew = srch(cvar)
-        eq[cvar] = (var1,var2,cmdnew)
+        var1, var2, cmdnew = srch(cvar)
+        eq[cvar] = (var1, var2, cmdnew)
     if len(var1) > 0 and not 57 >= ord(var1[0]) >= 48:
-        vararr.insert(0,var1)
+        vararr.insert(0, var1)
     if len(var2) > 0 and not 57 >= ord(var2[0]) >= 48:
-        vararr.insert(0,var2)
+        vararr.insert(0, var2)
 
     while 1:
         try:
             ind = cmd.index(cvar)
-            cmd = cmd[:ind] + cmdnew + cmd[ind+len(cvar):]
+            cmd = cmd[:ind] + cmdnew + cmd[ind + len(cvar) :]
         except:
             break
 
@@ -76,5 +79,5 @@ for i in range(500):
 
 print(len(eq.keys()))
 print(cmd)
-#print(vararr)
-#print(len(vararr))
+# print(vararr)
+# print(len(vararr))

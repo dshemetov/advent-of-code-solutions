@@ -1,11 +1,25 @@
 import pytest
-from .p12 import State, solve_a, parse_commands, execute_command_a, execute_command_b, solve_b, np, north, east, west, south, origin
+from .p12 import (
+    State,
+    solve_a,
+    parse_commands,
+    execute_command_a,
+    execute_command_b,
+    solve_b,
+    np,
+    north,
+    east,
+    west,
+    south,
+    origin,
+)
 
 test_string = """F10
 N3
 F7
 R90
 F11"""
+
 
 class Test12a:
     def test_parse_command(self):

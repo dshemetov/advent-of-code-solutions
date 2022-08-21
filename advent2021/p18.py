@@ -4,6 +4,7 @@ from math import floor, ceil
 import numpy as np
 from typing import List, Optional, Union
 
+
 def solve_a(s: str) -> int:
     if not s:
         return 0
@@ -19,21 +20,22 @@ def solve_a(s: str) -> int:
     while end_tree.reduce():
         pass
 
-    return f'{end_tree.magnitude}'
+    return f"{end_tree.magnitude}"
+
 
 class SnailfishTree:
     def __init__(self, val: Optional[int] = None, depth: int = 0):
         self.left, self.right, self.parent = None, None, None
         self.val, self.depth = val, depth
 
-    def parse(self, input: Union[List,int], depth: int = 0, parent: Optional['SnailfishTree'] = None) -> None:
+    def parse(self, input: Union[List, int], depth: int = 0, parent: Optional["SnailfishTree"] = None) -> None:
         self.depth = depth
         self.parent = parent
         if isinstance(input, List):
             self.left = SnailfishTree()
-            self.left.parse(input[0], depth+1, self)
+            self.left.parse(input[0], depth + 1, self)
             self.right = SnailfishTree()
-            self.right.parse(input[1], depth+1, self)
+            self.right.parse(input[1], depth + 1, self)
         else:
             self.val = input
 
@@ -44,22 +46,22 @@ class SnailfishTree:
         if self.right is not None:
             self.right.increment_depth()
 
-    def flatten_to_list(self, to_add: List['SnailfishTree']):
+    def flatten_to_list(self, to_add: List["SnailfishTree"]):
         if self.val is not None:
             to_add.append(self)
         else:
             self.left.flatten_to_list(to_add)
             self.right.flatten_to_list(to_add)
 
-    def get_right(self, list_of_nodes: List['SnailfishTree']) -> 'SnailfishTree':
+    def get_right(self, list_of_nodes: List["SnailfishTree"]) -> "SnailfishTree":
         assert self.val is not None
         ind = list_of_nodes.index(self)
-        return list_of_nodes[ind+1] if ind+1 < len(list_of_nodes) else None
+        return list_of_nodes[ind + 1] if ind + 1 < len(list_of_nodes) else None
 
-    def get_left(self, list_of_nodes: List['SnailfishTree']) -> 'SnailfishTree':
+    def get_left(self, list_of_nodes: List["SnailfishTree"]) -> "SnailfishTree":
         assert self.val is not None
         ind = list_of_nodes.index(self)
-        return list_of_nodes[ind-1] if ind > 0 else None
+        return list_of_nodes[ind - 1] if ind > 0 else None
 
     def needs_explosion(self) -> bool:
         return self.depth > 4
@@ -67,7 +69,7 @@ class SnailfishTree:
     def needs_split(self) -> bool:
         return self.val is not None and self.val >= 10
 
-    def explode(self, list_of_nodes: List['SnailfishTree']) -> None:
+    def explode(self, list_of_nodes: List["SnailfishTree"]) -> None:
         l, r = self.left.val, self.right.val
 
         right_neighbor = self.right.get_right(list_of_nodes)
@@ -88,12 +90,12 @@ class SnailfishTree:
         assert self.left is None
         cur_val = self.val
         self.val = None
-        self.left = SnailfishTree(floor(cur_val/2))
-        self.right = SnailfishTree(ceil(cur_val/2))
+        self.left = SnailfishTree(floor(cur_val / 2))
+        self.right = SnailfishTree(ceil(cur_val / 2))
         self.left.parent = self
         self.right.parent = self
-        self.left.depth = self.depth+1
-        self.right.depth = self.depth+1
+        self.left.depth = self.depth + 1
+        self.right.depth = self.depth + 1
         # fin
 
     @property
@@ -104,15 +106,15 @@ class SnailfishTree:
         if self.val is not None:
             return self.val
         else:
-            return 3*self.left.magnitude + 2*self.right.magnitude
+            return 3 * self.left.magnitude + 2 * self.right.magnitude
 
     def __repr__(self) -> str:
         if self.val is not None:
-            return f'{self.val}'
+            return f"{self.val}"
         else:
-            return f'[{self.left},{self.right}]'
+            return f"[{self.left},{self.right}]"
 
-    def __add__(self, other: 'SnailfishTree') -> 'SnailfishTree':
+    def __add__(self, other: "SnailfishTree") -> "SnailfishTree":
         assert self.depth == other.depth == 0
         parent = SnailfishTree()
         parent.depth = self.depth
@@ -133,7 +135,7 @@ class SnailfishTree:
 
     def get_max_depth(self, maxd: int) -> int:
         if self.val is not None:
-            return max(maxd,self.depth)
+            return max(maxd, self.depth)
         else:
             return max(self.left.get_max_depth(maxd), self.right.get_max_depth(maxd))
 
@@ -158,6 +160,7 @@ class SnailfishTree:
 
         return False
 
+
 def parse_input(s: str):
     data_lines = s.split("\n")
     root_trees = []
@@ -167,6 +170,7 @@ def parse_input(s: str):
         root_tree.parse(arr)
         root_trees.append(root_tree)
     return root_trees
+
 
 def solve_b(s: str) -> int:
     if not s:
@@ -182,6 +186,6 @@ def solve_b(s: str) -> int:
                 while out.reduce():
                     pass
 
-                max_mag = max(max_mag,out.magnitude)
+                max_mag = max(max_mag, out.magnitude)
 
-    return f'{max_mag}'
+    return f"{max_mag}"

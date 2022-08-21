@@ -1,5 +1,6 @@
 from advent_tools import Puzzle
 
+
 def solve_a(s: str) -> int:
     lines = (line.split(" ") for line in s.split("\n"))
     instructions = [(op, int(num)) for op, num in lines]
@@ -20,13 +21,14 @@ def solve_a(s: str) -> int:
             i += 1
     return acc
 
+
 def execute_instructions(instructions):
     acc = 0
     executed_lines = set()
     i = 0
     last_line_executed = False
     while i not in executed_lines:
-        if i > len(instructions)+1:
+        if i > len(instructions) + 1:
             raise LookupError
         elif i == len(instructions):
             last_line_executed = True
@@ -41,6 +43,7 @@ def execute_instructions(instructions):
         elif op == "nop":
             i += 1
     return acc, last_line_executed
+
 
 def solve_b(s: str) -> int:
     lines = (line.split(" ") for line in s.split("\n"))

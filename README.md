@@ -30,6 +30,14 @@ The runner caches results by default, you can clear the answer cache and rerun w
 python runner.py -s 2021.2.b -c
 ```
 
+Test and format (with black)
+
+```sh
+make test
+
+make format
+```
+
 ## Background
 
 I got into these puzzles in December 2015 in Los Angeles, while spending time with the Sellin family.

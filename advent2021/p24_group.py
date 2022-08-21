@@ -6,10 +6,12 @@ from typing import List
 from sympy import *
 from advent_tools import Puzzle
 
+
 class AdventProblem(ABC):
     """
     An abstraction of an advent code problem.
     """
+
     def __init__(self, name: str):
         """
         :param name: a name useful for logging and debugging
@@ -29,20 +31,22 @@ class AdventProblem(ABC):
         Solve the advent problem part 2.
         """
 
+
 class ALU:
     def __init__(self, instructions: List):
         from string import ascii_lowercase
+
         self.instructions = instructions
         self.variables = dict()
-        self.back_vars = {"w": "w", "x" : "x", "y" : "y", "z" : "z"}
+        self.back_vars = {"w": "w", "x": "x", "y": "y", "z": "z"}
         self.human_legible = list(ascii_lowercase)
         self.dict_of_functions = {
-            "inp" : self.inp,
-            "add" : self.add,
-            "mul" : self.mul,
-            "div" : self.div,
-            "mod" : self.mod,
-            "eql" : self.eql
+            "inp": self.inp,
+            "add": self.add,
+            "mul": self.mul,
+            "div": self.div,
+            "mod": self.mod,
+            "eql": self.eql,
         }
 
     def get_value(self, a):
@@ -114,12 +118,12 @@ class ALU:
     def add(self, a, b):
         a_val = self.variables[a]
         b_val = self.get_value(b)
-        self.variables[a] = a_val+b_val
+        self.variables[a] = a_val + b_val
 
     def mul(self, a, b):
         a_val = self.variables[a]
         b_val = self.get_value(b)
-        self.variables[a] =  a_val*b
+        self.variables[a] = a_val * b
 
     def div(self, a, b):
         a_val = self.variables[a]
@@ -140,7 +144,8 @@ class ALU:
     def eql(self, a, b):
         a_val = self.variables[a]
         b_val = self.get_value(b)
-        self.variables[a] = 1*a_val==b_val
+        self.variables[a] = 1 * a_val == b_val
+
 
 def parse_input(s: str):
     program_instructions = findall("(inp) (\w)|(add|mod|mul|eql|div) (\w) (-*\d+|\w)", s)
@@ -148,9 +153,10 @@ def parse_input(s: str):
     # print(program_instructions)
     return program_instructions
 
+
 class Day24(AdventProblem):
     def __init__(self, test: bool):
-        super().__init__('ALU')
+        super().__init__("ALU")
         self.ALU = ALU(Puzzle(24, 2021))
 
         if test:
@@ -184,16 +190,18 @@ class Day24(AdventProblem):
         # return "ya dumb"
 
     def solve_part2(self) -> str:
-        return f'{3}'
+        return f"{3}"
+
 
 def run_day(day: int, test: bool) -> None:
     time1 = time.time()
     time2 = time.time()
     instance = Day24(test)
-    print(f'Creating the class took {time2 - time1:.4f} seconds')
+    print(f"Creating the class took {time2 - time1:.4f} seconds")
     part1, time3 = instance.solve_part1(), time.time()
-    print(f'Part 1 ({time3 - time2:.4f} s) - {part1}')
+    print(f"Part 1 ({time3 - time2:.4f} s) - {part1}")
     part2, time4 = instance.solve_part2(), time.time()
-    print(f'Part 2 ({time4 - time3:.4f} s) - {part2}')
+    print(f"Part 2 ({time4 - time3:.4f} s) - {part2}")
+
 
 run_day(24, False)

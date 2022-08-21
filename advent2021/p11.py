@@ -4,12 +4,15 @@ from itertools import product
 import numpy as np
 from typing import Tuple
 
+
 def solve_a(s: str) -> int:
     _, flashes = run_octopus_steps(parse_input(s), 100)
     return flashes
 
+
 def parse_input(s: str) -> np.ndarray:
     return np.array([list(line) for line in s.split("\n")], dtype=int)
+
 
 def run_octopus_step(mat: np.ndarray) -> Tuple[np.ndarray, int]:
     mat = mat.copy()
@@ -27,6 +30,7 @@ def run_octopus_step(mat: np.ndarray) -> Tuple[np.ndarray, int]:
     mat[np.where(mat > 9)] = 0
     return mat, len(already_flashed)
 
+
 def run_octopus_steps(mat: np.ndarray, n: int) -> Tuple[np.ndarray, int]:
     flash_counter = 0
     mat_ = mat.copy()
@@ -34,6 +38,7 @@ def run_octopus_steps(mat: np.ndarray, n: int) -> Tuple[np.ndarray, int]:
         mat_, flashes = run_octopus_step(mat_)
         flash_counter += flashes
     return mat_, flash_counter
+
 
 def solve_b(s: str) -> int:
     mat = parse_input(s)

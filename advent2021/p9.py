@@ -4,6 +4,7 @@ from itertools import product
 import numpy as np
 from typing import List, Set, Tuple
 
+
 def solve_a(s: str) -> int:
     """
     Examples:
@@ -12,10 +13,12 @@ def solve_a(s: str) -> int:
     """
     mat = np.mat([list(x) for x in s.split("\n")], dtype=int)
     n, m = mat.shape
-    return sum(mat[i, j]+1 for i, j in product(range(n), range(m)) if is_lowest_point(np.array([i, j]), mat))
+    return sum(mat[i, j] + 1 for i, j in product(range(n), range(m)) if is_lowest_point(np.array([i, j]), mat))
+
 
 def is_lowest_point(ix: np.ndarray, mat: List[List[int]]) -> bool:
     return all(mat[tuple(ix)] < v for v in get_neighbor_values(ix, mat))
+
 
 def solve_b(s: str) -> int:
     """
@@ -27,6 +30,7 @@ def solve_b(s: str) -> int:
     a, b, c = get_top_n((len(basin) for basin in get_basins(mat)), 3)
     return a * b * c
 
+
 def get_basins(mat: np.ndarray) -> List[Set[Tuple[Tuple[int, int], ...]]]:
     basins = set()
     explored = set()
@@ -37,6 +41,7 @@ def get_basins(mat: np.ndarray) -> List[Set[Tuple[Tuple[int, int], ...]]]:
             basins |= {tuple(basin)}
             explored |= basin
     return basins
+
 
 def get_basin_at_index(ix: Tuple[int, int], mat: np.ndarray) -> Set[Tuple[int, int]]:
     explored_ixs = set()

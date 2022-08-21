@@ -7,20 +7,24 @@ test_strings = [
     """1\n67,7,59,61""",
     """1\n67,x,7,59,61""",
     """1\n67,7,x,59,61""",
-    """1\n1789,37,47,1889"""
+    """1\n1789,37,47,1889""",
 ]
+
 
 def test_get_next_bus_time():
     assert get_next_bus_time(14, 7) == 14
     assert get_next_bus_time(15, 7) == 21
     assert get_next_bus_time(36, 11) == 44
 
+
 def test_solve_a():
     assert solve_a(test_strings[0]) == 295
+
 
 def test_solve_modular_congruence_equation_pair():
     assert solve_modular_congruence_equation_pair((2, 5), (3, 7)) == (17, 35)
     assert solve_modular_congruence_equation_pair((2, 5), (3, 7)) == (17, 35)
+
 
 def test_solve_b():
     assert solve_b(test_strings[0]) == 1068781

@@ -2,6 +2,7 @@
 import re
 from typing import Tuple
 
+
 def solve_a(s: str) -> int:
     """
     Examples:
@@ -21,25 +22,28 @@ def solve_a(s: str) -> int:
 
     return max_y
 
+
 def valid_vxs(xmin, xmax) -> Tuple[int, int]:
     vx = 0
-    for vx in range(xmin+1):
+    for vx in range(xmin + 1):
         x = vx * (vx + 1) / 2
         if xmin < x < xmax:
             min_vx = vx
             break
 
-    max_vx = xmax + 1 # guaranteed to be too fast
-    return (min_vx-1, max_vx)
+    max_vx = xmax + 1  # guaranteed to be too fast
+    return (min_vx - 1, max_vx)
+
 
 def valid_vys(ymin, ymax):
-    return ymin, max(abs(ymin),abs(ymax)) + 2
+    return ymin, max(abs(ymin), abs(ymax)) + 2
+
 
 def ends_in_target(vx_: int, vy_: int, xmin, xmax, ymin, ymax) -> Tuple[bool, int]:
     vx, vy = vx_, vy_
     impossibru = False
     x, y = 0, 0
-    max_y = -float('inf')
+    max_y = -float("inf")
     while not impossibru:
         x += vx
         y += vy
@@ -48,13 +52,14 @@ def ends_in_target(vx_: int, vy_: int, xmin, xmax, ymin, ymax) -> Tuple[bool, in
         if xmin <= x <= xmax and ymin <= y <= ymax:
             return True, max_y
 
-        vx = max(vx-1, 0) 
+        vx = max(vx - 1, 0)
         vy -= 1
 
         if x > xmax or y < ymin:
             # print("Its impossibru!!!!")
             impossibru = True
     return False, max_y
+
 
 def solve_b(s: str) -> int:
     """

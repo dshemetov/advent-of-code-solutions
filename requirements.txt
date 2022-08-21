@@ -1,4 +1,3 @@
--e advent_tools
 docopt
 joblib
 more_itertools

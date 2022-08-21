@@ -14,6 +14,7 @@ def test_get_next_number():
     gs = GameState([0, 3, 6, 0, 3, 3, 1])
     assert GameState.get_next_number(gs.current_value, gs.turn_number, gs.last_turn) == 0
 
+
 def test_advance_game():
     gs = GameState([0, 3, 6])
     gs.advance_game(1)
@@ -30,6 +31,7 @@ def test_advance_game():
     assert gs.current_value == 4
     gs.advance_game(1)
     assert gs.current_value == 0
+
 
 def test_get_nth_spoken_number():
     gs = GameState([0, 3, 6])

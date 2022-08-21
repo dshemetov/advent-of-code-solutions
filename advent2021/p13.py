@@ -3,6 +3,7 @@ import numpy as np
 import re
 from typing import List
 
+
 def solve_a(s: str) -> int:
     """
     Examples:
@@ -10,7 +11,7 @@ def solve_a(s: str) -> int:
     17
     """
     ixs, folds = s.split("\n\n")
-    ixs = np.array([line.split(",") for line in ixs.strip("\n").split("\n")], dtype=int)[:,::-1].T
+    ixs = np.array([line.split(",") for line in ixs.strip("\n").split("\n")], dtype=int)[:, ::-1].T
     n, m = ixs.max(axis=1) + 1
     mat = np.zeros((n, m), dtype=bool)
     mat[ixs[0], ixs[1]] = True
@@ -21,13 +22,15 @@ def solve_a(s: str) -> int:
 
     return mat.sum()
 
+
 def fold_mat(along: str, mat: List[List[str]]) -> List[List[str]]:
     n, m = mat.shape
     if along == "y":
-        new_mat = mat[0:n//2, :] | mat[:n//2:-1, :]
+        new_mat = mat[0 : n // 2, :] | mat[: n // 2 : -1, :]
     if along == "x":
-        new_mat = mat[:, 0:m//2] | mat[:, :m//2:-1]
+        new_mat = mat[:, 0 : m // 2] | mat[:, : m // 2 : -1]
     return new_mat
+
 
 def solve_b(s: str) -> int:
     ixs, folds = s.split("\n\n")

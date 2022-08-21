@@ -1,29 +1,29 @@
-f = open("/home/dmitron/code/adventofcode/aoc3.txt",'r')
+f = open("aoc3.txt", "r")
 s = f.read()
 G1 = set()
 G2 = set()
-og1 = [0,0]
-og2 = [0,0]
+og1 = [0, 0]
+og2 = [0, 0]
 G1.add(tuple(og1))
 G2.add(tuple(og2))
 
 i = 1
 for m in s:
-    if m == '^':
+    if m == "^":
         if i % 2 == 0:
             og1[1] += 1
             G1.add(tuple(og1))
         else:
             og2[1] += 1
             G2.add(tuple(og2))
-    elif m == 'v':
+    elif m == "v":
         if i % 2 == 0:
             og1[1] -= 1
             G1.add(tuple(og1))
         else:
             og2[1] -= 1
             G2.add(tuple(og2))
-    elif m == '<':
+    elif m == "<":
         if i % 2 == 0:
             og1[0] -= 1
             G1.add(tuple(og1))

@@ -1,6 +1,7 @@
 from advent_tools import Puzzle
 from typing import List, Dict
 
+
 class GameState:
     def __init__(self, values: List[int]):
         values = values.copy()
@@ -30,12 +31,15 @@ class GameState:
     def get_next_number(current_value: int, turn_number: int, last_turn: Dict[int, int]):
         return turn_number - last_turn.get(current_value, turn_number)
 
+
 def convert_list_to_last_turn_dict(l: List[int]) -> Dict[int, int]:
     return dict({v: i + 1 for i, v in enumerate(l)})
+
 
 def solve_a(s: str) -> int:
     puzzle_input = [int(x) for x in s.strip("\n").split(",")]
     return GameState(puzzle_input).get_nth_spoken_number(2020)
+
 
 def solve_b(s: str) -> int:
     puzzle_input = [int(x) for x in s.strip("\n").split(",")]
