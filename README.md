@@ -9,11 +9,8 @@ To setup, use Python 3.9+, and:
 git clone https://github.com/dshemetov/advent-of-code-solutions
 cd advent-of-code-solutions
 
-# Install dependencies
-pip install -r requirements.txt
-
-# Get your AoC cookie (log in to https://adventofcode.com/ and inspect your browser session)
-echo "AOC_TOKEN=your_cookie" > .env
+# Install (Python dependencies, asks for AoC cookie)
+make install
 ```
 
 The problem runner can be used as follows:
