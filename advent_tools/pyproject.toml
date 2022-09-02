@@ -16,20 +16,16 @@ classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python"
 ]
-dependencies = ["joblib", "more-itertools", "numpy", "python-dotenv", "requests"]
-
-[project.optional-dependencies]
-dev = [
-    "docopt",
-    "joblib",
-    "more_itertools",
-    "numpy",
-    "requests",
-    "pytest",
-    "python-dotenv",
-    "scipy",
-    "sympy",
+dependencies = [
+  "joblib",
+  "more-itertools",
+  "numpy",
+  "python-dotenv",
+  "requests",
+  "scipy",
+  "sympy"
 ]
+
 
 [project.urls]
 repository = "https://github.com/dshemetov/advent-of-code-solutions"

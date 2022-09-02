@@ -1,6 +1,8 @@
 # Advent of Code Solutions
 
-[Advent of Code](https://adventofcode.com/) is a great set of Christmas-themed puzzles.
+[Advent of Code](https://adventofcode.com/) is a great set of Christmas-themed coding challenges.
+
+## Setup
 
 To setup, use Python 3.9+, and:
 
@@ -9,7 +11,7 @@ To setup, use Python 3.9+, and:
 git clone https://github.com/dshemetov/advent-of-code-solutions
 cd advent-of-code-solutions
 
-# Install (Python dependencies, asks for AoC cookie)
+# Install (Python dependencies, asks for AoC cookie, stores in .env)
 make install
 ```
 
@@ -39,12 +41,13 @@ make format
 
 ## Background
 
-I got into these puzzles in December 2015 in Los Angeles, while spending time with the Sellin family.
+I first got into Advent of Code in December 2015, while spending time with the Sellin family in Los Angeles.
 After a few days of doing not much more than playing SSX Tricky and drinking peppermint schnapps, my brain was beginning to decompress from a tough school semester.
-Evin was toying functional programming paradigms in JavaScript and I dabbled with Python.
-Together on a very large couch, it was a very nice time.
+Evin was toying with functional programming paradigms in JavaScript and I dabbled with Python.
+Nerding out together on a very large couch, it was good times.
 
-I'm going to update these solutions at some point, but you can look at the old versions for fun here.
+I periodically tinker with my old solutions and refactor them.
+The old versions can be found in the commit log, though.
 It's nice to look back and see yourself grow as a programmer.
 
 - AoC 2021: 43/50 Python.
