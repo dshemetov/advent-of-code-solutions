@@ -1,4 +1,3 @@
-from advent_tools import Puzzle
 from functools import reduce
 from itertools import chain
 from more_itertools import pairwise
@@ -36,13 +35,3 @@ def integer_composition(n):
     for k in range(n + 1):
         f += (x + x**2 + x**3) ** k
     return Poly(f, x).coeff_monomial(x**n)
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(10, 2020).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(10, 2020).input_data)

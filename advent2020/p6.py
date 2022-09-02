@@ -1,4 +1,3 @@
-from advent_tools import Puzzle
 from string import ascii_letters
 
 
@@ -16,13 +15,3 @@ def count_batch_intersection(s: str) -> int:
 
 def solve_b(s: str) -> int:
     return sum(count_batch_intersection(batch) for batch in s.split("\n\n"))
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(6, 2020).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(6, 2020).input_data)

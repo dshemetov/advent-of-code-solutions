@@ -1,4 +1,3 @@
-from advent_tools import Puzzle
 import re
 from typing import List, Tuple
 
@@ -37,13 +36,3 @@ def solve_b(s: str) -> int:
 def get_bags(d, e):
     n = sum(bag[0] * get_bags(d, bag[1]) for bag in d[e]) if len(d[e]) > 0 else 0
     return n + 1
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(7, 2020).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(7, 2020).input_data)

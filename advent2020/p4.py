@@ -1,6 +1,3 @@
-from advent_tools import Puzzle
-
-
 def solve_a(s: str) -> int:
     passports = [str_to_passport_dict(" ".join(batch.split("\n"))) for batch in s.split("\n\n")]
     return sum(map(validate_passport_a, passports))
@@ -48,13 +45,3 @@ def validate_passport_b(d: dict) -> bool:
         return False
 
     return all([birth_check, issue_check, expiration_check, height_check, eye_color_check])
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(4, 2020).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(4, 2020).input_data)

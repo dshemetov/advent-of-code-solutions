@@ -1,5 +1,4 @@
-import pytest
-from .p14 import int_to_bits, solve_a, solve_b
+from advent2020.p14 import int_to_bits, solve_a, solve_b
 
 test_string = """mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X
 mem[8] = 11

@@ -1,5 +1,4 @@
-import pytest
-from .p15 import GameState
+from advent2020.p15 import GameState
 
 
 def test_get_next_number():

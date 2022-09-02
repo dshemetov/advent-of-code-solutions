@@ -1,5 +1,4 @@
-import pytest
-from .template import solve_a, solve_b
+from advent2020.p17 import solve_a, solve_b
 
 test_string = """"""
 

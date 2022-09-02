@@ -1,4 +1,4 @@
-from .p22 import (
+from advent2021.p22 import (
     Cube,
     CubeSlice,
     NooiceSlice,

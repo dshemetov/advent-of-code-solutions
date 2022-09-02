@@ -1,5 +1,4 @@
-import pytest
-from .p17 import solve_a, solve_b
+from template import solve_a, solve_b
 
 test_string = """"""
 

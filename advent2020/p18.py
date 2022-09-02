@@ -3,8 +3,6 @@ from operator import mul
 from typing import List
 import re
 
-from advent_tools import Puzzle
-
 
 def find_simple_expressions(expr: str) -> List[str]:
     """A simple expression contains no parenthetical sub-statements."""
@@ -61,11 +59,9 @@ def evaluate_expression_b(expr: str) -> int:
     return int(evaluate_simple_expression_b(expr))
 
 
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return sum(evaluate_expression_a(expr) for expr in Puzzle(18, 2020).input_lines)
+def solve_a(s: str) -> int:
+    return sum(evaluate_expression_a(expr) for expr in s.split("\n"))
 
-    @property
-    def answer_b(self) -> int:
-        return sum(evaluate_expression_b(expr) for expr in Puzzle(18, 2020).input_lines)
+
+def solve_a(s: str) -> int:
+    return sum(evaluate_expression_b(expr) for expr in s.split("\n"))

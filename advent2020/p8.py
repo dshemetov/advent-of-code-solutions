@@ -1,6 +1,3 @@
-from advent_tools import Puzzle
-
-
 def solve_a(s: str) -> int:
     lines = (line.split(" ") for line in s.split("\n"))
     instructions = [(op, int(num)) for op, num in lines]
@@ -56,13 +53,3 @@ def solve_b(s: str) -> int:
             if flag:
                 break
     return val
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(8, 2020).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(8, 2020).input_data)

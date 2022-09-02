@@ -1,5 +1,4 @@
-import pytest
-from .p11 import string_to_array, update_state_until_fixed, count_occupied_seats
+from advent2020.p11 import string_to_array, update_state_until_fixed, count_occupied_seats
 
 
 test_string = "L.LL.LL.LL\nLLLLLLL.LL\nL.L.L..L..\nLLLL.LL.LL\nL.LL.LL.LL\nL.LLLLL.LL\n..L.L.....\nLLLLLLLLLL\nL.LLLLLL.L\nL.LLLLL.LL\n"

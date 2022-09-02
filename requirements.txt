@@ -1,9 +1,0 @@
-docopt
-joblib
-more_itertools
-numpy
-requests
-pytest
-python-dotenv
-scipy
-sympy

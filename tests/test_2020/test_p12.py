@@ -1,5 +1,4 @@
-import pytest
-from .p12 import (
+from advent2020.p12 import (
     State,
     solve_a,
     parse_commands,

@@ -1,4 +1,4 @@
-from advent_tools import Puzzle, get_bezout_coefficients, get_gcd
+from advent_tools import get_bezout_coefficients, get_gcd
 from itertools import product
 from typing import Tuple, List
 
@@ -56,13 +56,3 @@ def solve_modular_congruence_equation_pair(b1: Tuple[int, int], b2: Tuple[int, i
     s, t = get_bezout_coefficients(n1, n2)
     x = a2 * s * n1 + a1 * t * n2
     return (x % (n1 * n2), n1 * n2)
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(13, 2020).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(13, 2020).input_data)

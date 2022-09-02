@@ -1,4 +1,3 @@
-from advent_tools import Puzzle
 import re
 from typing import List
 
@@ -67,13 +66,3 @@ def get_memory_addresses(v: int, mask: List[str]) -> int:
                 addresses_.append(address_)
             addresses = addresses_.copy()
     return addresses
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(14, 2020).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(14, 2020).input_data)

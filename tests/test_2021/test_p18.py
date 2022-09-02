@@ -1,4 +1,4 @@
-from .p18 import solve_a, solve_b, SnailfishTree
+from advent2021.p18 import solve_a, solve_b, SnailfishTree
 
 test_string = """"""
 

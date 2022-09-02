@@ -1,6 +1,3 @@
-from advent_tools import Puzzle
-
-
 def solve_a(s: str) -> int:
     return max(get_seatid(line) for line in s.split("\n"))
 
@@ -23,13 +20,3 @@ def solve_b(s: str) -> int:
         if x + 1 not in ids and x + 2 in ids:
             break
     return x + 1
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(5, 2020).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(5, 2020).input_data)

@@ -1,4 +1,3 @@
-from advent_tools import Puzzle
 from typing import List, Dict
 
 
@@ -44,13 +43,3 @@ def solve_a(s: str) -> int:
 def solve_b(s: str) -> int:
     puzzle_input = [int(x) for x in s.strip("\n").split(",")]
     return GameState(puzzle_input).get_nth_spoken_number(30000000)
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(15, 2020).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(15, 2020).input_data)

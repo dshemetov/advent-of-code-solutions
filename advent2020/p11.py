@@ -1,4 +1,4 @@
-from advent_tools import Puzzle, get_valid_neighbor_ixs
+from advent_tools import get_valid_neighbor_ixs
 from copy import deepcopy
 from itertools import product
 from typing import List, Tuple, Iterable
@@ -112,13 +112,3 @@ def get_first_visible_object(i: int, j: int, di: int, dj: int, state: List[List[
 def solve_b(s: str) -> int:
     state = string_to_array(s)
     return count_occupied_seats(update_state_until_fixed(state, "visible"))
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(11, 2020).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(11, 2020).input_data)

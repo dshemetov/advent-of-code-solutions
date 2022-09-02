@@ -1,4 +1,3 @@
-from advent_tools import Puzzle
 from dataclasses import dataclass
 import numpy as np
 from numpy.linalg import norm, matrix_power
@@ -83,13 +82,3 @@ def execute_command_b(state: State, command: Tuple[str, str]) -> np.ndarray:
         return State(s_pos, matrix_power(turn_right, int(num) // 90) @ w_pos)
     if instruction == "L":
         return State(s_pos, matrix_power(-turn_right, int(num) // 90) @ w_pos)
-
-
-class Solution:
-    @property
-    def answer_a(self) -> int:
-        return solve_a(Puzzle(12, 2020).input_data)
-
-    @property
-    def answer_b(self) -> int:
-        return solve_b(Puzzle(12, 2020).input_data)
