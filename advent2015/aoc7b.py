@@ -1,7 +1,7 @@
 import numpy as np
+from advent_tools import Puzzle
 
-f = open("aoc7.txt", "r")
-s = f.read()
+s = Puzzle(7, 2015).input_data
 G = np.zeros((1000, 1000))
 lines = s.split("\n")
 lines.pop()
@@ -29,7 +29,7 @@ for line in lines:
         eq[var2] = ("", "", var1)
 
 
-for i in range(111):
+for i in range(0):
     print("Iter:" + str(i))
     for j in eq.keys():
         if eq[j][1] == "" and eq[j][0] != "":

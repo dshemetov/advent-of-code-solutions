@@ -2,7 +2,7 @@ from bisect import insort
 from functools import reduce
 from itertools import product
 import os
-from typing import Callable, Dict, Iterable, List, Tuple
+from typing import Any, Callable, Dict, Iterable, List, Tuple
 from numpy.typing import ArrayLike
 
 from dotenv import load_dotenv
@@ -167,7 +167,7 @@ def get_neighbor_values(ix: ArrayLike, mat: np.ndarray, radius: int = 1, diagona
 def get_valid_neighbor_ixs(ix: ArrayLike, mat_shape: ArrayLike, radius: int = 1, diagonals: bool = False) -> Iterable[Tuple[int, ...]]:
     """
     Examples:
-    >>> list(get_valid_neighbor_ixs(np.array([0, 1]), np.array([2, 2]))
+    >>> list(get_valid_neighbor_ixs(np.array([0, 1]), np.array([2, 2])))
     [(1, 1), (0, 0)]
     """
     if diagonals:
@@ -206,23 +206,15 @@ def compose_multivar(*fs: List[Callable]) -> Callable:
     return reduce(compose_multivar_2, fs)
 
 
-class FiniteSortedList:
-    def __init__(self, values: List, max_length: int):
-        assert len(values) <= max_length
-        self.values = sorted(values)
-        self.max_length = max_length
-
-    def insert(self, el):
-        insort(self.values, el)
-        if len(self.values) > self.max_length:
-            self.values.pop(0)
-
-    def __repr__(self) -> str:
-        return str(self.values)
+def insert_finite_sorted_list(l: list, v: Any, max_length: int):
+    """Insert into a sorted finite list, dropping the smallest lowest values."""
+    insort(l, v)
+    if len(l) > max_length:
+        l.pop(0)
 
 
 def get_top_n(it: Iterable, n: int) -> List:
-    fsl = FiniteSortedList([], n)
+    top_n = []
     for e in it:
-        fsl.insert(e)
-    return fsl.values
+        insert_finite_sorted_list(top_n, e, n)
+    return top_n

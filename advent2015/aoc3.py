@@ -1,8 +1,6 @@
-import os
-import numpy as np
+from advent_tools import Puzzle
 
-f = open("aoc3.txt", "r")
-s = f.read()
+s = Puzzle(3, 2015).input_data
 G = set()
 og = [0, 0]
 G.add(tuple(og))

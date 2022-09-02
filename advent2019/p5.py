@@ -1,8 +1,4 @@
-# First we need to parse the input.
-def parseInput(filename):
-    with open(filename) as f:
-        s = [int(x) for x in f.read().split(",")]
-    return s
+from advent_tools import Puzzle
 
 
 # Next we set the inputs, without overwriting.
@@ -29,7 +25,6 @@ def times(temp_intcode, i1, i2, o):
 
 def input(temp_intcode, i, o):
     a = temp_intcode[i]
-    temp_
 
 
 instructions = {1: [plus, 3], 2: [times, 3]}
@@ -55,7 +50,7 @@ def run_intcode(temp_intcode):
     return temp_intcode[0]
 
 
-INPUT = parseInput("input2a.txt")
+INPUT = [int(x) for x in Puzzle(2, 2019).input_data.split(",")]
 temp_intcode = setInputs(INPUT, 12, 2)
 print("Part a solution: ", run_intcode(temp_intcode))
 

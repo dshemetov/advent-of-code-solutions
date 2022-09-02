@@ -11,7 +11,7 @@ def solve_a(s: str) -> int:
     >>> solve_a(test_string)
     15
     """
-    mat = np.mat([list(x) for x in s.split("\n")], dtype=int)
+    mat = np.array([list(x) for x in s.split("\n")], dtype=int)
     n, m = mat.shape
     return sum(mat[i, j] + 1 for i, j in product(range(n), range(m)) if is_lowest_point(np.array([i, j]), mat))
 
@@ -26,7 +26,7 @@ def solve_b(s: str) -> int:
     >>> solve_b(test_string)
     1134
     """
-    mat = np.mat([list(x) for x in s.split("\n")], dtype=int)
+    mat = np.array([list(x) for x in s.split("\n")], dtype=int)
     a, b, c = get_top_n((len(basin) for basin in get_basins(mat)), 3)
     return a * b * c
 

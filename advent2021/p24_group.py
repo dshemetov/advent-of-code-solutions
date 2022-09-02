@@ -193,15 +193,9 @@ class Day24(AdventProblem):
         return f"{3}"
 
 
-def run_day(day: int, test: bool) -> None:
-    time1 = time.time()
-    time2 = time.time()
-    instance = Day24(test)
-    print(f"Creating the class took {time2 - time1:.4f} seconds")
-    part1, time3 = instance.solve_part1(), time.time()
-    print(f"Part 1 ({time3 - time2:.4f} s) - {part1}")
-    part2, time4 = instance.solve_part2(), time.time()
-    print(f"Part 2 ({time4 - time3:.4f} s) - {part2}")
+def solve_a(s: str) -> int:
+    return 0
 
 
-run_day(24, False)
+def solve_b(s: str) -> int:
+    return 0

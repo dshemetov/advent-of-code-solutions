@@ -1,5 +1,6 @@
-f = open("aoc5.txt", "r")
-s = f.read()
+from advent_tools import Puzzle
+
+s = Puzzle(5, 2015).input_data
 a = s.split("\n")
 
 nice = 0

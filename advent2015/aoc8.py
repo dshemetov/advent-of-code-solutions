@@ -1,7 +1,6 @@
-import numpy as np
+from advent_tools import Puzzle
 
-f = open("aoc8.txt", "r")
-s = f.read()
+s = Puzzle(8, 2015).input_data
 lines = s.split("\n")
 lines.pop()
 
