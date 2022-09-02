@@ -11,4 +11,3 @@ format:
 
 test:
 	pytest .
-	python -m doctest -v ./*/**.py
