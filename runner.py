@@ -12,7 +12,7 @@ Options:
     --version            Show version.
     -c --clear-cache     Clear cached solutions, if already computed.
 """
-from typing import Tuple
+from typing import Any, Callable, Tuple
 from docopt import docopt
 from importlib import import_module
 import time
@@ -49,8 +49,10 @@ def is_cached(year: int, day: int, part: str) -> int:
         return False
 
 
-def timed(func):
-    def new_func(*args, **kwargs):
+def timed(func: Callable):
+    """Times the function and returns the elapsed time."""
+
+    def new_func(*args, **kwargs) -> Tuple[Any, float]:
         t = time.perf_counter()
         out = func(*args, **kwargs)
         time_elapsed = time.perf_counter() - t
