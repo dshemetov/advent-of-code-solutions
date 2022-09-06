@@ -1,5 +1,6 @@
 from functools import reduce
 from itertools import chain
+from typing import Iterable
 from more_itertools import pairwise
 from sympy import symbols, Poly
 
@@ -24,14 +25,13 @@ def solve_b(s: str) -> int:
     return reduce(lambda x, y: x * y, diffs)
 
 
-def diff(iterable):
-    """s -> s1-s0, s2-s1, s3-s2, ..."""
+def diff(iterable: Iterable[int]) -> Iterable[int]:
     return (y - x for x, y in pairwise(iterable))
 
 
-def integer_composition(n):
+def integer_composition(n: int) -> int:
     x = symbols("x")
     f = 0
     for k in range(n + 1):
         f += (x + x**2 + x**3) ** k
-    return Poly(f, x).coeff_monomial(x**n)
+    return int(Poly(f, x).coeff_monomial(x**n))

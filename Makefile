@@ -1,5 +1,5 @@
 install:
-	@pip install -e advent_tools
+	@pip install -e .
 	@echo "Go to https://adventofcode.com/, inspect browser session, find the cookie."
 	@read -p "Set your AoC token (n to skip): " TOKEN; \
 		if [ $$TOKEN != "n" ]; then\

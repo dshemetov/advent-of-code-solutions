@@ -63,5 +63,5 @@ def solve_a(s: str) -> int:
     return sum(evaluate_expression_a(expr) for expr in s.split("\n"))
 
 
-def solve_a(s: str) -> int:
+def solve_b(s: str) -> int:
     return sum(evaluate_expression_b(expr) for expr in s.split("\n"))

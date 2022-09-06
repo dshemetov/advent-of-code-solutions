@@ -343,8 +343,5 @@ def merge_adjacent_cubes(cubes: List[CubeSlice]) -> List[CubeSlice]:
             already_merged.extend([cube1, cube2])
             merged_cubes.append(cube1.combine(cube2))
 
-    for cube in cubes:
-        if cube not in already_merged:
-            merged_cubes.append(cube)
-
+    merged_cubes += [cube for cube in cubes if cube not in already_merged]
     return merged_cubes

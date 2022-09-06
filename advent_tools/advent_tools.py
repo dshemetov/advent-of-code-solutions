@@ -1,14 +1,14 @@
-from bisect import insort
-from functools import reduce
-from itertools import product
 import os
+from bisect import insort
+from functools import partial, reduce
+from itertools import accumulate, product
 from typing import Any, Callable, Dict, Iterable, List, Tuple
-from numpy.typing import ArrayLike
 
+import numpy as np
+import requests
 from dotenv import load_dotenv
 from joblib import Memory
-import requests
-import numpy as np
+from numpy.typing import ArrayLike
 
 memory = Memory(".joblib_cache", verbose=0)
 try:
@@ -74,6 +74,28 @@ def apply_until_fixed_list(func):
         return new_val, vals
 
     return new_func
+
+
+def until_fixed(it: Iterable) -> Iterable:
+    return accumulate(it, no_repeat)
+
+
+def no_repeat(prev: Any, curr: Any) -> Any:
+    if prev == curr:
+        raise StopIteration
+    else:
+        return curr
+
+
+def until_close(it: Iterable, tol: float = 0.001) -> Iterable:
+    return accumulate(it, partial(within_tolerance, tol))
+
+
+def within_tolerance(tol: float, prev: float, curr: float) -> float:
+    if abs(prev - curr) < tol:
+        raise StopIteration
+    else:
+        return curr
 
 
 def binary_to_int(ls: List[int]) -> int:

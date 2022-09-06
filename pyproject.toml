@@ -1,3 +1,38 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "advent_tools"
+version = "0.1.0"
+description = "Utilities for Advent of Code Puzzles"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+  {email = "dshemetov@ucdavis.edu"},
+  {name = "Dmitry Shemetov"}
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python"
+]
+dependencies = [
+  "joblib",
+  "more-itertools",
+  "numpy",
+  "python-dotenv",
+  "requests",
+  "scipy",
+  "sympy"
+]
+
+[project.urls]
+repository = "https://github.com/dshemetov/advent-of-code-solutions"
+
+[tool.setuptools]
+# To specify specific folders or modules to install
+py-modules = ["advent_tools"]
+
 [tool.black]
 line-length = 180
 target-version = ['py310']
