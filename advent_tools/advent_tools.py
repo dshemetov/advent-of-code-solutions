@@ -19,9 +19,9 @@ except KeyError:
 
 
 class Puzzle:
-    def __init__(self, day: int, year: int, auth: Dict[str, str] = AUTH):
-        if year < 2015 or year > 2021:
-            raise ValueError("Year outside valid range [2015, 2021].")
+    def __init__(self, year: int, day: int, auth: Dict[str, str] = AUTH):
+        if year < 2015 or year > 2022:
+            raise ValueError("Year outside valid range [2015, 2022].")
         if day < 1 or day > 31:
             raise ValueError("Day outside valid range [1, 31].")
         self.day = day
@@ -30,7 +30,7 @@ class Puzzle:
 
     @property
     def input_data(self) -> str:
-        return puzzle_input(self.day, self.year, self.auth).strip("\n")
+        return puzzle_input(self.year, self.day, self.auth).strip("\n")
 
     @property
     def input_lines(self) -> List[str]:
@@ -38,9 +38,11 @@ class Puzzle:
 
 
 @memory.cache
-def puzzle_input(day: int, year: int, auth: Dict[str, str] = AUTH) -> str:
+def puzzle_input(year: int, day: int, auth: Dict[str, str] = AUTH) -> str:
     print(f"Downloading puzzle input for day {day}, year {year}...")
     request = requests.get(url=f"https://adventofcode.com/{year}/day/{day}/input", cookies=auth)
+    if "Please don't repeatedly request this endpoint" in request.text:
+        raise ValueError("Puzzle not available.")
     return request.text
 
 
