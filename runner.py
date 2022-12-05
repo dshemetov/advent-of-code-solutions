@@ -18,6 +18,7 @@ from importlib import import_module
 import time
 
 from joblib import Memory
+import typer
 
 memory = Memory("~/.advent_tools/joblib_cache", verbose=0)
 
@@ -31,10 +32,10 @@ def get_answer(year: int, day: int, part: str) -> int:
         solution_method = getattr(solution_module, f"solve_{part}")
     except ModuleNotFoundError:
         raise ModuleNotFoundError("Problem not implemented yet.")
-    return solution_method(Puzzle(day, year).input_data)
+    return solution_method(Puzzle(year, day).input_data)
 
 
-def is_cached(year: int, day: int, part: str) -> int:
+def is_cached(year: int, day: int, part: str) -> bool:
     """Return the list of inputs and outputs from `mem` (joblib.Memory cache).
 
     Uses non-public API: https://github.com/joblib/joblib/blob/754433f617793bc950be40cfaa265a32aed11d7d/joblib/memory.py#L758
@@ -49,7 +50,7 @@ def is_cached(year: int, day: int, part: str) -> int:
         return False
 
 
-def timed(func: Callable):
+def timed(func: Callable) -> Callable:
     """Times the function and returns the elapsed time."""
 
     def new_func(*args, **kwargs) -> Tuple[Any, float]:
@@ -67,7 +68,7 @@ def get_answer_cache(year: int, day: int, part: str, clear_cache: bool, verbose:
         result = get_answer.call_and_shelve(year, day, part).clear()
         ans = get_answer(year, day, part)
         if result != ans and verbose:
-            print(f"Warning, new result differs from cached for {year}.{day}.{part}...")
+            print(f"Warning, new result differs from cached for {year}.{day}.{part}. New is {result}, old was {ans}.")
     else:
         ans = get_answer(year, day, part)
     return ans
@@ -79,6 +80,9 @@ def get_part_solution(year: int, day: int, part: str, clear_cache: bool, verbose
         print(f"Day {day:>2}. Solution {part}: {ans:>20} (elapsed time {time_taken:>5.3f}).")
     except ModuleNotFoundError:
         ans, time_taken = 0, 0
+    except Exception as e:
+        ans, time_taken = 0, 0
+        print(f"Unexpected error occurred for {year}.{day}.{part}: {e}")
     return ans, time_taken
 
 
