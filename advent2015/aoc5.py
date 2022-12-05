@@ -1,6 +1,6 @@
 from advent_tools import Puzzle
 
-s = Puzzle(5, 2015).input_data
+s = Puzzle(2015, 3).input_data
 a = s.split("\n")
 
 alphabet = [chr(i) for i in range(97, 123)]

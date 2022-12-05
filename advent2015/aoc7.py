@@ -1,7 +1,7 @@
 import numpy as np
 from advent_tools import Puzzle
 
-s = Puzzle(7, 2015).input_data
+s = Puzzle(2015, 7).input_data
 G = np.zeros((1000, 1000))
 lines = s.split("\n")
 lines.pop()

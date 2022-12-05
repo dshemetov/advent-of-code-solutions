@@ -1,6 +1,6 @@
 from advent_tools import Puzzle
 
-s = Puzzle(3, 2015).input_data
+s = Puzzle(2015, 3).input_data
 G = set()
 og = [0, 0]
 G.add(tuple(og))

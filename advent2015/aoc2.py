@@ -1,6 +1,6 @@
 from advent_tools import Puzzle
 
-a = Puzzle(2, 2015).input_data
+a = Puzzle(2015, 2).input_data
 b = a.split("\n")
 c = [i.split("x") for i in b]
 c.pop()

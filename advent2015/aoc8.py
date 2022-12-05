@@ -1,6 +1,6 @@
 from advent_tools import Puzzle
 
-s = Puzzle(8, 2015).input_data
+s = Puzzle(2015, 8).input_data
 lines = s.split("\n")
 lines.pop()
 
