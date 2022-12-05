@@ -1,4 +1,6 @@
-"""Extended Polymerization https://adventofcode.com/2021/day/14"""
+"""Extended Polymerization
+https://adventofcode.com/2021/day/14
+"""
 from collections import Counter
 from scipy.sparse import dok_matrix
 

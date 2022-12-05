@@ -1,4 +1,6 @@
-"""Seven Segment Search https://adventofcode.com/2021/day/8"""
+"""Seven Segment Search
+https://adventofcode.com/2021/day/8
+"""
 from advent_tools import reverse_dict
 from itertools import permutations, product
 import re

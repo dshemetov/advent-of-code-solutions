@@ -1,4 +1,6 @@
-"""Arithmetic Logic Unit https://adventofcode.com/2021/day/24"""
+"""Arithmetic Logic Unit
+https://adventofcode.com/2021/day/24
+"""
 import time
 from re import findall
 from abc import ABC, abstractmethod
@@ -157,7 +159,7 @@ def parse_input(s: str):
 class Day24(AdventProblem):
     def __init__(self, test: bool):
         super().__init__("ALU")
-        self.ALU = ALU(Puzzle(24, 2021))
+        self.ALU = ALU(Puzzle(2021, 24))
 
         if test:
             a = ALU(parse_input("test.txt"))

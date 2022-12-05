@@ -1,4 +1,6 @@
-"""Syntax Scoring https://adventofcode.com/2021/day/10"""
+"""Syntax Scoring
+https://adventofcode.com/2021/day/10
+"""
 from advent_tools import reverse_dict
 from enum import Enum
 from typing import Optional, Tuple

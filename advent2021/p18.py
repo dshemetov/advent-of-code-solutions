@@ -1,4 +1,6 @@
-"""Snailfish https://adventofcode.com/2021/day/18"""
+"""Snailfish
+https://adventofcode.com/2021/day/18
+"""
 from copy import deepcopy
 from math import floor, ceil
 import numpy as np

@@ -1,4 +1,6 @@
-"""Trench Map https://adventofcode.com/2021/day/20"""
+"""Trench Map
+https://adventofcode.com/2021/day/20
+"""
 import numpy as np
 from scipy.signal import convolve2d
 from typing import List

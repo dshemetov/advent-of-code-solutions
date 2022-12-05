@@ -1,4 +1,6 @@
-"""Dive! https://adventofcode.com/2021/day/2"""
+"""Dive!
+https://adventofcode.com/2021/day/2
+"""
 
 
 def solve_a(s: str) -> int:
@@ -11,9 +13,9 @@ def solve_a(s: str) -> int:
     for dir, n in (line.split(" ") for line in s.split("\n")):
         if dir == "forward":
             x += int(n)
-        if dir == "up":
+        elif dir == "up":
             y += int(n)
-        if dir == "down":
+        elif dir == "down":
             y -= int(n)
     return abs(x * y)
 
@@ -29,9 +31,9 @@ def solve_b(s: str) -> int:
         if dir == "forward":
             x += int(n)
             y += aim * int(n)
-        if dir == "up":
+        elif dir == "up":
             aim -= int(n)
-        if dir == "down":
+        elif dir == "down":
             aim += int(n)
     return abs(x * y)
 

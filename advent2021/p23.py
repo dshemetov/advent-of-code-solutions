@@ -1,4 +1,6 @@
-"""Amphipod https://adventofcode.com/2021/day/23"""
+"""Amphipod
+https://adventofcode.com/2021/day/23
+"""
 
 
 def solve_a(s: str) -> int:

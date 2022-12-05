@@ -1,4 +1,6 @@
-"""Dirac Dice https://adventofcode.com/2021/day/21"""
+"""Dirac Dice
+https://adventofcode.com/2021/day/21
+"""
 from typing import List, Tuple
 from itertools import product, cycle, product
 import random as rng

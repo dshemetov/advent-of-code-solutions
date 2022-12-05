@@ -1,4 +1,6 @@
-"""Hydrothermal Venture Giant Squid https://adventofcode.com/2021/day/5"""
+"""Hydrothermal Venture Giant Squid
+https://adventofcode.com/2021/day/5
+"""
 
 import numpy as np
 import re

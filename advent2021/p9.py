@@ -1,4 +1,6 @@
-"""Smoke Basin https://adventofcode.com/2021/day/9"""
+"""Smoke Basin
+https://adventofcode.com/2021/day/9
+"""
 from advent_tools import get_top_n, get_valid_neighbor_ixs, get_neighbor_values
 from itertools import product
 import numpy as np

@@ -1,4 +1,6 @@
-"""Transparent Origami https://adventofcode.com/2021/day/13"""
+"""Transparent Origami
+https://adventofcode.com/2021/day/13
+"""
 import numpy as np
 import re
 from typing import List

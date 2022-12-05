@@ -1,6 +1,8 @@
-"""Beacon Scanner https://adventofcode.com/2021/day/19
+"""Beacon Scanner
+https://adventofcode.com/2021/day/19
 
-I was in flight to Tampa for this one, so this is mostly Jeff and David's code."""
+I was in flight to Tampa for this one, so this is mostly Jeff and David's code.
+"""
 import copy
 from itertools import permutations, product
 import numpy as np

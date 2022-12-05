@@ -1,4 +1,6 @@
-"""Sonar Sweep https://adventofcode.com/2021/day/1"""
+"""Sonar Sweep
+https://adventofcode.com/2021/day/1
+"""
 
 
 def solve_a(s: str) -> int:

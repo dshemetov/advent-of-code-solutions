@@ -1,4 +1,6 @@
-"""Trick Shot https://adventofcode.com/2021/day/17"""
+"""Trick Shot
+https://adventofcode.com/2021/day/17
+"""
 import re
 from typing import Tuple
 

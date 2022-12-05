@@ -1,4 +1,6 @@
-"""Binary Diagnostics https://adventofcode.com/2021/day/3"""
+"""Binary Diagnostics
+https://adventofcode.com/2021/day/3
+"""
 
 from advent_tools import binary_to_int
 from copy import copy

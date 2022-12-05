@@ -1,4 +1,6 @@
-"""Dumbo Octopus https://adventofcode.com/2021/day/11"""
+"""Dumbo Octopus
+https://adventofcode.com/2021/day/11
+"""
 from advent_tools import get_valid_neighbor_ixs
 from itertools import product
 import numpy as np
