@@ -1,0 +1,14 @@
+black
+cython
+docopt
+joblib
+jupyter
+matplotlib
+more-itertools
+numpy
+pytest
+python-dotenv
+requests
+scipy
+sympy
+typer[all]
