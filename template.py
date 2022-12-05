@@ -1,3 +1,7 @@
+# %%
+"""
+
+"""
 def solve_a(s: str) -> int:
     """
     Examples:
@@ -17,4 +21,11 @@ def solve_b(s: str) -> int:
 
 
 test_string = """
-"""
+""".strip("\n")
+
+# %%
+# solve_a(test_string)
+# from advent_tools import Puzzle
+# solve_a(Puzzle().input_data)
+# solve_b(test_string)
+# solve_b(Puzzle().input_data)
