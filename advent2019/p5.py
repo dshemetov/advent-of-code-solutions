@@ -50,7 +50,7 @@ def run_intcode(temp_intcode):
     return temp_intcode[0]
 
 
-INPUT = [int(x) for x in Puzzle(2, 2019).input_data.split(",")]
+INPUT = [int(x) for x in Puzzle(2019, 5).input_data.split(",")]
 temp_intcode = setInputs(INPUT, 12, 2)
 print("Part a solution: ", run_intcode(temp_intcode))
 
