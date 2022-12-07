@@ -11,22 +11,19 @@ from joblib import Memory
 from numpy.typing import ArrayLike
 
 memory = Memory(".joblib_cache", verbose=0)
-try:
-    load_dotenv()
-    AUTH = {"session": os.environ["AOC_TOKEN"]}
-except KeyError:
-    raise Exception(".env file with Advent of Code user cookie not found.")
+load_dotenv()
+AOC_TOKEN = os.environ.get("AOC_TOKEN")
 
 
 class Puzzle:
-    def __init__(self, year: int, day: int, auth: Dict[str, str] = AUTH):
+    def __init__(self, year: int, day: int, token: str = AOC_TOKEN):
         if year < 2015 or year > 2022:
             raise ValueError("Year outside valid range [2015, 2022].")
         if day < 1 or day > 31:
             raise ValueError("Day outside valid range [1, 31].")
         self.day = day
         self.year = year
-        self.auth = auth
+        self.auth = {"session": token}
 
     @property
     def input_data(self) -> str:
@@ -38,11 +35,14 @@ class Puzzle:
 
 
 @memory.cache
-def puzzle_input(year: int, day: int, auth: Dict[str, str] = AUTH) -> str:
+def puzzle_input(year: int, day: int, auth: Dict[str, str]) -> str:
     print(f"Downloading puzzle input for day {day}, year {year}...")
     request = requests.get(url=f"https://adventofcode.com/{year}/day/{day}/input", cookies=auth)
-    if "Please don't repeatedly request this endpoint" in request.text:
+    request.raise_for_status()
+    if "Please don't repeatedly request this endpoint" in request.text or "You don't seem to be solving the right level" in request.text:
         raise ValueError("Puzzle not available.")
+    if "Please log in" in request.text:
+        raise ValueError("Invalid or unset session cookie.")
     return request.text
 
 
@@ -107,7 +107,7 @@ def binary_to_int(ls: List[int]) -> int:
     >>> binary_to_int([1, 0, 1])
     5
     """
-    return sum(2**i * j for i, j in enumerate(reversed(ls)))
+    return int("".join(str(i) for i in ls), 2)
 
 
 def reverse_dict(d: dict) -> dict:
