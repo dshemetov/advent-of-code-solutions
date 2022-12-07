@@ -4,6 +4,7 @@ from importlib import import_module
 from typing import Any, Callable, Optional, Tuple
 
 import typer
+from dotenv import set_key
 from joblib import Memory
 from rich import print
 from rich.table import Table
@@ -48,7 +49,7 @@ def get_answer_cache(year: int, day: int, part: str, clear_cache: bool) -> Tuple
                 print(f"Warning, new result differs from cached for {year}.{day}.{part}. New is {answer}, old was {prev_answer}.")
         else:
             answer, time_taken = get_answer(year, day, part)
-            prev_time_taken = None 
+            prev_time_taken = None
     else:
         answer, prev_time_taken = get_answer(year, day, part)
         time_taken = 0
@@ -61,7 +62,9 @@ def get_solutions(
     day: Optional[int] = typer.Option(None, "--day", "-d", help="The day of the problem."),
     part: Optional[str] = typer.Option(None, "--part", "-p", help="The part of the problem."),
     clear_cache: bool = typer.Option(False, "--clear-cache", "-c", help="Clear the cache for this problem."),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Show warnings."),
 ):
+    """Prints the solution for a problem or problems."""
     days = range(1, 26) if day is None else [day]
     parts = ["a", "b"] if part is None else [part]
     total_time_taken = 0
@@ -71,12 +74,13 @@ def get_solutions(
             try:
                 ans, time_taken, prev_time_taken = get_answer_cache(year, day, part, clear_cache)
             except ModuleNotFoundError:
+                if verbose:
+                    print(f"Problem {year}.{day}.{part} not implemented yet.")
                 continue
             except Exception as e:
                 print(f"Unexpected error occurred for {year}.{day}.{part}: {e}")
                 continue
             run_stats[(day, part)] = [ans, time_taken, prev_time_taken]
-            # print(f"Day {day:>2}. Solution {part}: {ans:>20} (elapsed time {time_taken:>5.3f}).")
             total_time_taken += time_taken
 
     table = Table(title=f"{year} Solutions", caption=f"Total time taken: {total_time_taken:>5.3f}.")
@@ -90,6 +94,18 @@ def get_solutions(
         table.add_row(str(day), part, str(ans), f"{time_taken:>5.5f}", f"{prev_time_taken:>5.5f}")
 
     print(table)
+
+
+@app.command("set-cookie")
+def set_cookie(cookie: Optional[str] = typer.Option(None, "--cookie", "-c", help="The cookie to set.", prompt="Enter your cookie (input hidden)", hide_input=True)):
+    """Prints the cookie for the current user.
+    
+    Go to https://adventofcode.com/, inspect the browser session, and find your cookie.
+    """
+    if cookie is not None:
+        set_key(".env", "AOC_TOKEN", cookie)
+    else:
+        raise ValueError("Got empty cookie.")
 
 
 if __name__ == "__main__":

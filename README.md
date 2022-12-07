@@ -2,41 +2,29 @@
 
 [Advent of Code](https://adventofcode.com/) is a great set of Christmas-themed coding challenges.
 
-## Setup
+## Usage
 
-To setup, use Python 3.9+, and:
+Requires Python >=3.9.
 
 ```sh
 # Clone repo
 git clone https://github.com/dshemetov/advent-of-code-solutions
 cd advent-of-code-solutions
 
-# Install (Python dependencies, asks for AoC cookie, stores in .env)
+# Install (Python venv, dependencies)
 make install
-```
 
-The problem runner can be used as follows:
+# Set AoC cookie in .env
+make set-cookie
 
-```sh
-# Print the answer to 2021 puzzle day 2 part b
-python runner.py solution 2021.2.b
-
-# Print the answers to 2021 puzzle day 2 problems
-python runner.py day 2021.2
-
-# Print the answers to 2021 problems
-python runner.py year 2021
+# Print the answer to puzzle 2021 day 2 part b
+python runner.py solve -y 2021 -d 2 -p b
 
 # Clear cached answer
-python runner.py day 2021.2.b -c
-```
+python runner.py solve -y 2021 -d 2 -p -c
 
-Test and format (with black)
-
-```sh
-make test
-
-make format
+# See help for more
+python runner.py solve --help
 ```
 
 ## Background

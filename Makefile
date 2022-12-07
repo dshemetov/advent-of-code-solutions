@@ -1,13 +1,16 @@
-install:
-	@pip install -e .
-	@echo "Go to https://adventofcode.com/, inspect browser session, find the cookie."
-	@read -p "Set your AoC token (n to skip): " TOKEN; \
-		if [ $$TOKEN != "n" ]; then\
-			echo "AOC_TOKEN='$$TOKEN'" > .env;\
-		fi
+.PHONY = venv, lint, test, clean
+
+venv: venv/bin/activate
+	python3 -m venv venv
+
+install: venv
+	source venv/bin/activate; pip install -r requirements.txt
+
+set-cookie: venv
+	source venv/bin/activate; python runner.py set-cookie
 
 format:
-	black .
+	source venv/bin/activate; black .
 
 test:
-	pytest .
+	source venv/bin/activate; pytest .
