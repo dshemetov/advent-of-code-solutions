@@ -1,53 +1,17 @@
-"""Run Advent of Code solutions.
-
-Usage:
-    runner.py problem <year.day.part> [-c | --clear-cache]
-    runner.py day <year.day> [-c | --clear-cache]
-    runner.py year <year> [-c | --clear-cache]
-    runner.py -h | --help
-    runner.py --version
-
-Options:
-    -h --help            Show this screen.
-    --version            Show version.
-    -c --clear-cache     Clear cached solutions, if already computed.
-"""
-from typing import Any, Callable, Tuple
-from docopt import docopt
-from importlib import import_module
 import time
+from datetime import date
+from importlib import import_module
+from typing import Any, Callable, Optional, Tuple
 
-from joblib import Memory
 import typer
-
-memory = Memory("~/.advent_tools/joblib_cache", verbose=0)
+from joblib import Memory
+from rich import print
+from rich.table import Table
 
 from advent_tools import Puzzle
 
-
-@memory.cache
-def get_answer(year: int, day: int, part: str) -> int:
-    try:
-        solution_module = import_module(f"advent{year}.p{day}")
-        solution_method = getattr(solution_module, f"solve_{part}")
-    except ModuleNotFoundError:
-        raise ModuleNotFoundError("Problem not implemented yet.")
-    return solution_method(Puzzle(year, day).input_data)
-
-
-def is_cached(year: int, day: int, part: str) -> bool:
-    """Return the list of inputs and outputs from `mem` (joblib.Memory cache).
-
-    Uses non-public API: https://github.com/joblib/joblib/blob/754433f617793bc950be40cfaa265a32aed11d7d/joblib/memory.py#L758
-    and the answer that led me there https://stackoverflow.com/a/69361221.
-    """
-    args = [year, day, part]
-    func_id, args_id = get_answer._get_output_identifiers(*args)
-    try:
-        _ = get_answer.store_backend.load_item([func_id, args_id])
-        return True
-    except KeyError:
-        return False
+memory = Memory("~/.advent_tools/joblib_cache", verbose=0)
+app = typer.Typer(name="Advent of Code Solution Runner", chain=True)
 
 
 def timed(func: Callable) -> Callable:
@@ -62,59 +26,71 @@ def timed(func: Callable) -> Callable:
     return new_func
 
 
-@timed
-def get_answer_cache(year: int, day: int, part: str, clear_cache: bool, verbose: bool = False) -> int:
-    if clear_cache and is_cached(year, day, part):
-        result = get_answer.call_and_shelve(year, day, part).clear()
-        ans = get_answer(year, day, part)
-        if result != ans and verbose:
-            print(f"Warning, new result differs from cached for {year}.{day}.{part}. New is {result}, old was {ans}.")
-    else:
-        ans = get_answer(year, day, part)
-    return ans
-
-
-def get_part_solution(year: int, day: int, part: str, clear_cache: bool, verbose: bool = False) -> Tuple[int, float]:
+@memory.cache
+def get_answer(year: int, day: int, part: str) -> Tuple[int, float]:
     try:
-        ans, time_taken = get_answer_cache(year, day, part, clear_cache, verbose)
-        print(f"Day {day:>2}. Solution {part}: {ans:>20} (elapsed time {time_taken:>5.3f}).")
+        solution_module = import_module(f"advent{year}.p{day}")
+        solution_method = getattr(solution_module, f"solve_{part}")
     except ModuleNotFoundError:
-        ans, time_taken = 0, 0
-    except Exception as e:
-        ans, time_taken = 0, 0
-        print(f"Unexpected error occurred for {year}.{day}.{part}: {e}")
-    return ans, time_taken
+        raise ModuleNotFoundError("Problem not implemented yet.")
+    answer, time_taken = timed(solution_method)(Puzzle(year, day).input_data)
+    return answer, time_taken
 
 
-def get_day_solutions(year: int, day: int, clear_cache: bool, verbose: bool = False) -> Tuple[Tuple[int, float], Tuple[int, float]]:
-    ans1, time_taken1 = get_part_solution(year, day, "a", clear_cache, verbose)
-    ans2, time_taken2 = get_part_solution(year, day, "b", clear_cache, verbose)
-    return (ans1, time_taken1), (ans2, time_taken2)
+def get_answer_cache(year: int, day: int, part: str, clear_cache: bool) -> Tuple[int, float]:
+    if clear_cache:
+        if get_answer.check_call_in_cache(year, day, part) is True:
+            result = get_answer.call_and_shelve(year, day, part)
+            prev_answer, prev_time_taken = result.get()
+            result.clear()
+            answer, time_taken = get_answer(year, day, part)
+            if answer != prev_answer:
+                print(f"Warning, new result differs from cached for {year}.{day}.{part}. New is {answer}, old was {prev_answer}.")
+        else:
+            answer, time_taken = get_answer(year, day, part)
+            prev_time_taken = None 
+    else:
+        answer, prev_time_taken = get_answer(year, day, part)
+        time_taken = 0
+    return answer, time_taken, prev_time_taken
 
 
-def get_year_solutions(year: int, clear_cache: bool):
-    print(f"{year} Solutions:")
-
+@app.command("solve")
+def get_solutions(
+    year: Optional[int] = typer.Option(date.today().year, "--year", "-y", help="The year of the problem."),
+    day: Optional[int] = typer.Option(None, "--day", "-d", help="The day of the problem."),
+    part: Optional[str] = typer.Option(None, "--part", "-p", help="The part of the problem."),
+    clear_cache: bool = typer.Option(False, "--clear-cache", "-c", help="Clear the cache for this problem."),
+):
+    days = range(1, 26) if day is None else [day]
+    parts = ["a", "b"] if part is None else [part]
     total_time_taken = 0
-    for day in range(1, 26):
-        (_, time_taken1), (_, time_taken2) = get_day_solutions(year, day, clear_cache)
-        total_time_taken += time_taken1 + time_taken2
-    print(f"Total time taken: {total_time_taken}.")
+    run_stats = {}
+    for day in days:
+        for part in parts:
+            try:
+                ans, time_taken, prev_time_taken = get_answer_cache(year, day, part, clear_cache)
+            except ModuleNotFoundError:
+                continue
+            except Exception as e:
+                print(f"Unexpected error occurred for {year}.{day}.{part}: {e}")
+                continue
+            run_stats[(day, part)] = [ans, time_taken, prev_time_taken]
+            # print(f"Day {day:>2}. Solution {part}: {ans:>20} (elapsed time {time_taken:>5.3f}).")
+            total_time_taken += time_taken
+
+    table = Table(title=f"{year} Solutions", caption=f"Total time taken: {total_time_taken:>5.3f}.")
+    table.add_column("Day", style="dim", no_wrap=True)
+    table.add_column("Part", style="dim", no_wrap=True)
+    table.add_column("Answer", justify="right")
+    table.add_column("Time Taken", justify="right")
+    table.add_column("Prev Time Taken", justify="right")
+
+    for (day, part), (ans, time_taken, prev_time_taken) in run_stats.items():
+        table.add_row(str(day), part, str(ans), f"{time_taken:>5.5f}", f"{prev_time_taken:>5.5f}")
+
+    print(table)
 
 
 if __name__ == "__main__":
-    args = docopt(__doc__, version="Advent of Code Solution Runner v0.1.0")
-
-    if args.get("problem"):
-        year, day, part = args["<year.day.part>"].split(".")
-        year, day = int(year), int(day)
-        get_part_solution(year, day, part, args["--clear-cache"])
-
-    if args.get("day"):
-        year, day = args["<year.day>"].split(".")
-        year, day = int(year), int(day)
-        get_day_solutions(year, day, args["--clear-cache"])
-
-    if args.get("year"):
-        year = int(args["<year>"])
-        get_year_solutions(year, args["--clear-cache"])
+    app()
