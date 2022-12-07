@@ -181,7 +181,7 @@ def get_units_and_diagonals(n: int) -> np.ndarray:
            [ 1,  1]])
     """
     zeros = tuple([0] * n)
-    return np.array([tup for tup in product([-1, 0, 1], repeat=n) if tup != zeros])
+    return np.array([tup for tup in product([-1, 0, 1], repeat=n) if tup != zeros], dtype=int)
 
 
 def get_neighbor_values(ix: ArrayLike, mat: np.ndarray, radius: int = 1, diagonals: bool = False) -> Iterable:
@@ -230,15 +230,15 @@ def compose_multivar(*fs: List[Callable]) -> Callable:
     return reduce(compose_multivar_2, fs)
 
 
-def insert_finite_sorted_list(l: list, v: Any, max_length: int):
-    """Insert into a sorted finite list, dropping the smallest lowest values."""
-    insort(l, v)
-    if len(l) > max_length:
-        l.pop(0)
-
-
 def get_top_n(it: Iterable, n: int) -> List:
+    """
+    Examples:
+    >>> get_top_n([5, 4, 3, 10, 2, 5], 5)
+    [3, 4, 5, 5, 10]
+    """
     top_n = []
     for e in it:
-        insert_finite_sorted_list(top_n, e, n)
+        insort(top_n, e)
+        if len(top_n) > n:
+            top_n.pop(0)
     return top_n
