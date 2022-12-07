@@ -1,6 +1,7 @@
-.PHONY = venv, lint, test, clean
+.PHONY=venv, lint, test, clean
+SHELL:=/bin/bash
 
-venv: venv/bin/activate
+venv:
 	python3 -m venv venv
 
 install: venv

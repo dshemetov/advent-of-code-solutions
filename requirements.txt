@@ -1,6 +1,5 @@
 black
 cython
-docopt
 joblib
 jupyter
 matplotlib
