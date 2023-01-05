@@ -1,18 +1,22 @@
+import os
 import time
 from datetime import date
 from importlib import import_module
+import traceback
 from typing import Any, Callable, Optional, Tuple
 
 import typer
-from dotenv import set_key
+from dotenv import load_dotenv, set_key
 from joblib import Memory
 from rich import print
 from rich.table import Table
 
-from advent_tools import Puzzle
+from advent_tools import get_puzzle_input
 
 memory = Memory("~/.advent_tools/joblib_cache", verbose=0)
 app = typer.Typer(name="Advent of Code Solution Runner", chain=True)
+
+AnswerType = int | str | None
 
 
 def timed(func: Callable) -> Callable:
@@ -28,17 +32,18 @@ def timed(func: Callable) -> Callable:
 
 
 @memory.cache
-def get_answer(year: int, day: int, part: str) -> Tuple[int, float]:
+def get_answer(year: int, day: int, part: str) -> Tuple[AnswerType, float]:
     try:
         solution_module = import_module(f"advent{year}.p{day}")
         solution_method = getattr(solution_module, f"solve_{part}")
     except ModuleNotFoundError:
         raise ModuleNotFoundError("Problem not implemented yet.")
-    answer, time_taken = timed(solution_method)(Puzzle(year, day).input_data)
+    timed_solution_method = timed(solution_method)
+    answer, time_taken = timed_solution_method(get_puzzle_input(year, day))
     return answer, time_taken
 
 
-def get_answer_cache(year: int, day: int, part: str, clear_cache: bool) -> Tuple[int, float]:
+def get_answer_cache(year: int, day: int, part: str, clear_cache: bool) -> Tuple[AnswerType, float]:
     if clear_cache:
         if get_answer.check_call_in_cache(year, day, part) is True:
             result = get_answer.call_and_shelve(year, day, part)
@@ -49,7 +54,7 @@ def get_answer_cache(year: int, day: int, part: str, clear_cache: bool) -> Tuple
                 print(f"Warning, new result differs from cached for {year}.{day}.{part}. New is {answer}, old was {prev_answer}.")
         else:
             answer, time_taken = get_answer(year, day, part)
-            prev_time_taken = None
+            prev_time_taken = float("nan")
     else:
         answer, prev_time_taken = get_answer(year, day, part)
         time_taken = 0
@@ -79,6 +84,7 @@ def get_solutions(
                 continue
             except Exception as e:
                 print(f"Unexpected error occurred for {year}.{day}.{part}: {e}")
+                traceback.print_exception(type(e), e, e.__traceback__)
                 continue
             run_stats[(day, part)] = [ans, time_taken, prev_time_taken]
             total_time_taken += time_taken
@@ -106,6 +112,44 @@ def set_cookie(cookie: Optional[str] = typer.Option(None, "--cookie", "-c", help
         set_key(".env", "AOC_TOKEN", cookie)
     else:
         raise ValueError("Got empty cookie.")
+
+
+@app.command("clear-download-cache")
+def clear_download_cache(
+    year: Optional[int] = typer.Option(date.today().year, "--year", "-y", help="The year of the problem."),
+    day: Optional[int] = typer.Option(None, "--day", "-d", help="The day of the problem."),
+):
+    """Clears the download cache."""
+    load_dotenv()
+    AOC_TOKEN = os.environ.get("AOC_TOKEN")
+
+    days = range(1, 26) if day is None else [day]
+    for day in days:
+        if get_puzzle_input.check_call_in_cache(year, day, AOC_TOKEN) is True:
+            result = get_puzzle_input.call_and_shelve(year, day, AOC_TOKEN)
+            result.clear() 
+            print(f"Download cache cleared for {year}.{day}.")
+        else:
+            print(f"No solution cache for {year}.{day}.")
+
+
+@app.command("clear-solution-cache")
+def clear_solution_cache(
+    year: Optional[int] = typer.Option(date.today().year, "--year", "-y", help="The year of the problem."),
+    day: Optional[int] = typer.Option(None, "--day", "-d", help="The day of the problem."),
+    part: Optional[str] = typer.Option(None, "--part", "-p", help="The part of the problem."),
+):
+    """Clears the solution cache."""
+    days = range(1, 26) if day is None else [day]
+    parts = ["a", "b"] if part is None else [part]
+    for day in days:
+        for part in parts:
+            if get_answer.check_call_in_cache(year, day, part) is True:
+                result = get_answer.call_and_shelve(year, day, part)
+                result.clear() 
+                print(f"Solution cache cleared for {year}.{day}.{part}.")
+            else:
+                print(f"No solution cache for {year}.{day}.{part}.")
 
 
 if __name__ == "__main__":

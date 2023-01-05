@@ -2,7 +2,7 @@ import os
 from bisect import insort
 from functools import partial, reduce
 from itertools import accumulate, product
-from typing import Any, Callable, Dict, Iterable, List, Tuple
+from typing import Any, Callable, Iterable, List, Tuple
 
 import numpy as np
 import requests
@@ -15,34 +15,24 @@ load_dotenv()
 AOC_TOKEN = os.environ.get("AOC_TOKEN")
 
 
-class Puzzle:
-    def __init__(self, year: int, day: int, token: str = AOC_TOKEN):
-        if year < 2015 or year > 2022:
-            raise ValueError("Year outside valid range [2015, 2022].")
-        if day < 1 or day > 31:
-            raise ValueError("Day outside valid range [1, 31].")
-        self.day = day
-        self.year = year
-        self.auth = {"session": token}
-
-    @property
-    def input_data(self) -> str:
-        return puzzle_input(self.year, self.day, self.auth).strip("\n")
-
-    @property
-    def input_lines(self) -> List[str]:
-        return self.input_data.split("\n")
-
-
 @memory.cache
-def puzzle_input(year: int, day: int, auth: Dict[str, str]) -> str:
+def get_puzzle_input(year: int, day: int, token: str = AOC_TOKEN) -> str:
+    if year < 2015 or year > 2022:
+        raise ValueError("Year outside valid range [2015, 2022].")
+    if day < 1 or day > 31:
+        raise ValueError("Day outside valid range [1, 31].")
+
+    auth = {"session": token}
+
     print(f"Downloading puzzle input for day {day}, year {year}...")
     request = requests.get(url=f"https://adventofcode.com/{year}/day/{day}/input", cookies=auth)
     request.raise_for_status()
+
     if "Please don't repeatedly request this endpoint" in request.text or "You don't seem to be solving the right level" in request.text:
         raise ValueError("Puzzle not available.")
     if "Please log in" in request.text:
         raise ValueError("Invalid or unset session cookie.")
+
     return request.text
 
 
