@@ -2,6 +2,7 @@
 black
 joblib
 jupyter
+line_profiler
 matplotlib
 more-itertools
 numba
@@ -9,6 +10,7 @@ numpy
 pytest
 python-dotenv
 requests
+scalene
 scipy
 sympy
 typer[all]
