@@ -13,13 +13,11 @@ def solve_a(s: str) -> int:
     157
     """
     total = 0
-
     for line in s.splitlines():
         a = line[: len(line) // 2]
         b = line[len(line) // 2 :]
         c = (set(a) & set(b)).pop()
         total += letters.index(c) + 1
-
     return total
 
 
@@ -30,14 +28,9 @@ def solve_b(s: str) -> int:
     70
     """
     total = 0
-
-    for line in grouper(s.splitlines(), 3):
-        a = line[0]
-        b = line[1]
-        c = line[2]
+    for a, b, c in grouper(s.splitlines(), 3):
         d = (set(a) & set(b) & set(c)).pop()
         total += letters.index(d) + 1
-
     return total
 
 
