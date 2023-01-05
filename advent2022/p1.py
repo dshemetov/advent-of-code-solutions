@@ -1,10 +1,5 @@
 """Calorie Counting
 https://adventofcode.com/2022/day/1
-
-Consider Cythonizing: https://cython.readthedocs.io/en/stable/src/tutorial/strings.html
-
-    cython p1.pyx
-    gcc -shared -pthread -fPIC -fwrapv -O2 -Wall -fno-strict-aliasing -I/usr/include/python3.8 -o p1.so p1.c
 """
 from heapq import nlargest
 
