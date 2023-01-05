@@ -20,8 +20,11 @@ make set-cookie
 # Print the answer to puzzle 2021 day 2 part b
 python runner.py solve -y 2021 -d 2 -p b
 
+# Print the answer to current year's day 2 (both parts)
+python runner.py solve -d 21
+
 # Clear cached answer
-python runner.py solve -y 2021 -d 2 -p -c
+python runner.py solve -y 2021 -d 2 -c
 
 # See help for more
 python runner.py solve --help
