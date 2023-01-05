@@ -1,9 +1,10 @@
+-e .
 black
-cython
 joblib
 jupyter
 matplotlib
 more-itertools
+numba
 numpy
 pytest
 python-dotenv
