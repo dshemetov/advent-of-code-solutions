@@ -1,4 +1,6 @@
+import cProfile
 import os
+import pstats
 import time
 from datetime import date
 from importlib import import_module
@@ -17,6 +19,9 @@ memory = Memory("~/.advent_tools/joblib_cache", verbose=0)
 app = typer.Typer(name="Advent of Code Solution Runner", chain=True)
 
 AnswerType = int | str | None
+YearOption = typer.Option(date.today().year, "--year", "-y", help="The year of the problem.")
+DayOption = typer.Option(None, "--day", "-d", help="The day of the problem.")
+PartOption = typer.Option(None, "--part", "-p", help="The part of the problem.")
 
 
 def timed(func: Callable) -> Callable:
@@ -63,11 +68,12 @@ def get_answer_cache(year: int, day: int, part: str, clear_cache: bool) -> Tuple
 
 @app.command("solve")
 def get_solutions(
-    year: Optional[int] = typer.Option(date.today().year, "--year", "-y", help="The year of the problem."),
-    day: Optional[int] = typer.Option(None, "--day", "-d", help="The day of the problem."),
-    part: Optional[str] = typer.Option(None, "--part", "-p", help="The part of the problem."),
-    clear_cache: bool = typer.Option(False, "--clear-cache", "-c", help="Clear the cache for this problem."),
-    verbose: bool = typer.Option(False, "--verbose", "-v", help="Show warnings."),
+    year: Optional[int] = YearOption,
+    day: Optional[int] = DayOption,
+    part: Optional[str] = PartOption, 
+    clear_cache: bool = typer.Option(False, "--clear-cache", "-c", help="Clear the solution cache for this problem."),
+    silent: bool = typer.Option(False, "--silent", "-s", help="Silence warnings."),
+    profile: bool = typer.Option(False, "--profile", "-p", help="Profile the solution."),
 ):
     """Prints the solution for a problem or problems."""
     days = range(1, 26) if day is None else [day]
@@ -77,9 +83,16 @@ def get_solutions(
     for day in days:
         for part in parts:
             try:
-                ans, time_taken, prev_time_taken = get_answer_cache(year, day, part, clear_cache)
+                if profile:
+                    with cProfile.Profile() as pr:
+                        pr.enable()
+                        ans, time_taken, prev_time_taken = get_answer_cache(year, day, part, clear_cache)
+                        pr.create_stats()
+                        pstats.Stats(pr).sort_stats("cumtime").print_stats(f"p{day}.py")
+                else:
+                    ans, time_taken, prev_time_taken = get_answer_cache(year, day, part, clear_cache)
             except ModuleNotFoundError:
-                if verbose:
+                if not silent:
                     print(f"Problem {year}.{day}.{part} not implemented yet.")
                 continue
             except Exception as e:
@@ -100,10 +113,16 @@ def get_solutions(
         table.add_row(str(day), part, str(ans), f"{time_taken:>5.5f}", f"{prev_time_taken:>5.5f}")
 
     print(table)
+    return table
 
 
 @app.command("set-cookie")
-def set_cookie(cookie: Optional[str] = typer.Option(None, "--cookie", "-c", help="The cookie to set.", prompt="Enter your cookie (input hidden)", hide_input=True)):
+def set_cookie(
+    cookie: Optional[str] = typer.Option(
+        None, "--cookie", "-c", help="The cookie to set.", 
+        prompt="Enter your cookie (input hidden)", hide_input=True
+    )
+):
     """Prints the cookie for the current user.
     
     Go to https://adventofcode.com/, inspect the browser session, and find your cookie.
@@ -116,10 +135,10 @@ def set_cookie(cookie: Optional[str] = typer.Option(None, "--cookie", "-c", help
 
 @app.command("clear-download-cache")
 def clear_download_cache(
-    year: Optional[int] = typer.Option(date.today().year, "--year", "-y", help="The year of the problem."),
-    day: Optional[int] = typer.Option(None, "--day", "-d", help="The day of the problem."),
+    year: Optional[int] = YearOption,
+    day: Optional[int] = DayOption,
 ):
-    """Clears the download cache."""
+    """Clears the input download cache."""
     load_dotenv()
     AOC_TOKEN = os.environ.get("AOC_TOKEN")
 
@@ -135,9 +154,9 @@ def clear_download_cache(
 
 @app.command("clear-solution-cache")
 def clear_solution_cache(
-    year: Optional[int] = typer.Option(date.today().year, "--year", "-y", help="The year of the problem."),
-    day: Optional[int] = typer.Option(None, "--day", "-d", help="The day of the problem."),
-    part: Optional[str] = typer.Option(None, "--part", "-p", help="The part of the problem."),
+    year: Optional[int] = YearOption,
+    day: Optional[int] = DayOption,
+    part: Optional[str] = PartOption
 ):
     """Clears the solution cache."""
     days = range(1, 26) if day is None else [day]
@@ -150,6 +169,15 @@ def clear_solution_cache(
                 print(f"Solution cache cleared for {year}.{day}.{part}.")
             else:
                 print(f"No solution cache for {year}.{day}.{part}.")
+
+
+@app.command("make-table")
+def make_table(year: int):
+    """Makes a table of the run time statistics for a year and inserts into the README.md.
+    
+    TODO: Make this work.
+    """
+    table = get_solutions(year)
 
 
 if __name__ == "__main__":

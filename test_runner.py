@@ -6,4 +6,4 @@ runner = CliRunner()
 
 
 def test_app():
-    runner.invoke(app, ["-d", 1])
+    runner.invoke(app, ["solve", "-y", 2022, "-d", 11, "-c"])

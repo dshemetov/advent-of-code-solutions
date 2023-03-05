@@ -2,22 +2,33 @@
 """Monkey in the Middle
 https://adventofcode.com/2022/day/11
 
-# TODO: speed up solve_b, this is currently my slowest solution, clocking it a glacial 300ms!
-
 Lessons learned:
 - default values in lambda functions help avoid late binding errors
 - lambda functions are a performance hit
-"""
-from heapq import nlargest
-from math import prod
-import re
+- solve_b was very slow in pure Python, completing in 300ms, I sped it up to 50ms using Numba.
+- Cython is slightly faster than Numba in this particular case, ~20ms.
 
-r = re.compile(r"""Monkey (\d+):
-  Starting items: ([\s\d\,]+)
-  Operation: new = old ([\+\*]) (old|\d+)
-  Test: divisible by (\d+)
-    If true: throw to monkey (\d+)
-    If false: throw to monkey (\d+)""")
+Resources:
+https://smerity.com/articles/2018/cython_for_high_and_low.html
+"""
+import re
+from heapq import nlargest
+
+import numba as nb 
+import numpy as np
+
+from advent2022.p11_cython import solve_b_cy
+
+
+r = re.compile(
+    r"""Monkey (\d+):
+.*Starting items: ([\s\d\,]+)
+.*Operation: new = old ([\+\*]) (old|\d+)
+.*Test: divisible by (\d+)
+.*If true: throw to monkey (\d+)
+.*If false: throw to monkey (\d+)"""
+)
+
 
 def solve_a(s: str) -> int:
     """
@@ -63,54 +74,96 @@ def solve_a(s: str) -> int:
     lo, hi = nlargest(2, [md["inspects"] for md in monkey_datas.values()])
     return lo * hi
 
-# @profile
-def solve_b(s: str) -> int:
+
+@nb.vectorize(["int64(int64, int64, int64, int64)"], nopython=True, fastmath=True, cache=True)
+def monkey_op(x: int, op: int, val: int, mod: int) -> int:
+    if x == 0:
+        return 0
+
+    if op == 0:
+        if val == -1:
+            out = x + x
+        else:
+            out = x + val
+    elif op == 1:
+        if val == -1:
+            out = x * x
+        else:
+            out = x * val
+
+    return out % mod
+
+
+@nb.jit(nopython=True, fastmath=True, cache=True)
+def do_monkey_throws(items_matrix: np.ndarray, monkey_datas: np.ndarray, mod: int) -> np.ndarray:
+    for _ in range(10000):
+        for i in range(len(monkey_datas)):
+            # Get monkey data
+            op, val, test, true_monkey, false_monkey, inspects = monkey_datas[i, :]
+            # Update stress levels
+            items_matrix[i, :] = monkey_op(items_matrix[i, :], op, val, mod)
+            # Find item destinations
+            out = np.where(items_matrix[i, :] % test == 0, true_monkey, false_monkey)
+            # Move items
+            for j in range(out.shape[0]):
+                # No more items to throw
+                if items_matrix[i, j] == 0:
+                    # Update throw count
+                    break
+
+                # Throw item
+                for k in range(items_matrix.shape[1]):
+                    # First empty spot found
+                    if items_matrix[out[j], k] == 0:
+                        items_matrix[out[j], k] = items_matrix[i, j]
+                        items_matrix[i, j] = 0
+                        monkey_datas[i, 5] += 1
+                        break
+
+
+def solve_b_numba(s: str) -> int:
     """
     Examples:
-    >>> solve_a(test_string)
-    10605
+    >>> solve_b(test_string)
+    2713310158
     """
-    monkey_datas = {}
+    monkey_items = []
+    monkey_datas = []
     for monkey in s.split("\n\n"):
         num, items, op, val, test, true_monkey, false_monkey = r.match(monkey).groups()
 
-        monkey_data = {}
-        monkey_data["items"] = [int(x) for x in items.split(",")]
-        monkey_data["operation"] = (op, int(val) if val != "old" else val)
-        monkey_data["test"] = int(test)
-        monkey_data["test_true"] = int(true_monkey)
-        monkey_data["test_false"] = int(false_monkey)
-        monkey_data["inspects"] = 0
+        monkey_items.append([int(x) for x in items.split(",")])
 
-        num = int(num)
-        monkey_datas[num] = monkey_data
+        monkey_data = []
+        monkey_data.append(0 if op == "+" else 1)
+        monkey_data.append(int(val) if val != "old" else -1)
+        monkey_data.append(int(test))
+        monkey_data.append(int(true_monkey))
+        monkey_data.append(int(false_monkey))
+        monkey_data.append(0)
+        monkey_datas.append(monkey_data)
 
-    mod = prod([md["test"] for md in monkey_datas.values()])
+    monkey_datas = np.array(monkey_datas, dtype=np.int64)
+    mod = monkey_datas[:, 2].prod()
 
-    for _ in range(10000):
-        for m in range(num + 1):
-            md = monkey_datas[m]
-            (op, val), test, true_monkey, false_monkey = md["operation"], md["test"], md["test_true"], md["test_false"]
-            for i in range(len(md["items"])):
-                v = md["items"][i] if val == "old" else val
-                if op == "+":
-                    md["items"][i] += v
-                elif op == "*":
-                    md["items"][i] *= v
+    # Make a monkey x item matrix, where each item is either the value of the item or 0 if it has been thrown
+    total_items = sum(len(e) for e in monkey_items)
+    items_matrix = np.zeros((len(monkey_datas), total_items), dtype=np.int64)
 
-                if md["items"][i] > mod:
-                    md["items"][i] %= mod
+    # The left-most entries contain the items
+    for i, items in enumerate(monkey_items):
+        items_matrix[i, : len(items)] = items
 
-                if md["items"][i] % test == 0:
-                    monkey_datas[true_monkey]["items"].append(md["items"][i])
-                else:
-                    monkey_datas[false_monkey]["items"].append(md["items"][i])
+    do_monkey_throws(items_matrix, monkey_datas, mod)
 
-            md["inspects"] += len(md["items"])
-            md["items"] = []
-
-    lo, hi = nlargest(2, [md["inspects"] for md in monkey_datas.values()])
+    lo, hi = nlargest(2, monkey_datas[:, 5])
     return lo * hi
+    
+
+def solve_b(s: str) -> int:
+    # return solve_b_numba(s)
+    return solve_b_cy(s)
+
 
 test_string = """
 Monkey 0:
@@ -143,9 +196,10 @@ Monkey 3:
 """.strip("\n")
 
 # %%
-# from advent_tools import get_puzzle_input
-# solve_a(test_string)
-# solve_a(get_puzzle_input().strip("\n"))
 # solve_b(test_string)
-# %load_ext line_profiler
-# %lprun -s -f solve_b solve_b(get_puzzle_input(2022, 11).strip("\n"))
+
+# %%
+# from advent_tools import get_puzzle_input
+# solve_b(get_puzzle_input(2022, 11))
+
+# %%

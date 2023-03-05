@@ -6,3 +6,5 @@ __pycache__
 .joblib_cache
 .env
 venv
+*.so
+*.html

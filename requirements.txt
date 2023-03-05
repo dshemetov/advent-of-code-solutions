@@ -1,5 +1,5 @@
--e .
 black
+cython
 joblib
 jupyter
 line_profiler
@@ -13,4 +13,6 @@ requests
 scalene
 scipy
 sympy
+tqdm
 typer[all]
+-e .
