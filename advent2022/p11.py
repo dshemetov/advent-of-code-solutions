@@ -196,10 +196,4 @@ Monkey 3:
 """.strip("\n")
 
 # %%
-# solve_b(test_string)
-
-# %%
-# from advent_tools import get_puzzle_input
-# solve_b(get_puzzle_input(2022, 11))
-
-# %%
+solve_b(test_string)
