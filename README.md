@@ -23,12 +23,16 @@ python runner.py solve -y 2021 -d 2 -p b
 # Print the answer to current year's day 2 (both parts)
 python runner.py solve -d 21
 
-# Clear cached answer
+# Clear cached answer and solve again
 python runner.py solve -y 2021 -d 2 -c
 
 # See help for more
 python runner.py solve --help
 ```
+
+## Stats
+
+
 
 ## Background
 
@@ -41,6 +45,7 @@ I periodically tinker with my old solutions and refactor them.
 The old versions can be found in the commit log, though.
 It's nice to look back and see yourself grow as a programmer.
 
+- AoC 2022: 12/50 Python (with Numba and Cython).
 - AoC 2021: 43/50 Python.
 - AoC 2020: 32/50 Python.
 - AoC 2019: ??/50 Mathematica.
