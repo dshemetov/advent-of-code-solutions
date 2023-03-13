@@ -1,16 +1,16 @@
 from advent2020.p12 import (
     State,
-    solve_a,
-    parse_commands,
+    east,
     execute_command_a,
     execute_command_b,
-    solve_b,
-    np,
     north,
-    east,
-    west,
-    south,
+    np,
     origin,
+    parse_commands,
+    solve_a,
+    solve_b,
+    south,
+    west,
 )
 
 test_string = """F10

@@ -2,18 +2,17 @@ import cProfile
 import os
 import pstats
 import time
+import traceback
 from datetime import date
 from importlib import import_module
-import traceback
 from typing import Any, Callable, Optional, Tuple
 
 import typer
+from advent_tools import get_puzzle_input
 from dotenv import load_dotenv, set_key
 from joblib import Memory
 from rich import print
 from rich.table import Table
-
-from advent_tools import get_puzzle_input
 
 memory = Memory("~/.advent_tools/joblib_cache", verbose=0)
 app = typer.Typer(name="Advent of Code Solution Runner", chain=True)
@@ -73,7 +72,7 @@ def get_solutions(
     part: Optional[str] = PartOption, 
     clear_cache: bool = typer.Option(False, "--clear-cache", "-c", help="Clear the solution cache for this problem."),
     silent: bool = typer.Option(False, "--silent", "-s", help="Silence warnings."),
-    profile: bool = typer.Option(False, "--profile", "-p", help="Profile the solution."),
+    profile: bool = typer.Option(False, "--profile", "-P", help="Profile the solution."),
 ):
     """Prints the solution for a problem or problems."""
     days = range(1, 26) if day is None else [day]

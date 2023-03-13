@@ -10,6 +10,7 @@ numpy
 pytest
 python-dotenv
 requests
+ruff
 scalene
 scipy
 sympy

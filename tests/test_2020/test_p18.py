@@ -1,9 +1,9 @@
 from advent2020.p18 import (
     evaluate_expression_a,
-    evaluate_simple_expression_a,
     evaluate_expression_b,
-    evaluate_simple_expression_b,
     evaluate_simple_additions,
+    evaluate_simple_expression_a,
+    evaluate_simple_expression_b,
 )
 
 

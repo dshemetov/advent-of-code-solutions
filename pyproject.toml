@@ -27,14 +27,38 @@ py-modules = ["advent_tools"]
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
 
+[tool.coverage.paths]
+source = ["src"]
+
+[tool.coverage.run]
+branch = true
+relative_files = true
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 80
+
 [tool.black]
 line-length = 180
 target-version = ['py310']
 include = '\.py'
+extend-exclude = '''
+/(
+  | .env
+  | .venv
+  | venv
+  | notebooks
+)/
+'''
+
+[tool.ruff]
+ignore = ["E501"]
+select = ["E", "F", "I", "W"]
+line-length = 180
+fixable = ["I"]
+exclude = [".env", ".venv", "venv", "notebooks"]
+show-source = true
 
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "--doctest-modules --doctest-continue-on-failure"
-
-[tool.pylint.'FORMAT']
-max-line-length=180

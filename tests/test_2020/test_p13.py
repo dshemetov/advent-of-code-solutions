@@ -1,4 +1,4 @@
-from advent2020.p13 import solve_a, solve_b, get_next_bus_time, solve_modular_congruence_equation_pair
+from advent2020.p13 import get_next_bus_time, solve_a, solve_b, solve_modular_congruence_equation_pair
 
 test_strings = [
     """939\n7,13,x,x,59,x,31,19""",

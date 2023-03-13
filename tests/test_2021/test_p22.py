@@ -4,9 +4,9 @@ from advent2021.p22 import (
     NooiceSlice,
     generate_all_products,
     merge_adjacent_cubes,
+    parse_input,
     solve_a,
     solve_b,
-    parse_input,
 )
 
 test_strings = [
