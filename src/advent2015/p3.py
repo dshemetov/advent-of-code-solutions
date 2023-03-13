@@ -1,5 +1,4 @@
 def solve_a(s: str) -> int:
-
     G = set()
     og = [0, 0]
     G.add(tuple(og))
@@ -19,6 +18,7 @@ def solve_a(s: str) -> int:
             G.add(tuple(og))
 
     return len(G)
+
 
 def solve_b(s: str) -> int:
     G1 = set()

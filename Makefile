@@ -1,4 +1,4 @@
-.PHONY=venv, lint, test, clean
+.PHONY=venv, clean, install, set-cookie, lint, format, test
 SHELL:=/bin/bash
 
 venv:
@@ -24,8 +24,8 @@ lint:
 	source venv/bin/activate; ruff .
 
 format:
-	source venv/bin/activate; ruff . --fix
 	source venv/bin/activate; black .
+	source venv/bin/activate; ruff . --fix
 
 test:
 	source venv/bin/activate; pytest --cov=src --cov-report html --log-level=WARNING --disable-pytest-warnings .

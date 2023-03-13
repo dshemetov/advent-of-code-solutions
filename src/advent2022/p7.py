@@ -10,20 +10,20 @@ def print_dirs(dirs: dict, dir: str, indent: int = 0):
         if isinstance(child, str) and child.endswith("/"):
             print_dirs(dirs, child, indent + 1)
         else:
-            print(" " * (2 * indent + 3) + child + " " + str(dirs[child]))    
+            print(" " * (2 * indent + 3) + child + " " + str(dirs[child]))
 
 
 def get_dirs(s: str) -> dict:
     dir_to_subdir_map = {"/": []}
     cur_dir = "/"
-    r = re.compile(r"(\d+) ([a-zA-Z0-9\.]+)") # e.g. 14848514 b.txt
+    r = re.compile(r"(\d+) ([a-zA-Z0-9\.]+)")  # e.g. 14848514 b.txt
 
     for line in s.split("\n"):
         if not line:
             continue
         elif line.startswith("$ cd "):
             if line[5:] == "..":
-                new_dir = cur_dir[:cur_dir[:-1].rfind("/") + 1]
+                new_dir = cur_dir[: cur_dir[:-1].rfind("/") + 1]
             else:
                 if line[5:] == "/":
                     new_dir = "/"
@@ -45,7 +45,7 @@ def get_dirs(s: str) -> dict:
             num, name = r.findall(line)[0]
             dir_to_subdir_map[cur_dir].append(cur_dir + name)
             dir_to_subdir_map[cur_dir + name] = int(num)
-    
+
     return dir_to_subdir_map
 
 
@@ -72,6 +72,7 @@ def solve_a(s: str) -> int:
     >>> solve_a(test_string)
     95437
     """
+    s = s.strip("\n")
     dir_sizes = get_dir_sizes(s)
     return sum(size for key, size in dir_sizes.items() if key.endswith("/") and size <= 100000)
 
@@ -82,6 +83,7 @@ def solve_b(s: str) -> int:
     >>> solve_b(test_string)
     24933642
     """
+    s = s.strip("\n")
     dir_sizes = get_dir_sizes(s)
     space_needed = 30_000_000 - (70_000_000 - dir_sizes["/"])
     return min(size for key, size in dir_sizes.items() if key.endswith("/") and size >= space_needed)
@@ -111,4 +113,4 @@ $ ls
 8033020 d.log
 5626152 d.ext
 7214296 k
-""".strip("\n")
+"""

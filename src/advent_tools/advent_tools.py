@@ -129,7 +129,7 @@ def get_gcd(a: int, b: int) -> int:
     return r
 
 
-def get_bezout_coefficients(a: int, b: int) -> int:
+def get_bezout_coefficients(a: int, b: int) -> Tuple[int, int]:
     """Extended Euclidean algorithm.
 
     Returns integer coefficients x and y such that x * a + y * b = gcd(a, b).
@@ -195,7 +195,9 @@ def get_valid_neighbor_ixs(ix: ArrayLike, mat_shape: ArrayLike, radius: int = 1,
         mat_shape = np.array(mat_shape, dtype=int)
 
     min_ix = np.zeros(len(ix), dtype=int)
-    return (tuple(r * new_ix) for new_ix in (ix + directions) for r in range(1, radius + 1) if all((min_ix <= (r * new_ix)) & ((r * new_ix) < mat_shape)))
+    return (
+        tuple(r * new_ix) for new_ix in (ix + directions) for r in range(1, radius + 1) if all((min_ix <= (r * new_ix)) & ((r * new_ix) < mat_shape))
+    )
 
 
 def compose_multivar_2(f: Callable, g: Callable) -> Callable:

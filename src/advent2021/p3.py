@@ -16,7 +16,7 @@ def solve_a(s: str) -> int:
     """
     mat = np.array([list(line) for line in s.strip("\n").split("\n")], dtype=int)
     n, _ = mat.shape
-    max_rows = (mat.sum(axis=0) >= n / 2)
+    max_rows = mat.sum(axis=0) >= n / 2
     min_rows = ~max_rows
     max_rows = max_rows.astype(int)
     min_rows = min_rows.astype(int)

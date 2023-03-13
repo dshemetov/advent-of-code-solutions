@@ -9,6 +9,7 @@ def solve_a(s: str) -> int:
     >>> solve_a(test_string)
     15
     """
+    s = s.strip("\n")
     total = 0
     for line in s.splitlines():
         a, b = line.split()
@@ -42,6 +43,7 @@ def solve_b(s: str) -> int:
     >>> solve_b(test_string)
     12
     """
+    s = s.strip("\n")
     total = 0
     for line in s.splitlines():
         a, b = line.split()
@@ -75,4 +77,4 @@ test_string = """
 A Y
 B X
 C Z
-""".strip("\n")
+"""

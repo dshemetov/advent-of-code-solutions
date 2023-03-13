@@ -10,6 +10,8 @@ def solve_a(s: str) -> int:
     >>> solve_a(test_string)
     13
     """
+    s = s.strip("\n")
+
     def update_tail(tail, head):
         if abs(head[0] - tail[0]) == 2:
             tail[0] += (head[0] - tail[0]) // 2
@@ -74,6 +76,7 @@ def solve_b(s: str) -> int:
     >>> solve_b(test_string2)
     36
     """
+    s = s.strip("\n")
     n = 10
     tails = {i: [0, 0] for i in range(n)}
 
@@ -92,7 +95,7 @@ def solve_b(s: str) -> int:
             elif head[0] < tail[0]:
                 tail[0] -= 1
             return True
-        
+
         return False
 
     visited = set()
@@ -132,7 +135,7 @@ R 4
 D 1
 L 5
 R 2
-""".strip("\n")
+"""
 
 test_string2 = """
 R 5
@@ -143,4 +146,4 @@ R 17
 D 10
 L 25
 U 20
-""".strip("\n")
+"""

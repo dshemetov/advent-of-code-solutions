@@ -10,6 +10,7 @@ def solve_a(s: str) -> int:
     >>> solve_a(test_string)
     24000
     """
+    s = s.strip("\n")
     return max(sum(int(food) for food in elf.splitlines() if food.isnumeric()) for elf in s.split("\n\n"))
 
 
@@ -19,6 +20,7 @@ def solve_b(s: str) -> int:
     >>> solve_b(test_string)
     45000
     """
+    s = s.strip("\n")
     return sum(nlargest(3, (sum(int(food) for food in elf.splitlines() if food.isnumeric()) for elf in s.split("\n\n"))))
 
 
@@ -37,4 +39,4 @@ test_string = """
 9000
 
 10000
-""".strip("\n")
+"""

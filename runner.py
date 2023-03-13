@@ -69,7 +69,7 @@ def get_answer_cache(year: int, day: int, part: str, clear_cache: bool) -> Tuple
 def get_solutions(
     year: Optional[int] = YearOption,
     day: Optional[int] = DayOption,
-    part: Optional[str] = PartOption, 
+    part: Optional[str] = PartOption,
     clear_cache: bool = typer.Option(False, "--clear-cache", "-c", help="Clear the solution cache for this problem."),
     silent: bool = typer.Option(False, "--silent", "-s", help="Silence warnings."),
     profile: bool = typer.Option(False, "--profile", "-P", help="Profile the solution."),
@@ -118,12 +118,11 @@ def get_solutions(
 @app.command("set-cookie")
 def set_cookie(
     cookie: Optional[str] = typer.Option(
-        None, "--cookie", "-c", help="The cookie to set.", 
-        prompt="Enter your cookie (input hidden)", hide_input=True
+        None, "--cookie", "-c", help="The cookie to set.", prompt="Enter your cookie (input hidden)", hide_input=True
     )
 ):
     """Prints the cookie for the current user.
-    
+
     Go to https://adventofcode.com/, inspect the browser session, and find your cookie.
     """
     if cookie is not None:
@@ -145,18 +144,14 @@ def clear_download_cache(
     for day in days:
         if get_puzzle_input.check_call_in_cache(year, day, AOC_TOKEN) is True:
             result = get_puzzle_input.call_and_shelve(year, day, AOC_TOKEN)
-            result.clear() 
+            result.clear()
             print(f"Download cache cleared for {year}.{day}.")
         else:
             print(f"No solution cache for {year}.{day}.")
 
 
 @app.command("clear-solution-cache")
-def clear_solution_cache(
-    year: Optional[int] = YearOption,
-    day: Optional[int] = DayOption,
-    part: Optional[str] = PartOption
-):
+def clear_solution_cache(year: Optional[int] = YearOption, day: Optional[int] = DayOption, part: Optional[str] = PartOption):
     """Clears the solution cache."""
     days = range(1, 26) if day is None else [day]
     parts = ["a", "b"] if part is None else [part]
@@ -164,7 +159,7 @@ def clear_solution_cache(
         for part in parts:
             if get_answer.check_call_in_cache(year, day, part) is True:
                 result = get_answer.call_and_shelve(year, day, part)
-                result.clear() 
+                result.clear()
                 print(f"Solution cache cleared for {year}.{day}.{part}.")
             else:
                 print(f"No solution cache for {year}.{day}.{part}.")
@@ -173,7 +168,7 @@ def clear_solution_cache(
 @app.command("make-table")
 def make_table(year: int):
     """Makes a table of the run time statistics for a year and inserts into the README.md.
-    
+
     TODO: Make this work.
     """
     table = get_solutions(year)

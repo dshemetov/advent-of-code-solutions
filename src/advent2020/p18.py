@@ -11,8 +11,10 @@ def find_simple_expressions(expr: str) -> List[str]:
 
 def find_simple_addition(expr: str) -> re.Match:
     """A simple addition involves the addition of 2 or more numbers and no parenthetical sub-statements."""
-    # return re.compile("(\d+ \+ \d+)").findall(expr)    # only matches additions of 2 numbers
-    return re.search("(\d+\s+[\s\+\d]+\d+)", expr)  # matches all sequences of additions; \d+ matches one or more digits, \s+ matches at least one space to exclude plain numbers
+    # only matches additions of 2 numbers
+    # return re.compile("(\d+ \+ \d+)").findall(expr)
+    # matches all sequences of additions; \d+ matches one or more digits, \s+ matches at least one space to exclude plain numbers
+    return re.search("(\d+\s+[\s\+\d]+\d+)", expr)  
 
 
 def evaluate_simple_additions(expr: str) -> str:

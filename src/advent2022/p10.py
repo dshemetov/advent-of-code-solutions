@@ -2,12 +2,15 @@
 """Cathode-Ray Tube
 https://adventofcode.com/2022/day/10
 """
+
+
 def solve_a(s: str) -> int:
     """
     Examples:
     >>> solve_a(test_string)
     13140
     """
+    s = s.strip("\n")
     signal_strengths = []
     i, X, t = 0, 1, 1
     lines = s.splitlines()
@@ -38,6 +41,7 @@ def solve_b(s: str) -> int:
     ######......######......######......####
     #######.......#######.......#######.....
     """
+    s = s.strip("\n")
 
     def print_crt(t: int, out_str: str):
         if X - 1 <= (t - 1) % 40 <= X + 1:
@@ -213,4 +217,4 @@ addx -11
 noop
 noop
 noop
-""".strip("\n")
+"""

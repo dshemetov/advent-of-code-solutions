@@ -2,11 +2,9 @@ import numpy as np
 
 
 def solve_a(s: str) -> int:
-
     G = np.zeros((1000, 1000))
     lines = s.split("\n")
     lines.pop()
-
 
     def srch(var):
         for line in lines:
@@ -35,7 +33,6 @@ def solve_a(s: str) -> int:
                 var1, var2 = words[0], words[2]
                 if var2 == var:
                     return var1, "", var1
-
 
     cmd = "a"
     vararr = ["a"]
@@ -77,12 +74,12 @@ def solve_a(s: str) -> int:
         if len(vararr) == 0:
             break
 
-
     print(len(eq.keys()))
     print(cmd)
     # print(vararr)
     # print(len(vararr))
     return 0
+
 
 def solve_b(s: str) -> int:
     return 0
@@ -112,7 +109,6 @@ def solve_b(s: str) -> int:
         else:
             var1, var2 = words[0], words[2]
             eq[var2] = ("", "", var1)
-
 
     for i in range(0):
         print("Iter:" + str(i))
@@ -220,4 +216,3 @@ def solve_b(s: str) -> int:
                         print(eq[j])
                 #del eq[k]
     """
-

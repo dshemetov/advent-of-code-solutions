@@ -1,5 +1,4 @@
 def solve_a(s: str) -> int:
-
     a = s.split("\n")
 
     alphabet = [chr(i) for i in range(97, 123)]
@@ -27,6 +26,7 @@ def solve_a(s: str) -> int:
         nice += 1
 
     return nice
+
 
 def solve_b(s: str) -> int:
     a = s.split("\n")

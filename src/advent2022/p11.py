@@ -34,6 +34,7 @@ def solve_a(s: str) -> int:
     >>> solve_a(test_string)
     10605
     """
+    s = s.strip("\n")
     monkey_datas = {}
     for monkey in s.split("\n\n"):
         num, items, op, val, test, true_monkey, false_monkey = r.match(monkey).groups()
@@ -125,6 +126,7 @@ def solve_b_numba(s: str) -> int:
     >>> solve_b(test_string)
     2713310158
     """
+    s = s.strip("\n")
     monkey_items = []
     monkey_datas = []
     for monkey in s.split("\n\n"):
@@ -156,10 +158,11 @@ def solve_b_numba(s: str) -> int:
 
     lo, hi = nlargest(2, monkey_datas[:, 5])
     return lo * hi
-    
+
 
 def solve_b(s: str) -> int:
     # return solve_b_numba(s)
+    s = s.strip("\n")
     return solve_b_cy(s)
 
 
@@ -191,7 +194,7 @@ Monkey 3:
   Test: divisible by 17
     If true: throw to monkey 0
     If false: throw to monkey 1
-""".strip("\n")
+"""
 
 # %%
 solve_b(test_string)

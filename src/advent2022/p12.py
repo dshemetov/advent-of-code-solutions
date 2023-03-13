@@ -21,6 +21,7 @@ def solve_a(s: str) -> int:
     >> solve_a(test_string)
     31
     """
+    s = s.strip("\n")
     m = np.array([[ord(c) for c in e] for e in s.splitlines()], dtype=np.int32)
     start_ix = np.where(m == ord("S"))
     end_ix = np.where(m == ord("E"))
@@ -110,6 +111,7 @@ def solve_b(s: str) -> int:
     >>> solve_b(test_string)
     29
     """
+    s = s.strip("\n")
     m = np.array([list(e) for e in s.splitlines()], dtype=str)
     start_ix = np.where(m == "S")
     end_ix = np.where(m == "E")
@@ -125,7 +127,7 @@ abcryxxl
 accszExk
 acctuvwj
 abdefghi
-""".strip("\n")
+"""
 
 
 # %%

@@ -46,6 +46,7 @@ def solve_a(s: str) -> int:
 
     return count
 
+
 def solve_b(s: str) -> int:
     G = np.zeros((1000, 1000))
     lines = s.split("\n")

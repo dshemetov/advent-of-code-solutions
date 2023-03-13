@@ -261,7 +261,9 @@ class Cube:
             self.__slices.remove(pslice)
 
         if new_slice.off:
-            self.__slices.extend(flatten(merge_adjacent_cubes(list(generate_all_products(pslice, new_slice))) for pslice in intersecting_partitioned_slices))
+            self.__slices.extend(
+                flatten(merge_adjacent_cubes(list(generate_all_products(pslice, new_slice))) for pslice in intersecting_partitioned_slices)
+            )
         else:
             self.__slices.extend(self.partition_slices([new_slice] + intersecting_partitioned_slices))
 

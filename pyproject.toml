@@ -32,22 +32,22 @@ show_missing = true
 fail_under = 80
 
 [tool.black]
-line-length = 180
+line-length = 150
 target-version = ['py310']
-include = '\.py'
 extend-exclude = '''
 /(
   | .env
   | .venv
   | venv
   | notebooks
+  | \*.pyx
 )/
 '''
 
 [tool.ruff]
 ignore = ["E501"]
 select = ["E", "F", "I", "W"]
-line-length = 180
+line-length = 150
 fixable = ["I"]
 exclude = [".env", ".venv", "venv", "notebooks"]
 show-source = true

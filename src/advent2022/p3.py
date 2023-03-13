@@ -14,6 +14,7 @@ def solve_a(s: str) -> int:
     >>> solve_a(test_string)
     157
     """
+    s = s.strip("\n")
     total = 0
     for line in s.splitlines():
         a = line[: len(line) // 2]
@@ -29,6 +30,7 @@ def solve_b(s: str) -> int:
     >>> solve_b(test_string)
     70
     """
+    s = s.strip("\n")
     total = 0
     for a, b, c in grouper(s.splitlines(), 3):
         d = (set(a) & set(b) & set(c)).pop()
@@ -43,4 +45,4 @@ PmmdzqPrVvPwwTWBwg
 wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
 ttgJtRGJQctTZtZT
 CrZsJsPPZsGzwwsLwLmpwMDw
-""".strip("\n")
+"""

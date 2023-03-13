@@ -25,6 +25,7 @@ def times(temp_intcode, i1, i2, o):
 
 instructions = {1: [plus, 3], 2: [times, 3]}
 
+
 # Here we define a function that operates on intcode. This function runs the main loop.
 def run_intcode(temp_intcode):
     i = 0

@@ -52,6 +52,7 @@ def solve_a(s: str) -> int:
     >>> solve_a(test_string)
     21
     """
+    s = s.strip("\n")
     m = np.array([[int(x) for x in line] for line in s.splitlines()])
     visible = 0
     for i in range(1, m.shape[0] - 1):
@@ -76,7 +77,7 @@ def get_score(m: np.ndarray, i: int, j: int) -> int:
         if m[i_, j] >= m[i, j]:
             break
 
-    score *= i_ - i 
+    score *= i_ - i
 
     for j_ in np.arange(j - 1, -1, -1):
         if m[i, j_] >= m[i, j]:
@@ -88,7 +89,7 @@ def get_score(m: np.ndarray, i: int, j: int) -> int:
         if m[i, j_] >= m[i, j]:
             break
 
-    score *= j_ - j 
+    score *= j_ - j
 
     return score
 
@@ -99,6 +100,7 @@ def solve_b(s: str) -> int:
     >>> solve_b(test_string)
     8
     """
+    s = s.strip("\n")
     m = np.array([[int(x) for x in line] for line in s.splitlines()])
     max_score = 0
     for i in range(1, m.shape[0] - 1):
@@ -114,4 +116,4 @@ test_string = """
 65332
 33549
 35390
-""".strip("\n")
+"""

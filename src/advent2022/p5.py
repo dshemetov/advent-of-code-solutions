@@ -11,6 +11,7 @@ def solve_a(s: str) -> int:
     >>> solve_a(test_string)
     'CMZ'
     """
+    s = s.strip("\n")
     s1, s2 = s.split("\n\n")
     s1 = s1.split("\n")
     s2 = s2.split("\n")
@@ -29,7 +30,7 @@ def solve_a(s: str) -> int:
         num, f, t = int(num), int(f), int(t)
         for _ in range(num):
             stacks[t].append(stacks[f].pop())
-    
+
     return "".join(stacks[key][-1] for key in sorted(stacks.keys()))
 
 
@@ -39,6 +40,7 @@ def solve_b(s: str) -> int:
     >>> solve_b(test_string)
     'MCD'
     """
+    s = s.strip("\n")
     s1, s2 = s.split("\n\n")
     s1 = s1.split("\n")
     s2 = s2.split("\n")
@@ -60,7 +62,7 @@ def solve_b(s: str) -> int:
 
         for _ in range(num):
             stacks[f].pop()
-    
+
     return "".join(stacks[key][-1] for key in sorted(stacks.keys()))
 
 
@@ -74,4 +76,4 @@ move 1 from 2 to 1
 move 3 from 1 to 3
 move 2 from 2 to 1
 move 1 from 1 to 2
-""".strip("\n")
+"""

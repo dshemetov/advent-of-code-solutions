@@ -10,6 +10,7 @@ def solve_a(s: str) -> int:
     >>> solve_a(test_string)
     4
     """
+    s = s.strip("\n")
     total = 0
     for l in s.splitlines():
         a, b, c, d = [int(x) for x in re.findall(r"\d+", l)]
@@ -26,6 +27,7 @@ def solve_b(s: str) -> int:
     >>> solve_b(test_string)
     6
     """
+    s = s.strip("\n")
     total = 0
     for l in s.splitlines():
         a, b, c, d = [int(x) for x in re.findall(r"\d+", l)]
@@ -49,4 +51,4 @@ test_string = """
 2-6,4-8
 21-21,21-21
 24-36,25-27
-""".strip("\n")
+"""
