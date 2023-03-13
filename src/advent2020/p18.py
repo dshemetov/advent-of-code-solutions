@@ -6,7 +6,7 @@ from typing import List
 
 def find_simple_expressions(expr: str) -> List[str]:
     """A simple expression contains no parenthetical sub-statements."""
-    return re.compile("\([^\(\)]*[^\(\)]\)").findall(expr)
+    return re.compile(r"\([^\(\)]*[^\(\)]\)").findall(expr)
 
 
 def find_simple_addition(expr: str) -> re.Match:
@@ -14,7 +14,7 @@ def find_simple_addition(expr: str) -> re.Match:
     # only matches additions of 2 numbers
     # return re.compile("(\d+ \+ \d+)").findall(expr)
     # matches all sequences of additions; \d+ matches one or more digits, \s+ matches at least one space to exclude plain numbers
-    return re.search("(\d+\s+[\s\+\d]+\d+)", expr)  
+    return re.search(r"(\d+\s+[\s\+\d]+\d+)", expr)
 
 
 def evaluate_simple_additions(expr: str) -> str:

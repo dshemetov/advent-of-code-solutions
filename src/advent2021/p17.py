@@ -11,7 +11,7 @@ def solve_a(s: str) -> int:
     >>> solve_a(test_string)
     45
     """
-    xmin, xmax, ymin, ymax = [int(x) for x in re.findall("(-*\d+)", s)]
+    xmin, xmax, ymin, ymax = [int(x) for x in re.findall(r"(-*\d+)", s)]
     min_vx, max_vx = valid_vxs(xmin, xmax)
     min_vy, max_vy = valid_vys(ymin, ymax)
     max_y = -float("inf")
@@ -69,7 +69,7 @@ def solve_b(s: str) -> int:
     >>> solve_b(test_string)
     112
     """
-    xmin, xmax, ymin, ymax = [int(x) for x in re.findall("(-*\d+)", s)]
+    xmin, xmax, ymin, ymax = [int(x) for x in re.findall(r"(-*\d+)", s)]
     min_vx, max_vx = valid_vxs(xmin, xmax)
     min_vy, max_vy = valid_vys(ymin, ymax)
     valid_vxvys = 0

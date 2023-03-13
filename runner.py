@@ -171,7 +171,7 @@ def make_table(year: int):
 
     TODO: Make this work.
     """
-    table = get_solutions(year)
+    get_solutions(year)
 
 
 if __name__ == "__main__":

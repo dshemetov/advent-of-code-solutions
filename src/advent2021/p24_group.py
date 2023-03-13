@@ -1,7 +1,6 @@
 """Arithmetic Logic Unit
 https://adventofcode.com/2021/day/24
 """
-import time
 from abc import ABC, abstractmethod
 from re import findall
 from typing import List
@@ -126,7 +125,7 @@ class ALU:
     def mul(self, a, b):
         a_val = self.variables[a]
         b_val = self.get_value(b)
-        self.variables[a] = a_val * b
+        self.variables[a] = a_val * b_val
 
     def div(self, a, b):
         a_val = self.variables[a]
@@ -151,7 +150,7 @@ class ALU:
 
 
 def parse_input(s: str):
-    program_instructions = findall("(inp) (\w)|(add|mod|mul|eql|div) (\w) (-*\d+|\w)", s)
+    program_instructions = findall(r"(inp) (\w)|(add|mod|mul|eql|div) (\w) (-*\d+|\w)", s)
     program_instructions = [[x if x.isalpha() else int(x) for x in instruction if x != ""] for instruction in program_instructions]
     # print(program_instructions)
     return program_instructions

@@ -48,7 +48,7 @@ extend-exclude = '''
 ignore = ["E501"]
 select = ["E", "F", "I", "W"]
 line-length = 150
-fixable = ["I"]
+fixable = ["E", "F", "I"]
 exclude = [".env", ".venv", "venv", "notebooks"]
 show-source = true
 

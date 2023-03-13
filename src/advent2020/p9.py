@@ -4,7 +4,7 @@ def solve_a(s: str) -> int:
         if i < 25:
             continue
         valid_nums = make_pairs(nums[i - 25 : i])
-        if not x in valid_nums:
+        if x not in valid_nums:
             break
     return x
 

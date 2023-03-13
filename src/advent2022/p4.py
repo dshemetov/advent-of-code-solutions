@@ -12,11 +12,9 @@ def solve_a(s: str) -> int:
     """
     s = s.strip("\n")
     total = 0
-    for l in s.splitlines():
-        a, b, c, d = [int(x) for x in re.findall(r"\d+", l)]
-        if a <= c <= d <= b:
-            total += 1
-        elif c <= a <= b <= d:
+    for line in s.splitlines():
+        a, b, c, d = [int(x) for x in re.findall(r"\d+", line)]
+        if (a <= c <= d <= b) or (c <= a <= b <= d):
             total += 1
     return total
 
@@ -29,15 +27,9 @@ def solve_b(s: str) -> int:
     """
     s = s.strip("\n")
     total = 0
-    for l in s.splitlines():
-        a, b, c, d = [int(x) for x in re.findall(r"\d+", l)]
-        if a <= c <= b:
-            total += 1
-        elif a <= d <= b:
-            total += 1
-        elif c <= a <= d:
-            total += 1
-        elif c <= b <= d:
+    for line in s.splitlines():
+        a, b, c, d = [int(x) for x in re.findall(r"\d+", line)]
+        if (a <= c <= b) or (c <= a <= d) or (a <= d <= b) or (c <= b <= d):
             total += 1
     return total
 

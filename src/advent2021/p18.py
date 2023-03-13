@@ -15,15 +15,15 @@ def solve_a(s: str) -> int:
     end_tree = root_trees[0]
     for root_tree in root_trees[1:]:
         while end_tree.reduce():
-            pass
+            continue
         while root_tree.reduce():
-            pass
+            continue
         end_tree = end_tree + root_tree
 
     while end_tree.reduce():
-        pass
+        continue
 
-    return f"{end_tree.magnitude}"
+    return end_tree.magnitude()
 
 
 class SnailfishTree:
@@ -101,7 +101,6 @@ class SnailfishTree:
         self.right.depth = self.depth + 1
         # fin
 
-    @property
     def magnitude(self) -> int:
         # The magnitude of a pair is 3 times the magnitude of its left element plus
         # 2 times the magnitude of its right element. The magnitude of a regular
@@ -109,7 +108,7 @@ class SnailfishTree:
         if self.val is not None:
             return self.val
         else:
-            return 3 * self.left.magnitude + 2 * self.right.magnitude
+            return 3 * self.left.magnitude() + 2 * self.right.magnitude()
 
     def __repr__(self) -> str:
         if self.val is not None:
@@ -189,6 +188,6 @@ def solve_b(s: str) -> int:
                 while out.reduce():
                     pass
 
-                max_mag = max(max_mag, out.magnitude)
+                max_mag = max(max_mag, out.magnitude())
 
-    return f"{max_mag}"
+    return max_mag

@@ -13,12 +13,12 @@ def solve_a(s: str) -> int:
     batches = s.split("\n\n")
     numbers = [int(num) for num in batches[0].split(",")]
     boards = np.stack([board_from_str(board_str) for board_str in batches[1:]])
-    l, n, m = boards.shape
-    board_masks = np.zeros((l, n, m))
+    n_boards, n, m = boards.shape
+    board_masks = np.zeros((n_boards, n, m))
 
     have_winner = False
     for num in numbers:
-        for i in range(l):
+        for i in range(n_boards):
             board_masks[i][np.where(boards[i] == num)] = 1
             if did_board_win(board_masks[i]):
                 have_winner = True
@@ -50,18 +50,18 @@ def solve_b(s: str) -> int:
     batches = s.split("\n\n")
     numbers = [int(num) for num in batches[0].split(",")]
     boards = np.stack([board_from_str(board_str) for board_str in batches[1:]])
-    l, n, m = boards.shape
-    board_masks = np.zeros((l, n, m))
+    n_boards, n, m = boards.shape
+    board_masks = np.zeros((n_boards, n, m))
 
     winner_boards = set()
     for num in numbers:
-        for i in range(l):
+        for i in range(n_boards):
             board_masks[i][np.where(boards[i] == num)] = 1
             if did_board_win(board_masks[i]):
                 winner_boards |= set([i])
-                if len(winner_boards) == l:
+                if len(winner_boards) == n_boards:
                     break
-        if len(winner_boards) == l:
+        if len(winner_boards) == n_boards:
             break
 
     return get_board_score(boards[i], board_masks[i], num)

@@ -12,9 +12,8 @@ from scipy.spatial.distance import cdist
 
 # Cube rotation matrices
 # https://en.wikipedia.org/wiki/Octahedral_symmetry#Rotation_matrices
-I = np.identity(3, dtype=int)
-cube_reflections = [I * np.diag(x) for x in product([-1, 1], repeat=3)]
-cube_rotations = [I[list(x)] for x in permutations(range(3)) for I in cube_reflections if np.linalg.det(I[list(x)]) > 0]
+cube_reflections = [np.diag(x) for x in product([-1, 1], repeat=3)]
+cube_rotations = [reflection[list(x)] for x in permutations(range(3)) for reflection in cube_reflections if np.linalg.det(reflection[list(x)]) > 0]
 
 
 class ScannerRotation:

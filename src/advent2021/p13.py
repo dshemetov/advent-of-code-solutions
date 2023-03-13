@@ -19,7 +19,7 @@ def solve_a(s: str) -> int:
     mat = np.zeros((n, m), dtype=bool)
     mat[ixs[0], ixs[1]] = True
 
-    folds = [re.match("fold along (\w)=(\d+)", line).groups() for line in folds.split("\n")][0:1]
+    folds = [re.match(r"fold along (\w)=(\d+)", line).groups() for line in folds.split("\n")][0:1]
     for along, _ in folds:
         mat = fold_mat(along, mat)
 
@@ -45,7 +45,7 @@ def solve_b(s: str) -> int:
     for i, j in ixs:
         mat[i][j] = True
 
-    folds = [re.match("fold along (\w)=(\d+)", line).groups() for line in folds.split("\n")]
+    folds = [re.match(r"fold along (\w)=(\d+)", line).groups() for line in folds.split("\n")]
     for along, _ in folds:
         mat = fold_mat(along, mat)
     print("\n".join(["".join(["1" if x else " " for x in row]) for row in mat]))

@@ -34,29 +34,29 @@ def solve_a(s: str) -> Tuple[np.ndarray, np.ndarray]:
 
 
 def parse_commands(s: str) -> List[Tuple[str, str]]:
-    return re.findall("(.)(\d+)", s)
+    return re.findall(r"(.)(\d+)", s)
 
 
 def execute_command_a(state: Tuple[np.ndarray, np.ndarray], command: Tuple[str, str]) -> np.ndarray:
-    pos, dir = state
+    pos, directory = state
     instruction, num = command
     if instruction == "F":
-        return (pos + int(num) * dir, dir)
+        return (pos + int(num) * directory, directory)
     if instruction == "N":
-        return (pos + int(num) * north, dir)
+        return (pos + int(num) * north, directory)
     if instruction == "S":
-        return (pos - int(num) * north, dir)
+        return (pos - int(num) * north, directory)
     if instruction == "W":
-        return (pos + int(num) * west, dir)
+        return (pos + int(num) * west, directory)
     if instruction == "E":
-        return (pos - int(num) * west, dir)
+        return (pos - int(num) * west, directory)
     if instruction == "R":
-        return (pos, np.linalg.matrix_power(turn_right, int(num) // 90) @ dir)
+        return (pos, np.linalg.matrix_power(turn_right, int(num) // 90) @ directory)
     if instruction == "L":
-        return (pos, np.linalg.matrix_power(-turn_right, int(num) // 90) @ dir)
+        return (pos, np.linalg.matrix_power(-turn_right, int(num) // 90) @ directory)
 
 
-def solve_b(s: str) -> Tuple[np.ndarray, np.ndarray]:
+def solve_b(s: str) -> int:
     commands = parse_commands(s)
     state = State(origin, 10 * east + north)
 

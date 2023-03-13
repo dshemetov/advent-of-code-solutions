@@ -13,7 +13,7 @@ def solve_a(s: str) -> int:
     >>> solve_a(test_string)
     5
     """
-    matches = (m.groups() for m in re.finditer("(\d+),(\d+) -> (\d+),(\d+)", s))
+    matches = (m.groups() for m in re.finditer(r"(\d+),(\d+) -> (\d+),(\d+)", s))
     lines = np.array([[(x1, y1), (x2, y2)] for x1, y1, x2, y2 in matches], dtype=int)
     n, m = lines.max(axis=(0, 1)) + 1
     grid = np.zeros((n, m))
@@ -45,7 +45,7 @@ def solve_b(s: str) -> int:
     >>> solve_b(test_string)
     12
     """
-    matches = (m.groups() for m in re.finditer("(\d+),(\d+) -> (\d+),(\d+)", s))
+    matches = (m.groups() for m in re.finditer(r"(\d+),(\d+) -> (\d+),(\d+)", s))
     mat = np.array([[(x1, y1), (x2, y2)] for x1, y1, x2, y2 in matches], dtype=int)
     n, m = mat.max(axis=(0, 1)) + 1
     grid = np.zeros((n, m))

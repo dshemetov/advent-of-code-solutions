@@ -108,7 +108,7 @@ def transition_state(state: WorldState, state_dict: Counter[WorldState, int], pn
 
 
 def solve_a(s: str) -> int:
-    (_, p1_start), (_, p2_start) = re.findall("Player (\d+) starting position: (\d+)", s)
+    (_, p1_start), (_, p2_start) = re.findall(r"Player (\d+) starting position: (\d+)", s)
     players = [Player(1, location=int(p1_start)), Player(2, location=int(p2_start))]
 
     die = DeterministicDie()
@@ -121,11 +121,11 @@ def solve_a(s: str) -> int:
 
     loser = players[winner.num % 2]
 
-    return f"{loser.score * die.roll_count}"
+    return loser.score * die.roll_count
 
 
 def solve_b(s: str) -> int:
-    (_, p1_start), (_, p2_start) = re.findall("Player (\d+) starting position: (\d+)", s)
+    (_, p1_start), (_, p2_start) = re.findall(r"Player (\d+) starting position: (\d+)", s)
     p1, p2 = [Player(1, location=int(p1_start)), Player(2, location=int(p2_start))]
 
     state = WorldState(p1.location, p1.score, p2.location, p2.score)
@@ -139,4 +139,4 @@ def solve_b(s: str) -> int:
             state_dict = transition_state(state, state_dict, player_turn)
             state_dict = prune_winners(state_dict, winning_count)
 
-    return f"{max(winning_count)}"
+    return max(winning_count)

@@ -8,7 +8,7 @@ def solve_a(s: str) -> int:
         if "mask" in line:
             mask = list(line.strip("mask = "))
         else:
-            key, value = [int(x) for x in re.match("mem\[(\d+)\] = (\d+)", line).groups()]
+            key, value = [int(x) for x in re.match(r"mem\[(\d+)\] = (\d+)", line).groups()]
             memory[key] = apply_mask(value, mask)
     return sum(memory.values())
 
@@ -41,7 +41,7 @@ def solve_b(s: str) -> int:
         if "mask" in line:
             mask = list(line.strip("mask = "))
         else:
-            key, value = [int(x) for x in re.match("mem\[(\d+)\] = (\d+)", line).groups()]
+            key, value = [int(x) for x in re.match(r"mem\[(\d+)\] = (\d+)", line).groups()]
             for address in get_memory_addresses(key, mask):
                 memory[bits_to_int(address)] = value
     return sum(memory.values())

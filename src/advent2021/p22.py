@@ -224,7 +224,7 @@ class CubeSlice:
 
 
 def parse_input(s: str) -> List[CubeSlice]:
-    cube_slices = re.findall("(on|off) x=(-*\d+)..(-*\d+),y=(-*\d+)..(-*\d+),z=(-*\d+)..(-*\d+)", s)
+    cube_slices = re.findall(r"(on|off) x=(-*\d+)..(-*\d+),y=(-*\d+)..(-*\d+),z=(-*\d+)..(-*\d+)", s)
     slices = []
     for on_off, xmin, xmax, ymin, ymax, zmin, zmax in cube_slices:
         x = NooiceSlice(int(xmin), int(xmax) + 1)
