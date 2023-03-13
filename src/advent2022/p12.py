@@ -4,6 +4,7 @@ https://adventofcode.com/2022/day/12
 
 TODO: The solution to part a is very slow. Would benefit from optimizations.
 - A heuristic function didn't help.
+- Writing this in Cython is hard because of the use of heapq -- I don't easy access to a resizable array.
 TODO: The solution to b depends on a and is also very slow. Would have additional optimizations, after a is optimized.
 """
 from heapq import heappop, heappush
@@ -17,7 +18,7 @@ from advent_tools import get_valid_neighbor_ixs
 def solve_a(s: str) -> int:
     """
     Examples:
-    >>> solve_a(test_string)
+    >> solve_a(test_string)
     31
     """
     m = np.array([[ord(c) for c in e] for e in s.splitlines()], dtype=np.int32)
@@ -25,7 +26,7 @@ def solve_a(s: str) -> int:
     end_ix = np.where(m == ord("E"))
     m[start_ix] = ord("a")
     m[end_ix] = ord("z")
-    return get_minimum_path_nb(m, (start_ix[0][0], start_ix[1][0]), (end_ix[0][0], end_ix[1][0]))
+    return get_minimum_path(m, (start_ix[0][0], start_ix[1][0]), (end_ix[0][0], end_ix[1][0]))
 
 
 @nb.jit(nopython=True)
@@ -128,51 +129,35 @@ abdefghi
 
 
 # %%
-from advent_tools import get_puzzle_input
+# from advent_tools import get_puzzle_input
 
-solve_a(test_string)
-# solve_a(get_puzzle_input(2022, 12).strip("\n"))
-# solve_b(test_string)
-# solve_b(get_puzzle_input(2022, 12).strip("\n"))
-# %%
-m = np.arange(25).reshape(5, 5)
-m[1, 1] = 100
-m[3, 3] = -1
+# solve_a(test_string)
+# # solve_a(get_puzzle_input(2022, 12).strip("\n"))
+# # solve_b(test_string)
+# # solve_b(get_puzzle_input(2022, 12).strip("\n"))
+# # %%
+# m = np.arange(25).reshape(5, 5)
+# m[1, 1] = 100
+# m[3, 3] = -1
 
-# %%
-# - Resizable
-# - Smart insertion
-priority_queue_costs = np.array([0], dtype=np.int64)
-priority_queue_ixs = np.array([[0, 0]], dtype=np.int64)
+# # %%
+# # - Resizable
+# # - Smart insertion
+# priority_queue_costs = np.array([0], dtype=np.int64)
+# priority_queue_ixs = np.array([[0, 0]], dtype=np.int64)
 
-def priority_queue_push(pq_costs, pq_ixs, cost, ix):
-    pq_costs = np.append(pq_costs, cost)
-    pq_ixs = np.append(pq_ixs, ix, axis=1)
-    ix = pq_costs.size - 1
-    while ix > 0:
-        parent_ix = (ix - 1) // 2
-        if pq_costs[parent_ix] > pq_costs[ix]:
-            pq_costs[parent_ix], pq_costs[ix] = pq_costs[ix], pq_costs[parent_ix]
-            pq_ixs[parent_ix], pq_ixs[ix] = pq_ixs[ix], pq_ixs[parent_ix]
-            ix = parent_ix
-        else:
-            break
-    return pq_costs, pq_ixs
+# def priority_queue_push(pq_costs, pq_ixs, cost, ix):
+#     pq_costs = np.append(pq_costs, cost)
+#     pq_ixs = np.append(pq_ixs, ix, axis=1)
+#     ix = pq_costs.size - 1
+#     while ix > 0:
+#         parent_ix = (ix - 1) // 2
+#         if pq_costs[parent_ix] > pq_costs[ix]:
+#             pq_costs[parent_ix], pq_costs[ix] = pq_costs[ix], pq_costs[parent_ix]
+#             pq_ixs[parent_ix], pq_ixs[ix] = pq_ixs[ix], pq_ixs[parent_ix]
+#             ix = parent_ix
+#         else:
+#             break
+#     return pq_costs, pq_ixs
 
-priority_queue_push(priority_queue_costs, priority_queue_ixs, 1, (0, 1))
-
-# %%
-from heapq import heappop, heappush
-
-
-@nb.jit(nopython=True)
-def test():
-    t = [(1, (1,1))]
-    for i in range(100):
-        heappush(t, (i, (i, i)))
-    return t
-
-test()
-# %%
-heappush
-# %%
+# priority_queue_push(priority_queue_costs, priority_queue_ixs, 1, (0, 1))

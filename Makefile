@@ -28,4 +28,4 @@ format:
 	source venv/bin/activate; black .
 
 test:
-	source venv/bin/activate; pytest --cov=src --cov-report xml --log-level=WARNING --disable-pytest-warnings .
+	source venv/bin/activate; pytest --cov=src --cov-report html --log-level=WARNING --disable-pytest-warnings .

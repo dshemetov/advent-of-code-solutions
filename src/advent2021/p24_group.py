@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 from re import findall
 from typing import List
 
-from advent_tools import Puzzle
+from advent_tools import get_puzzle_input
 from sympy import *
 
 
@@ -160,7 +160,7 @@ def parse_input(s: str):
 class Day24(AdventProblem):
     def __init__(self, test: bool):
         super().__init__("ALU")
-        self.ALU = ALU(Puzzle(2021, 24))
+        self.ALU = ALU(get_puzzle_input(2021, 24))
 
         if test:
             a = ALU(parse_input("test.txt"))

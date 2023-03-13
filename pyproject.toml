@@ -3,9 +3,9 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "advent_tools"
+name = "advent_solver"
 version = "0.1.0"
-description = "Utilities for Advent of Code Puzzles"
+description = "Advent of Code Solutions"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [
@@ -19,13 +19,6 @@ classifiers = [
 
 [project.urls]
 repository = "https://github.com/dshemetov/advent-of-code-solutions"
-
-[tool.setuptools]
-# To specify specific folders or modules to install
-py-modules = ["advent_tools"]
-
-[tool.setuptools.dynamic]
-dependencies = {file = ["requirements.txt"]}
 
 [tool.coverage.paths]
 source = ["src"]

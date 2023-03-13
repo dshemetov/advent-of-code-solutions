@@ -14,10 +14,12 @@ def solve_a(s: str) -> int:
     >>> solve_a(test_string)
     198
     """
-    mat = np.array([list(line) for line in s.split("\n")], dtype=int)
+    mat = np.array([list(line) for line in s.strip("\n").split("\n")], dtype=int)
     n, _ = mat.shape
-    max_rows = mat.sum(axis=0) >= n / 2
+    max_rows = (mat.sum(axis=0) >= n / 2)
     min_rows = ~max_rows
+    max_rows = max_rows.astype(int)
+    min_rows = min_rows.astype(int)
     gamma_rate, epsilon_rate = binary_to_int(max_rows), binary_to_int(min_rows)
     return gamma_rate * epsilon_rate
 
@@ -28,7 +30,7 @@ def solve_b(s: str) -> int:
     >>> solve_b(test_string)
     230
     """
-    mat = np.array([list(line) for line in s.split("\n")], dtype=int)
+    mat = np.array([list(line) for line in s.strip("\n").split("\n")], dtype=int)
     _, m = mat.shape
 
     mat_ = copy(mat)
@@ -50,7 +52,8 @@ def solve_b(s: str) -> int:
     return oxygen_rating * co2_rating
 
 
-test_string = """00100
+test_string = """
+00100
 11110
 10110
 10111
@@ -61,4 +64,5 @@ test_string = """00100
 10000
 11001
 00010
-01010"""
+01010
+"""

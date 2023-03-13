@@ -8,6 +8,7 @@ more-itertools
 numba
 numpy
 pytest
+pytest-cov
 python-dotenv
 requests
 ruff
