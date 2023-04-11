@@ -5,7 +5,11 @@ https://adventofcode.com/2022/day/12
 TODO: The solution to part a is very slow. Would benefit from optimizations.
 - A heuristic function didn't help.
 - Writing this in Cython is hard because of the use of heapq -- I don't easy access to a resizable array.
+- Reimplementing a priority queue in Cython is hard.
+- This thread claims that you can just import from _heapq, which is written in C: 
+- - https://stackoverflow.com/questions/59463921/a-priority-queue-with-a-custom-comparator-in-cython
 TODO: The solution to b depends on a and is also very slow. Would have additional optimizations, after a is optimized.
+- Can do part (a) and then reuse the results for part (b) (part (a) gives the best paths starting from one point, can cache that and use it for part (b))
 """
 from heapq import heappop, heappush
 from typing import Tuple

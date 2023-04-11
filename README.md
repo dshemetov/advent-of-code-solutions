@@ -4,7 +4,7 @@
 
 ## Usage
 
-Requires Python >=3.9.
+Requires Python >=3.10.
 
 ```sh
 # Clone repo

@@ -197,4 +197,5 @@ Monkey 3:
 """
 
 # %%
+# This pre-compiles the numba functions
 solve_b(test_string)

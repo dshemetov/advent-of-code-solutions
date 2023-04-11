@@ -30,7 +30,7 @@ def solve_a(s: str) -> int:
     return sum(signal_strengths)
 
 
-def solve_b(s: str) -> int:
+def solve_b(s: str) -> str:
     """
     Examples:
     >> solve_b(test_string)
