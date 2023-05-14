@@ -1,60 +1,43 @@
-from advent_tools import get_puzzle_input
+"""1202 Program Alarm
+https://adventofcode.com/2019/day/2
+"""
 
 
-# Next we set the inputs, without overwriting.
-def setInputs(t, i1, i2):
-    s = t.copy()
-    s[1] = i1
-    s[2] = i2
-    return s
+def solve_a(s: str) -> int:
+    s = [int(x) for x in s.strip("\n").split(",")]
+    s[1] = 12
+    s[2] = 2
+    return run_intcode(s)
 
 
-# Next we build a library of operations the
-# intcode computer can choose to execute.
-def plus(temp_intcode, i1, i2, o):
-    a1, a2 = temp_intcode[i1], temp_intcode[i2]
-    temp_intcode[o] = a1 + a2
-    return
-
-
-def times(temp_intcode, i1, i2, o):
-    a1, a2 = temp_intcode[i1], temp_intcode[i2]
-    temp_intcode[o] = a1 * a2
-    return
-
-
-instructions = {1: [plus, 3], 2: [times, 3]}
-
-
-# Here we define a function that operates on intcode. This function runs the main loop.
-def run_intcode(temp_intcode):
+def run_intcode(s: list) -> int:
     i = 0
-    while i < len(temp_intcode):
-        # First, we recognize the instruction.
-        opcode = temp_intcode[i]
-        # We make a halt check.
+    while i < len(s):
+        opcode = s[i]
+
         if opcode == 99:
             break
-        instruction = instructions[opcode]
-        # the instruction contains the number of
-        # arguments
-        op = instruction[0]
-        num_args = instruction[1]
-        args = temp_intcode[i + 1 : i + num_args + 1]
-        op(temp_intcode, *args)
-        i += num_args + 1
 
-    return temp_intcode[0]
+        if opcode == 1:
+            s[s[i + 3]] = s[s[i + 1]] + s[s[i + 2]]
+            i += 4
+        elif opcode == 2:
+            s[s[i + 3]] = s[s[i + 1]] * s[s[i + 2]]
+            i += 4
+
+    return s[0]
 
 
-INPUT = [int(x) for x in get_puzzle_input(2019, 2).strip("\n").split(",")]
-temp_intcode = setInputs(INPUT, 12, 2)
-print("Part a solution: ", run_intcode(temp_intcode))
+def solve_b(s: str) -> int:
+    s = [int(x) for x in s.strip("\n").split(",")]
+    for i in range(99):
+        for j in range(99):
+            t = s.copy()
+            t[1] = i
+            t[2] = j
+            if run_intcode(t) == 19690720:
+                return 53 * 100 + j
 
-from itertools import product
 
-for i, j in product(range(99), repeat=2):
-    temp_intcode = setInputs(INPUT, i, j)
-    if run_intcode(temp_intcode) == 19690720:
-        break
-print("Part b solution: ", 53 * 100 + j)
+test_string = """1,9,10,3,2,3,11,0,99,30,40,50"""
+assert run_intcode([int(x) for x in test_string.split(",")]) == 3500
