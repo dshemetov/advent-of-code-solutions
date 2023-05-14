@@ -32,7 +32,6 @@ def solve_b(s: str) -> int:
     return sum(decode_entry(ins, outs) for ins, outs in lines)
 
 
-
 def decode_entry(inputs: List[str], outputs: List[str]) -> int:
     for permutation in permutations("abcdefg"):
         letter_mapping = dict(zip(permutation, "abcdefg"))
