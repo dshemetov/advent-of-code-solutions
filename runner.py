@@ -5,20 +5,22 @@ import time
 import traceback
 from datetime import date
 from importlib import import_module
-from typing import Any, Callable, Optional, Tuple
+from typing import Any, Callable
 
 import typer
-from advent_tools import get_puzzle_input
+from advent.tools import get_puzzle_input
 from dotenv import load_dotenv, set_key
 from joblib import Memory
 from rich import print
 from rich.table import Table
 
-memory = Memory("~/.advent_tools/joblib_cache", verbose=0)
+memory = Memory(".joblib_cache", verbose=0)
 app = typer.Typer(name="Advent of Code Solution Runner", chain=True)
 
 AnswerType = int | str | None
-YearOption = typer.Option(date.today().year, "--year", "-y", help="The year of the problem.")
+YearOption = typer.Option(
+    date.today().year, "--year", "-y", help="The year of the problem."
+)
 DayOption = typer.Option(None, "--day", "-d", help="The day of the problem.")
 PartOption = typer.Option(None, "--part", "-p", help="The part of the problem.")
 
@@ -26,7 +28,7 @@ PartOption = typer.Option(None, "--part", "-p", help="The part of the problem.")
 def timed(func: Callable) -> Callable:
     """Times the function and returns the elapsed time."""
 
-    def new_func(*args, **kwargs) -> Tuple[Any, float]:
+    def new_func(*args, **kwargs) -> tuple[Any, float]:
         t = time.perf_counter()
         out = func(*args, **kwargs)
         time_elapsed = time.perf_counter() - t
@@ -36,9 +38,9 @@ def timed(func: Callable) -> Callable:
 
 
 @memory.cache
-def get_answer(year: int, day: int, part: str) -> Tuple[AnswerType, float]:
+def get_answer(year: int, day: int, part: str) -> tuple[AnswerType, float]:
     try:
-        solution_module = import_module(f"advent{year}.p{day}")
+        solution_module = import_module(f"advent.advent{year}.p{day}")
         solution_method = getattr(solution_module, f"solve_{part}")
     except ModuleNotFoundError:
         raise ModuleNotFoundError("Problem not implemented yet.")
@@ -47,7 +49,9 @@ def get_answer(year: int, day: int, part: str) -> Tuple[AnswerType, float]:
     return answer, time_taken
 
 
-def get_answer_cache(year: int, day: int, part: str, clear_cache: bool) -> Tuple[AnswerType, float]:
+def get_answer_cache(
+    year: int, day: int, part: str, clear_cache: bool
+) -> tuple[AnswerType, float]:
     if clear_cache:
         if get_answer.check_call_in_cache(year, day, part) is True:
             result = get_answer.call_and_shelve(year, day, part)
@@ -55,7 +59,9 @@ def get_answer_cache(year: int, day: int, part: str, clear_cache: bool) -> Tuple
             result.clear()
             answer, time_taken = get_answer(year, day, part)
             if answer != prev_answer:
-                print(f"Warning, new result differs from cached for {year}.{day}.{part}. New is {answer}, old was {prev_answer}.")
+                print(
+                    f"Warning, new result differs from cached for {year}.{day}.{part}. New is {answer}, old was {prev_answer}."
+                )
         else:
             answer, time_taken = get_answer(year, day, part)
             prev_time_taken = float("nan")
@@ -67,12 +73,16 @@ def get_answer_cache(year: int, day: int, part: str, clear_cache: bool) -> Tuple
 
 @app.command("solve")
 def get_solutions(
-    year: Optional[int] = YearOption,
-    day: Optional[int] = DayOption,
-    part: Optional[str] = PartOption,
-    clear_cache: bool = typer.Option(False, "--clear-cache", "-c", help="Clear the solution cache for this problem."),
+    year: int = YearOption,
+    day: int = DayOption,
+    part: str = PartOption,
+    clear_cache: bool = typer.Option(
+        False, "--clear-cache", "-c", help="Clear the solution cache for this problem."
+    ),
     silent: bool = typer.Option(False, "--silent", "-s", help="Silence warnings."),
-    profile: bool = typer.Option(False, "--profile", "-P", help="Profile the solution."),
+    profile: bool = typer.Option(
+        False, "--profile", "-P", help="Profile the solution."
+    ),
 ):
     """Prints the solution for a problem or problems."""
     days = range(1, 26) if day is None else [day]
@@ -85,11 +95,15 @@ def get_solutions(
                 if profile:
                     with cProfile.Profile() as pr:
                         pr.enable()
-                        ans, time_taken, prev_time_taken = get_answer_cache(year, day, part, clear_cache)
+                        ans, time_taken, prev_time_taken = get_answer_cache(
+                            year, day, part, clear_cache
+                        )
                         pr.create_stats()
                         pstats.Stats(pr).sort_stats("cumtime").print_stats(f"p{day}.py")
                 else:
-                    ans, time_taken, prev_time_taken = get_answer_cache(year, day, part, clear_cache)
+                    ans, time_taken, prev_time_taken = get_answer_cache(
+                        year, day, part, clear_cache
+                    )
             except ModuleNotFoundError:
                 if not silent:
                     print(f"Problem {year}.{day}.{part} not implemented yet.")
@@ -101,7 +115,10 @@ def get_solutions(
             run_stats[(day, part)] = [ans, time_taken, prev_time_taken]
             total_time_taken += time_taken
 
-    table = Table(title=f"{year} Solutions", caption=f"Total time taken: {total_time_taken:>5.3f}.")
+    table = Table(
+        title=f"{year} Solutions",
+        caption=f"Total time taken: {total_time_taken:>5.3f}.",
+    )
     table.add_column("Day", style="dim", no_wrap=True)
     table.add_column("Part", style="dim", no_wrap=True)
     table.add_column("Answer", justify="right")
@@ -109,7 +126,9 @@ def get_solutions(
     table.add_column("Prev Time Taken", justify="right")
 
     for (day, part), (ans, time_taken, prev_time_taken) in run_stats.items():
-        table.add_row(str(day), part, str(ans), f"{time_taken:>5.5f}", f"{prev_time_taken:>5.5f}")
+        table.add_row(
+            str(day), part, str(ans), f"{time_taken:>5.5f}", f"{prev_time_taken:>5.5f}"
+        )
 
     print(table)
     return table
@@ -117,8 +136,13 @@ def get_solutions(
 
 @app.command("set-cookie")
 def set_cookie(
-    cookie: Optional[str] = typer.Option(
-        None, "--cookie", "-c", help="The cookie to set.", prompt="Enter your cookie (input hidden)", hide_input=True
+    cookie: str = typer.Option(
+        None,
+        "--cookie",
+        "-c",
+        help="The cookie to set.",
+        prompt="Enter your cookie (input hidden)",
+        hide_input=True,
     )
 ):
     """Prints the cookie for the current user.
@@ -133,8 +157,8 @@ def set_cookie(
 
 @app.command("clear-download-cache")
 def clear_download_cache(
-    year: Optional[int] = YearOption,
-    day: Optional[int] = DayOption,
+    year: int = YearOption,
+    day: int = DayOption,
 ):
     """Clears the input download cache."""
     load_dotenv()
@@ -151,7 +175,11 @@ def clear_download_cache(
 
 
 @app.command("clear-solution-cache")
-def clear_solution_cache(year: Optional[int] = YearOption, day: Optional[int] = DayOption, part: Optional[str] = PartOption):
+def clear_solution_cache(
+    year: int = YearOption,
+    day: int = DayOption,
+    part: str = PartOption,
+):
     """Clears the solution cache."""
     days = range(1, 26) if day is None else [day]
     parts = ["a", "b"] if part is None else [part]
@@ -176,3 +204,6 @@ def make_table(year: int):
 
 if __name__ == "__main__":
     app()
+
+
+from adventB.test import b

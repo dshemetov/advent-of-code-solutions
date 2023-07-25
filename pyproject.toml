@@ -1,25 +1,3 @@
-[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
-
-[project]
-name = "advent_solver"
-version = "0.1.0"
-description = "Advent of Code Solutions"
-readme = "README.md"
-requires-python = ">=3.10"
-authors = [
-  {email = "dshemetov@ucdavis.edu"},
-  {name = "Dmitry Shemetov"}
-]
-classifiers = [
-  "Development Status :: 4 - Beta",
-  "Programming Language :: Python"
-]
-
-[project.urls]
-repository = "https://github.com/dshemetov/advent-of-code-solutions"
-
 [tool.coverage.paths]
 source = ["src"]
 
@@ -32,7 +10,6 @@ show_missing = true
 fail_under = 80
 
 [tool.black]
-line-length = 150
 target-version = ['py310']
 extend-exclude = '''
 /(

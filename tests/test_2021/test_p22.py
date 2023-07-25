@@ -1,4 +1,4 @@
-from advent2021.p22 import (
+from advent.advent2021.p22 import (
     Cube,
     CubeSlice,
     NooiceSlice,
@@ -167,22 +167,52 @@ def test_generate_products():
     cube1 = CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(0, 2))
     cube2 = CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(1, 3))
     cube_products = list(generate_all_products(cube1, cube2))
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(0, 1)) in cube_products
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(1, 2)) in cube_products
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(2, 3)) in cube_products
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(0, 1))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(1, 2))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(2, 3))
+        in cube_products
+    )
     assert len(cube_products) == 3
 
     # Intersecting cubes with one identical axis
     cube1 = CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 2), NooiceSlice(0, 2))
     cube2 = CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(1, 3), NooiceSlice(1, 3))
     cube_products = list(generate_all_products(cube1, cube2))
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(0, 1)) in cube_products
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(1, 2)) in cube_products
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(1, 2), NooiceSlice(0, 1)) in cube_products
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(1, 2), NooiceSlice(1, 2)) in cube_products
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(1, 2), NooiceSlice(2, 3)) in cube_products
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(2, 3), NooiceSlice(1, 2)) in cube_products
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(2, 3), NooiceSlice(2, 3)) in cube_products
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(0, 1))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(1, 2))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(1, 2), NooiceSlice(0, 1))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(1, 2), NooiceSlice(1, 2))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(1, 2), NooiceSlice(2, 3))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(2, 3), NooiceSlice(1, 2))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(2, 3), NooiceSlice(2, 3))
+        in cube_products
+    )
     assert len(cube_products) == 7
 
     # Intersecting cubes with no identical axes
@@ -191,25 +221,70 @@ def test_generate_products():
     cube_products = list(generate_all_products(cube1, cube2))
 
     # First cube pieces
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(0, 1)) in cube_products
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(1, 2)) in cube_products
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(1, 2), NooiceSlice(0, 1)) in cube_products
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(1, 2), NooiceSlice(1, 2)) in cube_products
-    assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(0, 1), NooiceSlice(0, 1)) in cube_products
-    assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(0, 1), NooiceSlice(1, 2)) in cube_products
-    assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(1, 2), NooiceSlice(0, 1)) in cube_products
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(0, 1))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(1, 2))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(1, 2), NooiceSlice(0, 1))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(1, 2), NooiceSlice(1, 2))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(0, 1), NooiceSlice(0, 1))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(0, 1), NooiceSlice(1, 2))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(1, 2), NooiceSlice(0, 1))
+        in cube_products
+    )
 
     # Intersection
-    assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(1, 2), NooiceSlice(1, 2)) in cube_products
+    assert (
+        CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(1, 2), NooiceSlice(1, 2))
+        in cube_products
+    )
 
     # Second cube pieces
-    assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(1, 2), NooiceSlice(2, 3)) in cube_products
-    assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(2, 3), NooiceSlice(1, 2)) in cube_products
-    assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(2, 3), NooiceSlice(2, 3)) in cube_products
-    assert CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(1, 2), NooiceSlice(1, 2)) in cube_products
-    assert CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(1, 2), NooiceSlice(2, 3)) in cube_products
-    assert CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(2, 3), NooiceSlice(1, 2)) in cube_products
-    assert CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(2, 3), NooiceSlice(2, 3)) in cube_products
+    assert (
+        CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(1, 2), NooiceSlice(2, 3))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(2, 3), NooiceSlice(1, 2))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(2, 3), NooiceSlice(2, 3))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(1, 2), NooiceSlice(1, 2))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(1, 2), NooiceSlice(2, 3))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(2, 3), NooiceSlice(1, 2))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(2, 3), NooiceSlice(2, 3))
+        in cube_products
+    )
     assert len(cube_products) == 15
 
     # Intersecting cubes with no identical axes and one cube is off
@@ -218,13 +293,34 @@ def test_generate_products():
     cube_products = list(generate_all_products(cube1, cube2))
 
     # First cube pieces
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(0, 1)) in cube_products
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(1, 2)) in cube_products
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(1, 2), NooiceSlice(0, 1)) in cube_products
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(1, 2), NooiceSlice(1, 2)) in cube_products
-    assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(0, 1), NooiceSlice(0, 1)) in cube_products
-    assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(0, 1), NooiceSlice(1, 2)) in cube_products
-    assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(1, 2), NooiceSlice(0, 1)) in cube_products
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(0, 1))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(1, 2))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(1, 2), NooiceSlice(0, 1))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(1, 2), NooiceSlice(1, 2))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(0, 1), NooiceSlice(0, 1))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(0, 1), NooiceSlice(1, 2))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(1, 2), NooiceSlice(0, 1))
+        in cube_products
+    )
     assert len(cube_products) == 7
 
     # Turn off cube
@@ -243,35 +339,116 @@ def test_generate_products():
     cube1 = CubeSlice(True, NooiceSlice(0, 3), NooiceSlice(0, 3), NooiceSlice(0, 3))
     cube2 = CubeSlice(False, NooiceSlice(1, 2), NooiceSlice(1, 2), NooiceSlice(1, 2))
     cube_products = list(generate_all_products(cube1, cube2))
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(0, 1)) in cube_products
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(1, 2)) in cube_products
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(2, 3)) in cube_products
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(1, 2), NooiceSlice(0, 1)) in cube_products
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(1, 2), NooiceSlice(1, 2)) in cube_products
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(1, 2), NooiceSlice(2, 3)) in cube_products
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(2, 3), NooiceSlice(0, 1)) in cube_products
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(2, 3), NooiceSlice(1, 2)) in cube_products
-    assert CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(2, 3), NooiceSlice(2, 3)) in cube_products
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(0, 1))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(1, 2))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(2, 3))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(1, 2), NooiceSlice(0, 1))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(1, 2), NooiceSlice(1, 2))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(1, 2), NooiceSlice(2, 3))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(2, 3), NooiceSlice(0, 1))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(2, 3), NooiceSlice(1, 2))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(2, 3), NooiceSlice(2, 3))
+        in cube_products
+    )
 
-    assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(0, 1), NooiceSlice(0, 1)) in cube_products
-    assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(0, 1), NooiceSlice(1, 2)) in cube_products
-    assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(0, 1), NooiceSlice(2, 3)) in cube_products
-    assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(1, 2), NooiceSlice(0, 1)) in cube_products
-    assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(1, 2), NooiceSlice(1, 2)) not in cube_products  # Intersection
-    assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(1, 2), NooiceSlice(2, 3)) in cube_products
-    assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(2, 3), NooiceSlice(0, 1)) in cube_products
-    assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(2, 3), NooiceSlice(1, 2)) in cube_products
-    assert CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(2, 3), NooiceSlice(2, 3)) in cube_products
+    assert (
+        CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(0, 1), NooiceSlice(0, 1))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(0, 1), NooiceSlice(1, 2))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(0, 1), NooiceSlice(2, 3))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(1, 2), NooiceSlice(0, 1))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(1, 2), NooiceSlice(1, 2))
+        not in cube_products
+    )  # Intersection
+    assert (
+        CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(1, 2), NooiceSlice(2, 3))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(2, 3), NooiceSlice(0, 1))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(2, 3), NooiceSlice(1, 2))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(1, 2), NooiceSlice(2, 3), NooiceSlice(2, 3))
+        in cube_products
+    )
 
-    assert CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(0, 1), NooiceSlice(0, 1)) in cube_products
-    assert CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(0, 1), NooiceSlice(1, 2)) in cube_products
-    assert CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(0, 1), NooiceSlice(2, 3)) in cube_products
-    assert CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(1, 2), NooiceSlice(0, 1)) in cube_products
-    assert CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(1, 2), NooiceSlice(1, 2)) in cube_products
-    assert CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(1, 2), NooiceSlice(2, 3)) in cube_products
-    assert CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(2, 3), NooiceSlice(0, 1)) in cube_products
-    assert CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(2, 3), NooiceSlice(1, 2)) in cube_products
-    assert CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(2, 3), NooiceSlice(2, 3)) in cube_products
+    assert (
+        CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(0, 1), NooiceSlice(0, 1))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(0, 1), NooiceSlice(1, 2))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(0, 1), NooiceSlice(2, 3))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(1, 2), NooiceSlice(0, 1))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(1, 2), NooiceSlice(1, 2))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(1, 2), NooiceSlice(2, 3))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(2, 3), NooiceSlice(0, 1))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(2, 3), NooiceSlice(1, 2))
+        in cube_products
+    )
+    assert (
+        CubeSlice(True, NooiceSlice(2, 3), NooiceSlice(2, 3), NooiceSlice(2, 3))
+        in cube_products
+    )
 
     assert len(cube_products) == 26
 
@@ -285,7 +462,9 @@ def test_merge_adjacent_cubes():
             CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(3, 4)),
         ]
     )
-    assert cubes == [CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(0, 4))]
+    assert cubes == [
+        CubeSlice(True, NooiceSlice(0, 1), NooiceSlice(0, 1), NooiceSlice(0, 4))
+    ]
     assert merge_adjacent_cubes([]) == []
 
 

@@ -17,4 +17,3 @@ scipy
 sympy
 tqdm
 typer[all]
--e .
