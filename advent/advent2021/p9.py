@@ -4,6 +4,7 @@ https://adventofcode.com/2021/day/9
 from itertools import product
 
 import numpy as np
+
 from advent.tools import get_neighbor_values, get_top_n, get_valid_neighbor_ixs
 
 

@@ -1,5 +1,7 @@
 def solve_a(s: str) -> int:
-    passports = [str_to_passport_dict(" ".join(batch.split("\n"))) for batch in s.split("\n\n")]
+    passports = [
+        str_to_passport_dict(" ".join(batch.split("\n"))) for batch in s.split("\n\n")
+    ]
     return sum(map(validate_passport_a, passports))
 
 
@@ -12,7 +14,9 @@ def validate_passport_a(d: dict) -> bool:
 
 
 def solve_b(s: str) -> int:
-    passports = [str_to_passport_dict(" ".join(batch.split("\n"))) for batch in s.split("\n\n")]
+    passports = [
+        str_to_passport_dict(" ".join(batch.split("\n"))) for batch in s.split("\n\n")
+    ]
     return sum(map(validate_passport_b, passports))
 
 
@@ -35,7 +39,11 @@ def validate_passport_b(d: dict) -> bool:
         return False
 
     hcl = d["hcl"]
-    if not (hcl[0] == "#" and set(hcl[1:]).issubset(set("123456789abcdef")) and len(hcl[1:]) == 6):
+    if not (
+        hcl[0] == "#"
+        and set(hcl[1:]).issubset(set("123456789abcdef"))
+        and len(hcl[1:]) == 6
+    ):
         return False
 
     eye_color_check = d["ecl"] in ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
@@ -44,4 +52,6 @@ def validate_passport_b(d: dict) -> bool:
     if not (pid.isdigit() and len(pid) == 9):
         return False
 
-    return all([birth_check, issue_check, expiration_check, height_check, eye_color_check])
+    return all(
+        [birth_check, issue_check, expiration_check, height_check, eye_color_check]
+    )

@@ -4,6 +4,7 @@ https://adventofcode.com/2021/day/3
 from copy import copy
 
 import numpy as np
+
 from advent.tools import binary_to_int
 
 

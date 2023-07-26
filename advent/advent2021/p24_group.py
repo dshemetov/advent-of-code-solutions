@@ -6,7 +6,6 @@ from re import findall
 from typing import List
 
 from advent.tools import get_puzzle_input
-from sympy import *
 
 
 class AdventProblem(ABC):

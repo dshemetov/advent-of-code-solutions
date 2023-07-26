@@ -16,6 +16,7 @@ from heapq import nlargest
 
 import numba as nb
 import numpy as np
+
 from advent.advent2022.p11_cython import solve_b_cy
 
 r = re.compile(

@@ -8,8 +8,9 @@ from math import inf
 from typing import Generator
 
 import numpy as np
-from advent.tools import apply_until_fixed
 from more_itertools import flatten
+
+from advent.tools import apply_until_fixed
 
 
 def solve_a(s: str) -> int:

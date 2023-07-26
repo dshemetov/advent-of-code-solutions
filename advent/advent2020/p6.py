@@ -10,7 +10,9 @@ def count_batch_union(s: str) -> int:
 
 
 def count_batch_intersection(s: str) -> int:
-    return len(set(ascii_letters).intersection(*(set(line.strip()) for line in s.split("\n"))))
+    return len(
+        set(ascii_letters).intersection(*(set(line.strip()) for line in s.split("\n")))
+    )
 
 
 def solve_b(s: str) -> int:

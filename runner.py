@@ -8,11 +8,12 @@ from importlib import import_module
 from typing import Any, Callable
 
 import typer
-from advent.tools import get_puzzle_input
 from dotenv import load_dotenv, set_key
 from joblib import Memory
 from rich import print
 from rich.table import Table
+
+from advent.tools import get_puzzle_input
 
 memory = Memory(".joblib_cache", verbose=0)
 app = typer.Typer(name="Advent of Code Solution Runner", chain=True)
@@ -204,6 +205,3 @@ def make_table(year: int):
 
 if __name__ == "__main__":
     app()
-
-
-from adventB.test import b

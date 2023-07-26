@@ -4,6 +4,7 @@ https://adventofcode.com/2021/day/15
 from heapq import heappop, heappush
 
 import numpy as np
+
 from advent.tools import get_valid_neighbor_ixs
 
 

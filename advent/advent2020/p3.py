@@ -17,4 +17,10 @@ def solve_b(s: str) -> int:
     trees_slope_51 = sum(1 if mat[i, 5 * i] == "#" else 0 for i in range(n))
     trees_slope_71 = sum(1 if mat[i, 7 * i] == "#" else 0 for i in range(n))
     trees_slope_12 = sum(1 if mat[2 * i, i] == "#" else 0 for i in range(n // 2))
-    return trees_slope_11 * trees_slope_31 * trees_slope_51 * trees_slope_71 * trees_slope_12
+    return (
+        trees_slope_11
+        * trees_slope_31
+        * trees_slope_51
+        * trees_slope_71
+        * trees_slope_12
+    )

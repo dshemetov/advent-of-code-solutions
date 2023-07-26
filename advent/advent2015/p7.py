@@ -2,7 +2,7 @@ import numpy as np
 
 
 def solve_a(s: str) -> int:
-    G = np.zeros((1000, 1000))
+    np.zeros((1000, 1000))
     lines = s.split("\n")
     lines.pop()
 
@@ -84,7 +84,7 @@ def solve_a(s: str) -> int:
 def solve_b(s: str) -> int:
     return 0
 
-    G = np.zeros((1000, 1000))
+    np.zeros((1000, 1000))
     lines = s.split("\n")
     lines.pop()
 
@@ -157,10 +157,18 @@ def solve_b(s: str) -> int:
                         cmd = cmd[:ind] + eq[k][2] + cmd[ind + len(k) :]
                         eq[j] = ("", "", str(eval(cmd)))
                         print("newj:", eq[j])
-                elif not 48 <= ord(eq[j][0][0]) <= 57 and not 48 <= ord(eq[j][1][0]) <= 57:
+                elif (
+                    not 48 <= ord(eq[j][0][0]) <= 57
+                    and not 48 <= ord(eq[j][1][0]) <= 57
+                ):
                     k1 = eq[j][0]
                     k2 = eq[j][1]
-                    if eq[k1][0] == "" and eq[k1][1] == "" and eq[k2][0] == "" and eq[k2][1] == "":
+                    if (
+                        eq[k1][0] == ""
+                        and eq[k1][1] == ""
+                        and eq[k2][0] == ""
+                        and eq[k2][1] == ""
+                    ):
                         print("j:", j, eq[j], k1, eq[k1], k2, eq[k2])
                         cmd = eq[j][2]
                         ind = cmd.index(k1)
