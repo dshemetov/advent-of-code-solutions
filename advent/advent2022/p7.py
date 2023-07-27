@@ -1,5 +1,7 @@
 """No Space Left On Device
 https://adventofcode.com/2022/day/7
+
+TODO: Can we get rid of the recursion in get_dir_sizes?
 """
 import re
 
@@ -13,53 +15,51 @@ def print_dirs(dirs: dict, dir: str, indent: int = 0):
             print(" " * (2 * indent + 3) + child + " " + str(dirs[child]))
 
 
-def get_dirs(s: str) -> dict:
-    dir_to_subdir_map = {"/": []}
-    cur_dir = "/"
+def get_dirs(s: str) -> tuple[dict, dict]:
+    dir_map: dict[str, list[str]] = {"/": []}
+    dir_size: dict[str, int] = {}
+    cur_path = "/"
     r = re.compile(r"(\d+) ([a-zA-Z0-9\.]+)")  # e.g. 14848514 b.txt
 
     for line in s.split("\n"):
         if not line:
             continue
         elif line.startswith("$ cd "):
-            if line[5:] == "..":
-                new_dir = cur_dir[: cur_dir[:-1].rfind("/") + 1]
+            new_dir = line[5:]
+            if new_dir == "..":
+                new_path = cur_path[: cur_path[:-1].rfind("/") + 1]
             else:
-                if line[5:] == "/":
-                    new_dir = "/"
+                if new_dir == "/":
+                    new_path = "/"
                 else:
-                    new_dir = cur_dir + line[5:] + "/"
+                    new_path = cur_path + new_dir + "/"
 
-            if new_dir not in dir_to_subdir_map:
-                dir_to_subdir_map[cur_dir].append(new_dir)
-                dir_to_subdir_map[new_dir] = []
-            cur_dir = new_dir
+            if new_path not in dir_map:
+                dir_map[cur_path].append(new_path)
+                dir_map[new_path] = []
+            cur_path = new_path
         elif line.startswith("$ ls"):
             continue
         elif line.startswith("dir "):
-            new_dir = cur_dir + line[4:] + "/"
-            if new_dir not in dir_to_subdir_map:
-                dir_to_subdir_map[cur_dir].append(new_dir)
-                dir_to_subdir_map[new_dir] = []
+            new_path = cur_path + line[4:] + "/"
+            if new_path not in dir_map:
+                dir_map[cur_path].append(new_path)
+                dir_map[new_path] = []
         else:
             num, name = r.findall(line)[0]
-            dir_to_subdir_map[cur_dir].append(cur_dir + name)
-            dir_to_subdir_map[cur_dir + name] = int(num)
+            dir_map[cur_path].append(cur_path + name)
+            dir_size[cur_path + name] = int(num)
 
-    return dir_to_subdir_map
+    return dir_map, dir_size
 
 
 def get_dir_sizes(s: str) -> dict:
-    dir_to_subdir_map = get_dirs(s)
-    dir_sizes = {}
+    dir_map, dir_sizes = get_dirs(s)
 
     def get_size(d: str) -> int:
-        if d in dir_sizes:
-            pass
-        elif d.endswith("/"):
-            dir_sizes[d] = sum(get_size(child) for child in dir_to_subdir_map[d])
-        else:
-            dir_sizes[d] = dir_to_subdir_map[d]
+        if d.endswith("/"):
+            dir_sizes[d] = sum(get_size(child) for child in dir_map[d])
+
         return dir_sizes[d]
 
     get_size("/")
