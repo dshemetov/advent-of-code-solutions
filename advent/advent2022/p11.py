@@ -3,13 +3,13 @@
 https://adventofcode.com/2022/day/11
 
 Lessons learned:
-- default values in lambda functions help avoid late binding errors
-- lambda functions are a performance hit
-- solve_b was very slow in pure Python, completing in 300ms, I sped it up to 50ms using Numba.
-- Cython is slightly faster than Numba in this particular case, ~20ms.
+- The pure Python solution took 300ms, Numba took 50ms, Cython took 20ms.
+- Use default values in lambda functions to avoid late binding errors.
+- Lambda functions are a performance hit.
 
 Resources:
-https://smerity.com/articles/2018/cython_for_high_and_low.html
+- You may need to compile the Cython code with `cythonize -i -a p11_cython.pyx`.
+- https://smerity.com/articles/2018/cython_for_high_and_low.html
 """
 import re
 from heapq import nlargest
@@ -205,7 +205,4 @@ Monkey 3:
     If true: throw to monkey 0
     If false: throw to monkey 1
 """
-
-# %%
-# This pre-compiles the numba functions
 solve_b(test_string)

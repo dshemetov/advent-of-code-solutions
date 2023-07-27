@@ -1,7 +1,5 @@
 """No Space Left On Device
 https://adventofcode.com/2022/day/7
-
-TODO: Can we get rid of the recursion in get_dir_sizes?
 """
 import re
 

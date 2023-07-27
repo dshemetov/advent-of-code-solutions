@@ -80,7 +80,7 @@ def get_solutions(
     clear_cache: bool = typer.Option(
         False, "--clear-cache", "-c", help="Clear the solution cache for this problem."
     ),
-    silent: bool = typer.Option(False, "--silent", "-s", help="Silence warnings."),
+    silent: bool = typer.Option(True, "--silent", "-s", help="Silence warnings."),
     profile: bool = typer.Option(
         False, "--profile", "-P", help="Profile the solution."
     ),

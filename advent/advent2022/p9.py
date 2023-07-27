@@ -51,7 +51,7 @@ def solve_a(s: str) -> int:
 
 
 def print_tails_on_grid(
-    tails, min_x: int = None, max_x: int = None, min_y: int = None, max_y: int = None
+    tails, min_x: int | None = None, max_x: int | None = None, min_y: int | None = None, max_y: int | None = None
 ):
     np.set_printoptions(linewidth=120)
     if min_x is None:
@@ -75,8 +75,6 @@ def print_tails_on_grid(
 
 def solve_b(s: str) -> int:
     """
-    The head moves U, R, L, D, but the body can move diagonally. The logic becomes more complex.
-
     Examples:
     >>> solve_b(test_string)
     1

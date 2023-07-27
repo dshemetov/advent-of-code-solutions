@@ -117,3 +117,5 @@ test_string = """
 33549
 35390
 """
+solve_a(test_string)
+solve_b(test_string)
