@@ -5,7 +5,7 @@ import re
 from collections import defaultdict, deque
 
 
-def solve_a(s: str) -> int:
+def solve_a(s: str) -> str:
     """
     Examples:
     >>> solve_a(test_string)
@@ -20,6 +20,7 @@ def solve_a(s: str) -> int:
     r = re.compile(r"([A-Z])")
     for line in s1:
         for m in r.finditer(line):
+            # Each stack is 4 characters wide
             stacks[(m.start() - 1) // 4 + 1].appendleft(m.group())
 
     r = re.compile(r"move (\d+) from (\d+) to (\d+)")
@@ -34,7 +35,7 @@ def solve_a(s: str) -> int:
     return "".join(stacks[key][-1] for key in sorted(stacks.keys()))
 
 
-def solve_b(s: str) -> int:
+def solve_b(s: str) -> str:
     """
     Examples:
     >>> solve_b(test_string)
@@ -49,6 +50,7 @@ def solve_b(s: str) -> int:
     r = re.compile(r"([A-Z])")
     for line in s1:
         for m in r.finditer(line):
+            # Each stack is 4 characters wide
             stacks[(m.start() - 1) // 4 + 1].appendleft(m.group())
 
     r = re.compile(r"move (\d+) from (\d+) to (\d+)")

@@ -19,6 +19,7 @@ def solve_a(s: str) -> int:
     for i in range(4, len(s)):
         if len(set(s[i - 4 : i])) == 4:
             return i
+    return -1
 
 
 def solve_b(s: str) -> int:
@@ -37,3 +38,4 @@ def solve_b(s: str) -> int:
     for i in range(14, len(s)):
         if len(set(s[i - 14 : i])) == 14:
             return i
+    return -1
