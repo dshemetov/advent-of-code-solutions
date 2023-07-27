@@ -52,7 +52,7 @@ def get_answer(year: int, day: int, part: str) -> tuple[AnswerType, float]:
 
 def get_answer_cache(
     year: int, day: int, part: str, clear_cache: bool
-) -> tuple[AnswerType, float]:
+) -> tuple[AnswerType, float, float]:
     if clear_cache:
         if get_answer.check_call_in_cache(year, day, part) is True:
             result = get_answer.call_and_shelve(year, day, part)

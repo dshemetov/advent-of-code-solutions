@@ -47,7 +47,9 @@ def get_minimum_cost(
         if ix == end_ix:
             break
 
-        for ix_ in [(ix[0] + direction[0], ix[1] + direction[1]) for direction in directions]:
+        for ix_ in [
+            (ix[0] + direction[0], ix[1] + direction[1]) for direction in directions
+        ]:
             if not (0 <= ix_[0] < mat.shape[0] and 0 <= ix_[1] < mat.shape[1]):
                 continue
             if ord(mat[ix_[0], ix_[1]]) - ord(mat[ix[0], ix[1]]) > 1:
@@ -55,7 +57,11 @@ def get_minimum_cost(
 
             new_path_length = cost + 1
 
-            if ix_ in min_cost and min_cost[ix_] > new_path_length or ix_ not in min_cost:
+            if (
+                ix_ in min_cost
+                and min_cost[ix_] > new_path_length
+                or ix_ not in min_cost
+            ):
                 min_cost[ix_] = new_path_length
                 heappush(priority_queue, (new_path_length, ix_))
 
@@ -77,7 +83,9 @@ def get_minimum_cost2(
     while edge_set:
         new_edge_set = set()
         for ix in edge_set:
-            for ix_ in [(ix[0] + direction[0], ix[1] + direction[1]) for direction in directions]:
+            for ix_ in [
+                (ix[0] + direction[0], ix[1] + direction[1]) for direction in directions
+            ]:
                 if not (0 <= ix_[0] < mat.shape[0] and 0 <= ix_[1] < mat.shape[1]):
                     continue
                 if ix_ in visited:

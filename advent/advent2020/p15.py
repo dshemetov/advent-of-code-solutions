@@ -32,8 +32,8 @@ class GameState:
         return turn_number - last_turn.get(current_value, turn_number)
 
 
-def convert_list_to_last_turn_dict(l: list[int]) -> dict[int, int]:
-    return dict({v: i + 1 for i, v in enumerate(l)})
+def convert_list_to_last_turn_dict(lst: list[int]) -> dict[int, int]:
+    return dict({v: i + 1 for i, v in enumerate(lst)})
 
 
 def solve_a(s: str) -> int:

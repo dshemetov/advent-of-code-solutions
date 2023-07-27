@@ -5,8 +5,6 @@ from heapq import heappop, heappush
 
 import numpy as np
 
-from advent.tools import get_valid_neighbor_ixs
-
 
 def solve_a(s: str) -> int:
     """
@@ -27,9 +25,14 @@ def get_minimum_path(
     cost = 0
     priority_queue = []
     best_cost = dict()
+    directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
 
     while end_ix != ix:
-        for ix_ in get_valid_neighbor_ixs(ix, mat.shape):
+        for ix_ in [
+            (ix[0] + directions[0], ix[1] + directions[1]) for directions in directions
+        ]:
+            if not (0 <= ix_[0] < mat.shape[0] and 0 <= ix_[1] < mat.shape[1]):
+                continue
             cost_ = cost + mat[ix_]
             if ix_ in best_cost and best_cost[ix_] <= cost_:
                 continue

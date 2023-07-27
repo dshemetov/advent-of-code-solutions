@@ -5,8 +5,6 @@ from itertools import product
 
 import numpy as np
 
-from advent.tools import get_valid_neighbor_ixs
-
 
 def solve_a(s: str) -> int:
     _, flashes = run_octopus_steps(parse_input(s), 100)
@@ -23,11 +21,15 @@ def run_octopus_step(mat: np.ndarray) -> tuple[np.ndarray, int]:
     n, m = mat.shape
     already_flashed = set()
     ixs_to_check = set((i, j) for i, j in product(range(n), range(m)) if mat[i, j] > 9)
+    directions = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (-1, 1), (1, -1)]
+
     while len(ixs_to_check) > 0:
         i, j = ixs_to_check.pop()
         if mat[i, j] > 9 and (i, j) not in already_flashed:
             already_flashed |= {(i, j)}
-            for i_, j_ in get_valid_neighbor_ixs((i, j), mat.shape, diagonals=True):
+            for i_, j_ in [
+                (i + directions[0], j + directions[1]) for directions in directions
+            ]:
                 mat[i_, j_] += 1
                 ixs_to_check |= {(i_, j_)}
     mat[np.where(mat > 9)] = 0

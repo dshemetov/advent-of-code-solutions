@@ -2,8 +2,6 @@ from copy import deepcopy
 from itertools import product
 from typing import Iterable
 
-from advent.tools import get_valid_neighbor_ixs
-
 
 def solve_a(s: str) -> int:
     state = string_to_array(s)
@@ -78,17 +76,23 @@ def get_occupied_seats(state: list[list[str]]) -> Iterable[tuple[int, int]]:
 
 
 def check_nearby_seats_empty(i: int, j: int, state: list[list[str]]) -> bool:
+    directions = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (-1, -1), (1, -1), (-1, 1)]
     n, m = len(state), len(state[0])
-    for i_, j_ in get_valid_neighbor_ixs((i, j), (n, m), diagonals=True):
+    for i_, j_ in [
+        (i + di, j + dj) for di, dj in directions if 0 <= i + di < n and 0 <= j + dj < m
+    ]:
         if state[i_][j_] == "#":
             return False
     return True
 
 
 def check_nearby_seats_crowded(i: int, j: int, state: list[list[str]]) -> bool:
+    directions = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (-1, -1), (1, -1), (-1, 1)]
     n, m = len(state), len(state[0])
     visible_seats = 0
-    for i_, j_ in get_valid_neighbor_ixs((i, j), (n, m), diagonals=True):
+    for i_, j_ in [
+        (i + di, j + dj) for di, dj in directions if 0 <= i + di < n and 0 <= j + dj < m
+    ]:
         if state[i_][j_] == "#":
             visible_seats += 1
             if visible_seats >= 4:

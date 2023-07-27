@@ -1,18 +1,20 @@
 import os
 from bisect import insort
 from functools import partial, reduce
-from itertools import accumulate, product
+from itertools import accumulate
 from typing import Callable, Iterable
+from warnings import warn
 
-import numpy as np
 import requests
 from dotenv import load_dotenv
 from joblib import Memory
-from numpy.typing import ArrayLike
 
 memory = Memory(".joblib_cache", verbose=0)
 load_dotenv()
 AOC_TOKEN = os.environ.get("AOC_TOKEN")
+
+if AOC_TOKEN is None:
+    warn("AOC_TOKEN not set; fetching problem inputs will not work.")
 
 
 @memory.cache
@@ -157,65 +159,6 @@ def get_bezout_coefficients(a: int, b: int) -> tuple[int, int]:
     return (t, s)
 
 
-def get_units(n: int) -> np.ndarray:
-    return np.concatenate([np.eye(n, dtype=int), -np.eye(n, dtype=int)])
-
-
-def get_units_and_diagonals(n: int) -> np.ndarray:
-    """
-    Examples:
-    >>> get_units_and_diagonals(2)
-    array([[-1, -1],
-           [-1,  0],
-           [-1,  1],
-           [ 0, -1],
-           [ 0,  1],
-           [ 1, -1],
-           [ 1,  0],
-           [ 1,  1]])
-    """
-    zeros = tuple([0] * n)
-    return np.array(
-        [tup for tup in product([-1, 0, 1], repeat=n) if tup != zeros], dtype=int
-    )
-
-
-def get_neighbor_values(
-    ix: ArrayLike, mat: np.ndarray, radius: int = 1, diagonals: bool = False
-) -> Iterable:
-    return (
-        mat[new_ix]
-        for new_ix in get_valid_neighbor_ixs(ix, mat.shape, radius, diagonals)
-    )
-
-
-def get_valid_neighbor_ixs(
-    ix: ArrayLike, mat_shape: ArrayLike, radius: int = 1, diagonals: bool = False
-) -> Iterable[tuple[int, ...]]:
-    """
-    Examples:
-    >>> list(get_valid_neighbor_ixs(np.array([0, 1]), np.array([2, 2])))
-    [(1, 1), (0, 0)]
-    """
-    if diagonals:
-        directions = get_units_and_diagonals(len(ix))
-    else:
-        directions = get_units(len(ix))
-
-    if isinstance(ix, tuple):
-        ix = np.array(ix, dtype=int)
-    if isinstance(mat_shape, tuple):
-        mat_shape = np.array(mat_shape, dtype=int)
-
-    min_ix = np.zeros(len(ix), dtype=int)
-    return (
-        tuple(r * new_ix)
-        for new_ix in (ix + directions)
-        for r in range(1, radius + 1)
-        if all((min_ix <= (r * new_ix)) & ((r * new_ix) < mat_shape))
-    )
-
-
 def compose_multivar_2(f: Callable, g: Callable) -> Callable:
     """
     Examples:
@@ -238,10 +181,10 @@ def compose_multivar(*fs: list[Callable]) -> Callable:
     return reduce(compose_multivar_2, fs)
 
 
-def get_top_n(it: Iterable, n: int) -> list:
+def nlargest(n: int, it: Iterable) -> list:
     """
     Examples:
-    >>> get_top_n([5, 4, 3, 10, 2, 5], 5)
+    >>> nlargest(5, [5, 4, 3, 10, 2, 5])
     [3, 4, 5, 5, 10]
     """
     top_n = []

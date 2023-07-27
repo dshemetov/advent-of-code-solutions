@@ -1,11 +1,7 @@
 """Smoke Basin
 https://adventofcode.com/2021/day/9
 """
-from itertools import product
-
-import numpy as np
-
-from advent.tools import get_neighbor_values, get_top_n, get_valid_neighbor_ixs
+from advent.tools import nlargest
 
 
 def solve_a(s: str) -> int:
@@ -14,17 +10,19 @@ def solve_a(s: str) -> int:
     >>> solve_a(test_string)
     15
     """
-    mat = np.array([list(x) for x in s.split("\n")], dtype=int)
-    n, m = mat.shape
-    return sum(
-        mat[i, j] + 1
-        for i, j in product(range(n), range(m))
-        if is_lowest_point(np.array([i, j]), mat)
-    )
-
-
-def is_lowest_point(ix: np.ndarray, mat: list[list[int]]) -> bool:
-    return all(mat[tuple(ix)] < v for v in get_neighbor_values(ix, mat))
+    mat = [list(x) for x in s.strip("\n").split("\n")]
+    n, m = len(mat), len(mat[0])
+    directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+    total = 0
+    for i in range(n):
+        for j in range(m):
+            for i_, j_ in [(i + i__, j + j__) for i__, j__ in directions]:
+                if 0 <= i_ < len(mat) and 0 <= j_ < len(mat[0]):
+                    if mat[i_][j_] <= mat[i][j]:
+                        break
+            else:
+                total += int(mat[i][j]) + 1
+    return total
 
 
 def solve_b(s: str) -> int:
@@ -33,38 +31,42 @@ def solve_b(s: str) -> int:
     >>> solve_b(test_string)
     1134
     """
-    mat = np.array([list(x) for x in s.split("\n")], dtype=int)
-    a, b, c = get_top_n((len(basin) for basin in get_basins(mat)), 3)
+    mat = [list(x) for x in s.strip("\n").split("\n")]
+    directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+
+    visited = set()
+    basin_sizes = []
+    for i in range(len(mat)):
+        for j in range(len(mat[0])):
+            if mat[i][j] == "9":
+                continue
+            if (i, j) in visited:
+                continue
+
+            basin_size = 0
+            stack = [(i, j)]
+            while stack:
+                i_, j_ = stack.pop()
+                if mat[i_][j_] == "9":
+                    continue
+                if (i_, j_) in visited:
+                    continue
+                visited.add((i_, j_))
+                basin_size += 1
+                for i__, j__ in [(i_ + i___, j_ + j___) for i___, j___ in directions]:
+                    if 0 <= i__ < len(mat) and 0 <= j__ < len(mat[0]):
+                        stack.append((i__, j__))
+
+            basin_sizes.append(basin_size)
+
+    a, b, c = nlargest(3, basin_sizes)
     return a * b * c
 
 
-def get_basins(mat: np.ndarray) -> list[set[tuple[tuple[int, int], ...]]]:
-    basins = set()
-    explored = set()
-    possible_locations = (ix for ix in np.ndindex(mat.shape) if mat[ix] != 9)
-    for ix in possible_locations:
-        if ix not in explored:
-            basin = get_basin_at_index(ix, mat)
-            basins |= {tuple(basin)}
-            explored |= basin
-    return basins
-
-
-def get_basin_at_index(ix: tuple[int, int], mat: np.ndarray) -> set[tuple[int, int]]:
-    explored_ixs = set()
-    unexplored_ixs = set({ix})
-    while len(unexplored_ixs) > 0:
-        ix_ = unexplored_ixs.pop()
-        explored_ixs |= {ix_}
-        neighbor_ixs_vals = zip(
-            get_valid_neighbor_ixs(ix_, mat.shape), get_neighbor_values(ix_, mat)
-        )
-        unexplored_ixs |= {x for x, val in neighbor_ixs_vals if val != 9} - explored_ixs
-    return explored_ixs
-
-
-test_string = """2199943210
+test_string = """
+2199943210
 3987894921
 9856789892
 8767896789
-9899965678"""
+9899965678
+"""

@@ -51,7 +51,11 @@ def solve_a(s: str) -> int:
 
 
 def print_tails_on_grid(
-    tails, min_x: int | None = None, max_x: int | None = None, min_y: int | None = None, max_y: int | None = None
+    tails,
+    min_x: int | None = None,
+    max_x: int | None = None,
+    min_y: int | None = None,
+    max_y: int | None = None,
 ):
     np.set_printoptions(linewidth=120)
     if min_x is None:

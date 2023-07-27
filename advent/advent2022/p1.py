@@ -1,7 +1,7 @@
 """Calorie Counting
 https://adventofcode.com/2022/day/1
 """
-from heapq import nlargest
+from advent.tools import nlargest
 
 
 def solve_a(s: str) -> int:
@@ -24,15 +24,11 @@ def solve_b(s: str) -> int:
     45000
     """
     s = s.strip("\n")
-    return sum(
-        nlargest(
-            3,
-            (
-                sum(int(food) for food in elf.splitlines() if food.isnumeric())
-                for elf in s.split("\n\n")
-            ),
-        )
-    )
+    weight = [
+        sum(int(food) for food in elf.splitlines() if food.isnumeric())
+        for elf in s.split("\n\n")
+    ]
+    return sum(nlargest(3, weight))
 
 
 test_string = """

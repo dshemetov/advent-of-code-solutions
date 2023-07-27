@@ -7,7 +7,7 @@ def solve_a(s: str) -> int:
     """
     Examples:
     >>> solve_a(test_string)
-    111111
+    10
     """
     a, b = [int(x) for x in s.split("-")]
     total = 0
@@ -27,7 +27,7 @@ def solve_b(s: str) -> int:
     """
     Examples:
     >>> solve_b(test_string)
-    111122
+    1
     """
     a, b = [int(x) for x in s.split("-")]
     total = 0

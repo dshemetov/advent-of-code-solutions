@@ -61,7 +61,9 @@ def get_dir_sizes(s: str) -> dict:
             dir_sizes[cur_dir] = sum(dir_sizes[child] for child in dir_map[cur_dir])
         else:
             stack.append((cur_dir, True))
-            stack.extend((child, False) for child in dir_map[cur_dir] if child.endswith("/"))
+            stack.extend(
+                (child, False) for child in dir_map[cur_dir] if child.endswith("/")
+            )
 
     return dir_sizes
 
