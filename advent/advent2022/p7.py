@@ -56,13 +56,15 @@ def get_dirs(s: str) -> tuple[dict, dict]:
 def get_dir_sizes(s: str) -> dict:
     dir_map, dir_sizes = get_dirs(s)
 
-    def get_size(d: str) -> int:
-        if d.endswith("/"):
-            dir_sizes[d] = sum(get_size(child) for child in dir_map[d])
+    stack: list[tuple[str, bool]] = [("/", False)]
+    while stack:
+        cur_dir, visited = stack.pop()
+        if visited:
+            dir_sizes[cur_dir] = sum(dir_sizes[child] for child in dir_map[cur_dir])
+        else:
+            stack.append((cur_dir, True))
+            stack.extend((child, False) for child in dir_map[cur_dir] if child.endswith("/"))
 
-        return dir_sizes[d]
-
-    get_size("/")
     return dir_sizes
 
 
