@@ -2,110 +2,96 @@
 """Hill Climbing Algorithm
 https://adventofcode.com/2022/day/12
 
-TODO: The solution to part a is very slow. Would benefit from optimizations.
-- A heuristic function didn't help.
-- Writing this in Cython is hard because of the use of heapq -- I don't easy access to a resizable array.
-- Reimplementing a priority queue in Cython is hard.
-- This thread claims that you can just import from _heapq, which is written in C:
-- - https://stackoverflow.com/questions/59463921/a-priority-queue-with-a-custom-comparator-in-cython
-TODO: The solution to b depends on a and is also very slow. Would have additional optimizations, after a is optimized.
-- Can do part (a) and then reuse the results for part (b) (part (a) gives the best paths starting from one point, can cache that and use it for part (b))
+Lessons learned:
+
+- Cython and numba don't help - the bottleneck is the heapq. I don't have access
+  to a resizable array in Cython/numba.
+- The A* is slower than BFS in this case, because of the cost of the priority
+  queue and the fact that the heuristic is weak (the true solution follows a
+  spiraling path).
+- Putting all the starting nodes in the priority queue at the beginning was
+  another clever optimization.
 """
 from heapq import heappop, heappush
 
-import numba as nb
 import numpy as np
-
-from advent.tools import get_valid_neighbor_ixs
 
 
 def solve_a(s: str) -> int:
     """
     Examples:
-    >> solve_a(test_string)
+    >>> solve_a(test_string)
     31
     """
     s = s.strip("\n")
-    m = np.array([[ord(c) for c in e] for e in s.splitlines()], dtype=np.int32)
-    start_ix = np.where(m == ord("S"))
-    end_ix = np.where(m == ord("E"))
-    m[start_ix] = ord("a")
-    m[end_ix] = ord("z")
-    return get_minimum_path(
-        m, (start_ix[0][0], start_ix[1][0]), (end_ix[0][0], end_ix[1][0])
-    )
+    m = np.array([list(e) for e in s.splitlines()], dtype=str)
+    start_ix = np.where(m == "S")
+    end_ix = np.where(m == "E")
+    m[start_ix] = "a"
+    m[end_ix] = "z"
+    priority_queue = [(start_ix[0][0], start_ix[1][0])]
+    return get_minimum_cost(m, priority_queue, (end_ix[0][0], end_ix[1][0]))
 
 
-@nb.jit(nopython=True)
-def get_minimum_path_nb(
-    mat: np.ndarray, start_ix: tuple[int, int], end_ix: tuple[int, int]
+def get_minimum_cost(
+    mat: np.ndarray, starting_nodes: list[tuple[int, int]], end_ix: tuple[int, int]
 ) -> int:
-    ix = start_ix
-    priority_queue = [(0, ix)]
-    min_path_lengths = np.ones_like(mat)
-    min_path_lengths = min_path_lengths * 10e9
-    min_path_lengths[start_ix] = 0
+    """This is A* without a heuristic, aka Djikstra."""
+    directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+    priority_queue = [(0, ix) for ix in starting_nodes]
+    min_cost = {ix: cost for cost, ix in priority_queue}
 
-    while end_ix != ix:
-        for ix_ in [
-            (ix[0] + 1, ix[1]),
-            (ix[0] - 1, ix[1]),
-            (ix[0], ix[1] + 1),
-            (ix[0], ix[1] - 1),
-        ]:
-            if not (0 <= ix[0] < mat.shape[0] and 0 <= ix[1] < mat.shape[1]):
-                continue
+    while priority_queue:
+        cost, ix = heappop(priority_queue)
 
-            if mat[ix_[0], ix_[1]] - mat[ix[0], ix[1]] > 1:
-                continue
-
-            path_length = min_path_lengths[ix] + 1
-
-            if min_path_lengths[ix_] <= path_length:
-                continue
-
-            min_path_lengths[ix_] = path_length
-            heuristic_cost = abs(end_ix[0] - ix_[0]) + abs(end_ix[1] - ix_[1])
-            heappush(priority_queue, (path_length + heuristic_cost, ix_))
-
-        if priority_queue:
-            _, ix = heappop(priority_queue)
-        else:
+        if ix == end_ix:
             break
 
-    if end_ix != ix:
-        return np.inf
-
-    return min_path_lengths[ix]
-
-
-def get_minimum_path(
-    mat: np.ndarray, start_ix: tuple[int, int], end_ix: tuple[int, int]
-) -> int:
-    ix = start_ix
-    priority_queue = []
-    min_path_lengths = {(start_ix[0], start_ix[1]): 0}
-
-    while end_ix != ix:
-        for ix_ in get_valid_neighbor_ixs(ix, mat.shape):
+        for ix_ in [(ix[0] + direction[0], ix[1] + direction[1]) for direction in directions]:
+            if not (0 <= ix_[0] < mat.shape[0] and 0 <= ix_[1] < mat.shape[1]):
+                continue
             if ord(mat[ix_[0], ix_[1]]) - ord(mat[ix[0], ix[1]]) > 1:
                 continue
-            path_length = min_path_lengths[ix] + 1
-            if ix_ in min_path_lengths and min_path_lengths[ix_] <= path_length:
-                continue
-            min_path_lengths[ix_] = path_length
-            heuristic_cost = np.abs(end_ix[0] - ix_[0]) + np.abs(end_ix[1] - ix_[1])
-            heappush(priority_queue, (path_length + heuristic_cost, ix_))
 
-        if priority_queue:
-            _, ix = heappop(priority_queue)
-        else:
-            break
+            new_path_length = cost + 1
+
+            if ix_ in min_cost and min_cost[ix_] > new_path_length or ix_ not in min_cost:
+                min_cost[ix_] = new_path_length
+                heappush(priority_queue, (new_path_length, ix_))
 
     if end_ix != ix:
-        return np.inf
+        return 9999
 
-    return min_path_lengths[ix]
+    return min_cost[ix]
+
+
+def get_minimum_cost2(
+    mat: np.ndarray, starting_nodes: list[tuple[int, int]], end_ix: tuple[int, int]
+) -> int:
+    """This is BFS."""
+    directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+    value = 0
+    edge_set = set(starting_nodes)
+    visited = set()
+
+    while edge_set:
+        new_edge_set = set()
+        for ix in edge_set:
+            for ix_ in [(ix[0] + direction[0], ix[1] + direction[1]) for direction in directions]:
+                if not (0 <= ix_[0] < mat.shape[0] and 0 <= ix_[1] < mat.shape[1]):
+                    continue
+                if ix_ in visited:
+                    continue
+                if ord(mat[ix_[0], ix_[1]]) - ord(mat[ix[0], ix[1]]) > 1:
+                    continue
+                if ix_ == end_ix:
+                    return value + 1
+                new_edge_set.add(ix_)
+        visited.update(edge_set)
+        edge_set = new_edge_set
+        value += 1
+
+    return -1
 
 
 def print_path_lengths(mat: np.ndarray, best_cost: dict):
@@ -133,10 +119,8 @@ def solve_b(s: str) -> int:
     m[start_ix] = "a"
     m[end_ix] = "z"
     start_pos_x, start_pos_y = np.where(m == "a")
-    return min(
-        get_minimum_path(m, (x, y), (end_ix[0][0], end_ix[1][0]))
-        for x, y in zip(start_pos_x, start_pos_y)
-    )
+    priority_queue = [(x, y) for x, y in zip(start_pos_x, start_pos_y)]
+    return get_minimum_cost(m, priority_queue, (end_ix[0][0], end_ix[1][0]))
 
 
 test_string = """
@@ -146,38 +130,4 @@ accszExk
 acctuvwj
 abdefghi
 """
-
-
-# %%
-# from advent.tools import get_puzzle_input
-
-# solve_a(test_string)
-# # solve_a(get_puzzle_input(2022, 12).strip("\n"))
-# # solve_b(test_string)
-# # solve_b(get_puzzle_input(2022, 12).strip("\n"))
-# # %%
-# m = np.arange(25).reshape(5, 5)
-# m[1, 1] = 100
-# m[3, 3] = -1
-
-# # %%
-# # - Resizable
-# # - Smart insertion
-# priority_queue_costs = np.array([0], dtype=np.int64)
-# priority_queue_ixs = np.array([[0, 0]], dtype=np.int64)
-
-# def priority_queue_push(pq_costs, pq_ixs, cost, ix):
-#     pq_costs = np.append(pq_costs, cost)
-#     pq_ixs = np.append(pq_ixs, ix, axis=1)
-#     ix = pq_costs.size - 1
-#     while ix > 0:
-#         parent_ix = (ix - 1) // 2
-#         if pq_costs[parent_ix] > pq_costs[ix]:
-#             pq_costs[parent_ix], pq_costs[ix] = pq_costs[ix], pq_costs[parent_ix]
-#             pq_ixs[parent_ix], pq_ixs[ix] = pq_ixs[ix], pq_ixs[parent_ix]
-#             ix = parent_ix
-#         else:
-#             break
-#     return pq_costs, pq_ixs
-
-# priority_queue_push(priority_queue_costs, priority_queue_ixs, 1, (0, 1))
+solve_a(test_string)
