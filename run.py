@@ -6,7 +6,9 @@ import traceback
 from datetime import date
 from importlib import import_module
 from typing import Any, Callable
+from warnings import warn
 
+import pandas as pd
 import typer
 from dotenv import load_dotenv, set_key
 from joblib import Memory
@@ -43,8 +45,8 @@ def get_answer(year: int, day: int, part: str) -> tuple[AnswerType, float]:
     try:
         solution_module = import_module(f"advent.advent{year}.p{day}")
         solution_method = getattr(solution_module, f"solve_{part}")
-    except ModuleNotFoundError:
-        raise ModuleNotFoundError("Problem not implemented yet.")
+    except ModuleNotFoundError as e:
+        raise ModuleNotFoundError("Problem not implemented yet.") from e
     timed_solution_method = timed(solution_method)
     answer, time_taken = timed_solution_method(get_puzzle_input(year, day))
     return answer, time_taken
@@ -60,7 +62,7 @@ def get_answer_cache(
             result.clear()
             answer, time_taken = get_answer(year, day, part)
             if answer != prev_answer:
-                print(
+                warn(
                     f"Warning, new result differs from cached for {year}.{day}.{part}. New is {answer}, old was {prev_answer}."
                 )
         else:
@@ -68,7 +70,7 @@ def get_answer_cache(
             prev_time_taken = float("nan")
     else:
         answer, prev_time_taken = get_answer(year, day, part)
-        time_taken = 0
+        time_taken = 0.0
     return answer, time_taken, prev_time_taken
 
 
@@ -89,7 +91,13 @@ def get_solutions(
     days = range(1, 26) if day is None else [day]
     parts = ["a", "b"] if part is None else [part]
     total_time_taken = 0
-    run_stats = {}
+    table = Table(title=f"{year} Solutions")
+    table.add_column("Day", style="dim", no_wrap=True)
+    table.add_column("Part", style="dim", no_wrap=True)
+    table.add_column("Answer", style="gold1", justify="right")
+    table.add_column("Time Taken", style="steel_blue1", justify="right")
+    table.add_column("Prev Time Taken", style="slate_blue3", justify="right")
+    row_values = []
     for day in days:
         for part in parts:
             try:
@@ -107,32 +115,45 @@ def get_solutions(
                     )
             except ModuleNotFoundError:
                 if not silent:
-                    print(f"Problem {year}.{day}.{part} not implemented yet.")
+                    warn(f"Problem {year}.{day}.{part} not implemented yet.")
                 continue
             except Exception as e:
-                print(f"Unexpected error occurred for {year}.{day}.{part}: {e}")
+                warn(f"Unexpected error occurred for {year}.{day}.{part}: {e}")
                 traceback.print_exception(type(e), e, e.__traceback__)
                 continue
-            run_stats[(day, part)] = [ans, time_taken, prev_time_taken]
+            table.add_row(
+                str(day),
+                part,
+                str(ans),
+                f"{time_taken:>5.5f}",
+                f"{prev_time_taken:>5.5f}",
+            )
+            row_values.append((day, part, ans, time_taken, prev_time_taken))
             total_time_taken += time_taken
 
-    table = Table(
-        title=f"{year} Solutions",
-        caption=f"Total time taken: {total_time_taken:>5.3f}.",
-    )
-    table.add_column("Day", style="dim", no_wrap=True)
-    table.add_column("Part", style="dim", no_wrap=True)
-    table.add_column("Answer", justify="right")
-    table.add_column("Time Taken", justify="right")
-    table.add_column("Prev Time Taken", justify="right")
-
-    for (day, part), (ans, time_taken, prev_time_taken) in run_stats.items():
-        table.add_row(
-            str(day), part, str(ans), f"{time_taken:>5.5f}", f"{prev_time_taken:>5.5f}"
-        )
-
+    table.caption = f"Total time taken: {total_time_taken:>5.5f}"
     print(table)
     return table
+
+
+def make_table_with_pandas(row_values):
+    """A test of making a markdown table with Pandas.
+
+    Doesn't look as good as the rich table, but it's simple.
+    """
+    out2 = pd.DataFrame(
+        row_values,
+        columns=["Day", "Part", "Answer", "Time Taken", "Prev Time Taken"],
+    ).to_markdown(tablefmt="rounded_grid", floatfmt=".5f", index=False)
+    print(out2)
+
+    out3 = pd.DataFrame(
+        row_values,
+        columns=["Day", "Part", "Answer", "Time Taken", "Prev Time Taken"],
+    ).to_string(index=False, float_format=lambda x: f"{x:.5f}")
+    table = Table(title="2022 Solutions")
+    table.add_row(out3)
+    print(out3)
 
 
 @app.command("set-cookie")
