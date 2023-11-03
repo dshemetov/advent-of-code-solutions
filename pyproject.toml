@@ -1,23 +1,14 @@
-[tool.black]
-target-version = ['py310']
-extend-exclude = '''
-/(
-  | .env
-  | .venv
-  | venv
-  | notebooks
-  | \*.pyx
-)/
-'''
-
-[tool.ruff]
-ignore = ["E501"]
-select = ["E", "F", "I", "W"]
-line-length = 150
-fixable = ["E", "F", "I"]
-exclude = [".env", ".venv", "venv", "notebooks"]
-show-source = true
+[tool.pyright]
+reportUnboundVariable = false
 
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "--doctest-modules --doctest-continue-on-failure"
+doctest_optionflags = "NORMALIZE_WHITESPACE"
+
+[tool.ruff]
+ignore = ["E501"]
+select = ["E", "F", "I", "W"]
+fixable = ["E", "F", "I"]
+exclude = [".env", ".venv", "venv", "notebooks"]
+show-source = true
