@@ -178,7 +178,7 @@ def check_valid_move(
 def make_move(b: BoardState, i: int, t: tuple[int, int]) -> BoardState:
     s = b.amphipods[i][0:2]
     type = b.amphipods[i].type
-    b_ = BoardState(b.amphipods.copy(), b.cost)
+    b_ = BoardState(b.amphipods.copy(), b.cost, b.moves.copy())
     b_.amphipods[i] = Amphipod(t[0], t[1], type, True)
     b_.cost += get_move_cost(s, t) * 10 ** (ord(type) - ord("A"))
     b_.moves.append((s, t))
@@ -224,12 +224,12 @@ def get_path(
             path += [(s[0], j) for j in range(s[1], -1, -1)]
 
         if s[0] > t[0]:
-            path += [(i, 0) for i in range(s[0] - 1, t[0] - 1, -1)]
+            path += [(i, 0) for i in range(s[0], t[0] - 1, -1)]
         else:
-            path += [(i, 0) for i in range(s[0] + 1, t[0] + 1)]
+            path += [(i, 0) for i in range(s[0], t[0] + 1)]
 
         if t[1] > 0:
-            path += [(t[0], j) for j in range(1, t[1] + 1)]
+            path += [(t[0], j) for j in range(0, t[1] + 1)]
 
     return path if include_from else path[1:]
 
@@ -261,7 +261,7 @@ def merge_drawings(s1: str, s2: str) -> str:
 def get_heuristic_cost(b: BoardState) -> int:
     """
     The heuristic is just the Manhattan distance for each amphipod to its
-    destination room (times amphipod step cost). The added complication is  we
+    destination room (times amphipod step cost). The added complication is we
     have to consider all the permutations of amphipods of the same type and
     choose the one with the minimum cost.
     """
@@ -295,8 +295,8 @@ def a_star_search(
     while prio_queue:
         j += 1
         _, board = heappop(prio_queue)
-        # if progress and j % 2000 == 0:
-        print(board)
+        if progress and j % 2000 == 0:
+            print(board)
         if str(board) == goal:
             return board
         for i, t in get_valid_moves(board):
@@ -338,7 +338,8 @@ def solve_a(s: str) -> int:
         )
         assert ans == ans_board.cost
 
-    return ans_board.cost
+    if ans_board:
+        return ans_board.cost
 
 
 def solve_b(s: str) -> int:
@@ -348,14 +349,15 @@ def solve_b(s: str) -> int:
     44169
     """
     lines = s.splitlines()
-    lines.insert(3, "  #D#B#A#C#")
-    lines.insert(3, "  #D#C#B#A#")
+    lines.insert(4, "  #D#B#A#C#")
+    lines.insert(4, "  #D#C#B#A#")
     s = "\n".join(lines)
 
     start_board = BoardState.from_string(s)
     ans_board = a_star_search(start_board, GOAL4.strip())
 
-    return ans_board.cost
+    if ans_board:
+        return ans_board.cost
 
 
 board = BoardState.from_string(EXAMPLE4)
@@ -385,9 +387,3 @@ board = BoardState.from_string(
 """
 )
 assert get_heuristic_cost(board) == 7700
-valid_moves = get_valid_moves(board)
-path = get_path((2, 1), (0, 0))
-solve_a(EXAMPLE2)
-
-# TODO: Take a board, print every valid move, calculate the heuristic cost for
-# each, and verify by hand.
