@@ -2,11 +2,22 @@
 
 Lessons learned:
 
-- This problem is not so hard algorithmically - it's just A star search. The
-  main challenge was coding all the movement logic.
-- The rules are setup so that the search space is actually much smaller than it
-  appears. The main constraint is that each amphipod's will have at most 2
-  steps: one to the hallways and one to its destination room.
+- This problem is not so hard algorithmically - it's just A star search.
+  However, the main challenge is to reduce the branching factor as much as
+  possible. The first part was simple enough to solve manually and I then
+  tackled it with a very unoptimized movement strategy. The second part took
+  more thought. Looking at other solutions, I thought that maybe my problem
+  representation was too bulky (others on Reddit, such as Gravitar64, used a
+  simple string representation, see below), but that was not the case (my final
+  solution is within a factor of 2 of Gravitar64's). The main gain came from not
+  moving amphipods into rooms if there are still amphipods that needed to move
+  out of that room.
+
+    https://github.com/Gravitar64/Advent-of-Code-2021/blob/main/Tag_23.py
+
+- Interestingly, the A star heuristic only helps for part 1. For part 2, the
+  solution slows down by 50% if the heuristic is used. I suppose this means the
+  actual solution requires a lot of diversions from the heuristic.
 - This is my solution for part A, solved manually:
 
 cost = 0
@@ -33,7 +44,7 @@ from collections import defaultdict, namedtuple
 from dataclasses import dataclass, field
 from functools import lru_cache
 from heapq import heappop, heappush
-from itertools import permutations
+from typing import Callable
 
 from advent.tools import get_puzzle_input
 
@@ -85,12 +96,12 @@ EMPTY_BOARD4 = """
   #.#.#.#.#
   #########
 """
-Amphipod = namedtuple("Amphipod", ["x", "y", "type", "has_moved"])
+Amphipod = namedtuple("Amphipod", ["x", "y", "type"])
 
 
 @dataclass
 class BoardState:
-    """BoardState.
+    """Full state of the board.
 
     The cost is the number of steps taken so far and moves records the moves
     taken so far. The coordinates are indexed as follows (where A = 10):
@@ -120,7 +131,7 @@ class BoardState:
         else:
             rooms = [list(line) for line in EMPTY_BOARD4.strip().splitlines()]
 
-        for x, y, t, _ in self.amphipods:
+        for x, y, t in self.amphipods:
             rooms[y + 1][x + 1] = t
 
         return "\n".join("".join(line) for line in rooms)
@@ -130,7 +141,7 @@ class BoardState:
         lines = s.strip().splitlines()
         return cls(
             [
-                Amphipod(i, j, type, False)
+                Amphipod(i, j, type)
                 for j, line in enumerate(lines[1 : len(lines) - 1])
                 for i, type in enumerate(line[1:-1])
                 if type in {"A", "B", "C", "D"}
@@ -141,19 +152,40 @@ class BoardState:
 def get_valid_moves(b: BoardState) -> list[tuple[int, tuple[int, int]]]:
     room_size = 2 if len(b.amphipods) == 8 else 4
     valid_moves = []
+
+    # Partition the pods.
+    hallway_pods = []
+    pods_by_room = {"A": [], "B": [], "C": [], "D": []}
     for i, pod in enumerate(b.amphipods):
-        if pod.has_moved and pod.y > 0:
+        if pod.y == 0:
+            hallway_pods += [(i, pod)]
+        else:
+            pods_by_room[chr(pod.x // 2 - 1 + ord("A"))].append((i, pod))
+
+    # First find pods that could move to rooms.
+    maybe_moves = []
+    for i, pod in hallway_pods:
+        target_room = 2 * (ord(pod.type) - ord("A") + 1)
+        if not pods_by_room[pod.type]:
+            maybe_moves += [(i, (target_room, room_size))]
+        elif all(pod.type == pod_.type for _, pod_ in pods_by_room[pod.type]):
+            available_room = min(pod_.y for _, pod_ in pods_by_room[pod.type]) - 1
+            maybe_moves += [(i, (target_room, available_room))]
+
+    # Next find top of stack pods that could move to hallway.
+    for type, room_pods in pods_by_room.items():
+        target_room = 2 * (ord(type) - ord("A") + 1)
+        if not room_pods:
             continue
+        if not all(pod.type == type for _, pod in room_pods):
+            i, pod = sorted(room_pods, key=lambda x: x[1].y)[0]
+            maybe_moves += [(i, (i_, 0)) for i_ in [0, 1, 3, 5, 7, 9, 10]]
 
-        target_room = 2 * ((ord(pod.type) - ord("A")) + 1)
-        maybe_moves = [(target_room, i) for i in range(1, room_size + 1)]
-
-        if pod.y > 0:
-            maybe_moves += [(i_, 0) for i_ in [0, 1, 3, 5, 7, 9, 10]]
-
-        valid_moves += [
-            (i, move) for move in maybe_moves if check_valid_move(b, pod[0:2], move)
-        ]
+    valid_moves += [
+        (i, move)
+        for i, move in maybe_moves
+        if check_valid_move(b, b.amphipods[i][0:2], move)
+    ]
     return valid_moves
 
 
@@ -168,8 +200,8 @@ def check_valid_move(
         return False
 
     path = get_path(s, t)
-    for x, y, _, _ in b.amphipods:
-        if (x, y) in path:
+    for pod in b.amphipods:
+        if (pod.x, pod.y) in path:
             return False
 
     return True
@@ -179,7 +211,7 @@ def make_move(b: BoardState, i: int, t: tuple[int, int]) -> BoardState:
     s = b.amphipods[i][0:2]
     type = b.amphipods[i].type
     b_ = BoardState(b.amphipods.copy(), b.cost, b.moves.copy())
-    b_.amphipods[i] = Amphipod(t[0], t[1], type, True)
+    b_.amphipods[i] = Amphipod(t[0], t[1], type)
     b_.cost += get_move_cost(s, t) * 10 ** (ord(type) - ord("A"))
     b_.moves.append((s, t))
     return b_
@@ -261,47 +293,51 @@ def merge_drawings(s1: str, s2: str) -> str:
 def get_heuristic_cost(b: BoardState) -> int:
     """
     The heuristic is just the Manhattan distance for each amphipod to its
-    destination room (times amphipod step cost). The added complication is we
-    have to consider all the permutations of amphipods of the same type and
-    choose the one with the minimum cost.
+    destination room (times amphipod step cost). The complication is that we
+    don't want to accidentally reorder amphipods that are in the same room, so
+    we make sure they keep their relative order.
     """
     room_size = 2 if len(b.amphipods) == 8 else 4
     heuristic_costs = defaultdict(list)
     for pod in b.amphipods:
-        target_room = 2 * ((ord(pod.type) - ord("A")) + 1)
+        target_room = 2 * (ord(pod.type) - ord("A") + 1)
         rooms = [(target_room, j) for j in range(1, room_size + 1)]
         heuristic_costs[pod.type].append(
             tuple(get_move_cost(pod[0:2], room) for room in rooms)
         )
     heuristic_cost = 0
     for k in heuristic_costs:
-        heuristic_cost += min(
-            sum(heuristic_costs[k][i][p[i]] for i in range(room_size))
-            for p in permutations(range(room_size))
-        ) * 10 ** (ord(k) - ord("A"))
+        available_pods = set(range(room_size))
+        pod_cost = 0
+        for j in range(room_size - 1, -1, -1):
+            cost, pod = min((heuristic_costs[k][i][j], i) for i in available_pods)
+            pod_cost += cost
+            available_pods.remove(pod)
+        heuristic_cost += pod_cost * 10 ** (ord(k) - ord("A"))
     return heuristic_cost
 
 
-def get_board_value(b: BoardState) -> int:
-    return b.cost + get_heuristic_cost(b)
-
-
 def a_star_search(
-    start: BoardState, goal: str, progress: bool = False
+    start: BoardState,
+    goal: str,
+    heuristic: Callable = lambda x: 0,
+    progress: bool = False,
 ) -> BoardState | None:
-    prio_queue = [(get_board_value(start), start)]
-    memo = {str(start): get_board_value(start)}
+    cost = start.cost + heuristic(start)
+    prio_queue = [(cost, start)]
+    memo = {str(start): cost}
     j = 0
     while prio_queue:
         j += 1
         _, board = heappop(prio_queue)
         if progress and j % 2000 == 0:
             print(board)
+            print(j)
         if str(board) == goal:
             return board
         for i, t in get_valid_moves(board):
             board_ = make_move(board, i, t)
-            cost_ = get_board_value(board_)
+            cost_ = board_.cost + heuristic(board_)
             if str(board_) in memo and memo[str(board_)] <= cost_:
                 continue
             heappush(prio_queue, (cost_, board_))
@@ -317,7 +353,7 @@ def solve_a(s: str) -> int:
     12521
     """
     start_board = BoardState.from_string(s)
-    ans_board = a_star_search(start_board, GOAL2.strip())
+    ans_board = a_star_search(start_board, GOAL2.strip(), get_heuristic_cost)
 
     if s == get_puzzle_input(2021, 23):
         # Solved manually.
@@ -348,9 +384,9 @@ def solve_b(s: str) -> int:
     >>> solve_b(EXAMPLE1)
     44169
     """
-    lines = s.splitlines()
-    lines.insert(4, "  #D#B#A#C#")
-    lines.insert(4, "  #D#C#B#A#")
+    lines = s.strip().splitlines()
+    lines.insert(3, "  #D#B#A#C#")
+    lines.insert(3, "  #D#C#B#A#")
     s = "\n".join(lines)
 
     start_board = BoardState.from_string(s)
@@ -374,7 +410,6 @@ assert (
   #########
 """.strip()
 )
-
 board = BoardState.from_string(
     """
 #############
