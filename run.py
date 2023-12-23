@@ -215,14 +215,5 @@ def clear_solution_cache(
                 print(f"No solution cache for {year}.{day}.{part}.")
 
 
-@app.command("make-table")
-def make_table(year: int):
-    """Makes a table of the run time statistics for a year and inserts into the README.md.
-
-    TODO: Make this work.
-    """
-    get_solutions(year)
-
-
 if __name__ == "__main__":
     app()

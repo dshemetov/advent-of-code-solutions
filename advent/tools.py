@@ -1,5 +1,6 @@
 import os
 from bisect import insort
+from datetime import datetime, timedelta, timezone
 from functools import partial, reduce
 from itertools import accumulate
 from typing import Callable, Iterable
@@ -19,10 +20,18 @@ if AOC_TOKEN is None:
 
 @memory.cache
 def get_puzzle_input(year: int, day: int, token: str = AOC_TOKEN) -> str:
-    if year < 2015 or year > 2022:
-        raise ValueError("Year outside valid range [2015, 2022].")
-    if day < 1 or day > 31:
-        raise ValueError("Day outside valid range [1, 31].")
+    """
+    Puzzles drop at midnight EST/UTC-5. You can debug the date below with
+    (example in PST/UTC-8):
+
+        puzzle_date.astimezone(timezone(timedelta(hours=-8))).strftime("%Y%m%d
+        %H%M %Z")
+
+    """
+    puzzle_date = datetime(year, 12, day, 0, 0, 0, tzinfo=timezone(timedelta(hours=-5)))
+
+    if puzzle_date > datetime.now():
+        raise ValueError("Puzzle not released yet.")
 
     auth = {"session": token}
 
@@ -193,3 +202,17 @@ def nlargest(n: int, it: Iterable) -> list:
         if len(top_n) > n:
             top_n.pop(0)
     return top_n
+
+
+def chainMap(arg, *funcs):
+    """
+    From https://stackoverflow.com/a/34613623.
+
+    Examples:
+    >>> list(chainMap([1, 2, 3], lambda x: map(lambda y: y + 1, x)))
+    [2, 3, 4]
+    """
+    result = arg
+    for f in funcs:
+        result = f(result)
+    return result

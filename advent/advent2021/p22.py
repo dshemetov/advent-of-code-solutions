@@ -1,5 +1,4 @@
-"""Reactor Reboot
-https://adventofcode.com/2021/day/22
+"""22. Reactor Reboot https://adventofcode.com/2021/day/22
 """
 import re
 from copy import deepcopy

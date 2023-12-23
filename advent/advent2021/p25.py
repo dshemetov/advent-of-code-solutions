@@ -1,56 +1,31 @@
-"""Sea Cucumber
-https://adventofcode.com/2021/day/25
+"""24. Sea Cucumber https://adventofcode.com/2021/day/25
+
+Notes:
+
+- A freebie after the last few.
 """
 import numpy as np
 
 
 def solve_a(s: str) -> str:
-    return CucumberAutomata(parse_input(s)).update_until_stopped()
-
-
-def parse_input(s: str):
-    lines = s.split("\n")
-    cucumber_array = np.array([list(line.strip("\n")) for line in lines])
-    return cucumber_array
-
-
-class CucumberAutomata:
-    def __init__(self, array: np.ndarray):
-        self.array = array
-
-    def update(self) -> bool:
-        n, m = self.array.shape
+    cucumber_array = np.array([list(line.strip("\n")) for line in s.split("\n")])
+    count = 0
+    was_updated = True
+    while was_updated:
         was_updated = False
+        n, m = cucumber_array.shape
+        for i, j in np.ndindex(n, m):
+            if cucumber_array[i, j] == ">" and cucumber_array[i, (j + 1) % m] == ".":
+                cucumber_array[i, (j + 1) % m] = ">"
+                cucumber_array[i, j] = "."
+                was_updated = True
+            elif cucumber_array[i, j] == "v" and cucumber_array[(i + 1) % n, j] == ".":
+                cucumber_array[(i + 1) % n, j] = "v"
+                cucumber_array[i, j] = "."
+                was_updated = True
+        count += 1
 
-        # Move east
-        can_update = [
-            [i, j]
-            for i, j in np.ndindex(n, m)
-            if self.array[i, j] == ">" and self.array[i, (j + 1) % m] == "."
-        ]
-        for i, j in can_update:
-            self.array[i, (j + 1) % m] = ">"
-            self.array[i, j] = "."
-        was_updated |= can_update != []
-
-        # Move south
-        can_update = [
-            [i, j]
-            for i, j in np.ndindex(n, m)
-            if self.array[i, j] == "v" and self.array[(i + 1) % n, j] == "."
-        ]
-        for i, j in can_update:
-            self.array[(i + 1) % n, j] = "v"
-            self.array[i, j] = "."
-        was_updated |= can_update != []
-
-        return was_updated
-
-    def update_until_stopped(self) -> int:
-        i = 0
-        while self.update():
-            i += 1
-        return i + 1
+    return count + 1
 
 
 def solve_b(s: str) -> str:

@@ -1,4 +1,3 @@
-# %%
 """
 
 """
@@ -26,10 +25,3 @@ def solve_b(s: str) -> int:
 
 test_string = """
 """
-
-# %%
-# from advent_tools import get_puzzle_input
-# solve_a(test_string)
-# solve_a(get_puzzle_input().strip("\n"))
-# solve_b(test_string)
-# solve_b(get_puzzle_input().strip("\n"))

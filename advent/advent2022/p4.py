@@ -1,5 +1,4 @@
-"""Camp Cleanup
-https://adventofcode.com/2022/day/4
+"""4. Camp Cleanup https://adventofcode.com/2022/day/4
 """
 import re
 

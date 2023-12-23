@@ -1,6 +1,6 @@
 """23. Amphipod https://adventofcode.com/2021/day/23
 
-Lessons learned:
+Notes:
 
 - This problem is not so hard algorithmically - it's just A star search.
   However, the main challenge is to reduce the branching factor as much as

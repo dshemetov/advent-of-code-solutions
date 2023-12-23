@@ -1,6 +1,4 @@
-"""Rucksack Reorganization
-https://adventofcode.com/2022/day/3
-"""
+"""3. Rucksack Reorganization https://adventofcode.com/2022/day/3"""
 from string import ascii_lowercase, ascii_uppercase
 
 from more_itertools import grouper
