@@ -30,7 +30,7 @@ def get_puzzle_input(year: int, day: int, token: str = AOC_TOKEN) -> str:
     """
     puzzle_date = datetime(year, 12, day, 0, 0, 0, tzinfo=timezone(timedelta(hours=-5)))
 
-    if puzzle_date > datetime.now():
+    if puzzle_date > datetime.now(tz=timezone(timedelta(hours=-5))):
         raise ValueError("Puzzle not released yet.")
 
     auth = {"session": token}
