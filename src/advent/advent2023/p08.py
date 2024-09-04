@@ -1,7 +1,17 @@
-"""8. Haunted Wasteland https://adventofcode.com/2023/day/8"""
+"""8. Haunted Wasteland https://adventofcode.com/2023/day/8
+
+Part a is a simple binary tree traversal. I'm not a big fan of part b, since the
+solution depends on noticing that the data contains hidden assumptions not
+stated in the problem. Namely each traversal of the binary tree is cyclical,
+where the length of the period is exactly equal to the time it takes to
+encounter the first "Z" node. This allows us to find the cycle intersection
+using least common multiples. Otherwise, the problem would've been a linear
+Diophantine equation and would have required the Chinese Remainder Theorem.
+"""
 
 import re
-from itertools import chain, cycle, islice
+from itertools import cycle
+from math import lcm
 
 
 def solve_a(s: str) -> int:
@@ -12,8 +22,7 @@ def solve_a(s: str) -> int:
     >>> solve_a(test_string2)
     6
     """
-    s = s.strip("\n")
-    commands, *network = s.splitlines()
+    commands, *network = s.strip("\n").splitlines()
 
     d = {}
     for node in network[1:]:
@@ -21,12 +30,10 @@ def solve_a(s: str) -> int:
         d[node] = children
 
     cur_node = "AAA"
-    steps = 0
-    for command in cycle(commands):
+    for i, command in enumerate(cycle(commands)):
         if cur_node == "ZZZ":
-            return steps
-        cur_node = d[cur_node][1 if command == "R" else 0]
-        steps += 1
+            return i
+        cur_node = d[cur_node][command == "R"]
 
     return -1
 
@@ -34,6 +41,7 @@ def solve_a(s: str) -> int:
 def solve_b(s: str) -> int:
     """
     Examples:
+    >>> solve_b(get_puzzle_input(2023, 8))
     >>> solve_b(test_string3)
     6
     """
@@ -44,31 +52,24 @@ def solve_b(s: str) -> int:
         node, *children = re.findall(r"\w+", node)
         d[node] = children
 
-    state_paths = [[(x, (0, commands[0]))] for x in d if x.endswith("A")]
-    visited_states = [{state_path[0]} for state_path in state_paths]
-    loop_points = [False] * len(state_paths)
-    for next_command in islice(cycle(enumerate(commands)), 1, None):
-        for j, state_path in enumerate(state_paths):
-            new_node, cur_command = state_path[-1][0], state_path[-1][1][1]
-            new_state = (d[new_node][1 if cur_command == "R" else 0], next_command)
-            if new_state in visited_states[j]:
-                loop_points[j] = new_state
-            else:
-                state_path.append(new_state)
-                visited_states[j] |= {new_state}
-        if all(loop_points):
-            break
+    start_nodes = [x for x in d if x.endswith("A")]
+    paths = []
+    lengths = []
+    for start_node in start_nodes:
+        cur_node = start_node
+        seen = set()
+        path = []
+        for j, command in cycle(enumerate(commands)):
+            if (cur_node, j) in seen:
+                break
+            path.append((cur_node, j))
+            seen |= {(cur_node, j)}
+            cur_node = d[cur_node][command == "R"]
+        path.append((cur_node, j))
+        lengths.append(len(path) - 1 - path.index(path[-1]))
+        paths.append(path)
 
-    state_paths2 = [
-        chain(state_path[: (x := state_path.index(loop_point))], cycle(state_path[x:]))
-        for state_path, loop_point in zip(state_paths, loop_points)
-    ]
-
-    for i, x in enumerate(zip(*state_paths)):
-        if all(y[0].endswith("Z") for y in x):
-            return i
-
-    return -1
+    return lcm(*lengths)
 
 
 test_string = """

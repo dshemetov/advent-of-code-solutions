@@ -12,7 +12,7 @@ def solve_a(s: str) -> int:
     s = s.strip("\n")
     hands = [Hand(*x.split(), "A") for x in s.splitlines()]
     hands.sort()
-    return sum(map(lambda x: x[0] * x[1].bid, enumerate(hands, 1)))
+    return sum(i * h.bid for i, h in enumerate(hands, 1))
 
 
 class Hand:
@@ -91,7 +91,7 @@ def solve_b(s: str) -> int:
     s = s.strip("\n")
     hands = [Hand(*x.split(), "B") for x in s.splitlines()]
     hands.sort()
-    return sum(map(lambda x: x[0] * x[1].bid, enumerate(hands, 1)))
+    return sum(i * h.bid for i, h in enumerate(hands, 1))
 
 
 test_string = """
