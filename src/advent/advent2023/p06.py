@@ -16,12 +16,11 @@ def solve_a(s: str) -> int:
     >>> solve_a(test_string)
     288
     """
-    ts, ds = [[int(e) for e in x.split()[1:]] for x in s.strip("\n").split("\n")]
+    ts, ds = ([int(e) for e in x.split()[1:]] for x in s.strip("\n").split("\n"))
     win_counts = 1
-    for i, t in enumerate(ts):
-        vals = np.arange(t + 1)
-        win_count = sum(ds[i] < vals * (t - vals))
-        win_counts *= win_count
+    for t, d in zip(ts, ds):
+        roots = np.roots([-1, t, -d])
+        win_counts *= np.ceil(max(roots) - 1) - np.floor(min(roots) + 1) + 1
     return int(win_counts)
 
 
@@ -31,11 +30,10 @@ def solve_b(s: str) -> int:
     >>> solve_b(test_string)
     71503
     """
-    t, d = [int("".join(x.split()[1:])) for x in s.strip("\n").split("\n")]
-    win_count = 0
-    vals = np.arange(t + 1)
-    win_count = sum(d < vals * (t - vals))
-    return int(win_count)
+    t, d = (int("".join(x.split()[1:])) for x in s.strip("\n").split("\n"))
+    roots = np.roots([-1, t, -d])
+    win_counts = np.ceil(max(roots) - 1) - np.floor(min(roots) + 1) + 1
+    return int(win_counts)
 
 
 test_string = """
