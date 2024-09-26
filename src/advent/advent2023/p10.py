@@ -167,17 +167,18 @@ def solve_b(s: str, method: int = 0) -> int:
     ix = 0
     for i, graph in enumerate(graphs):
         path = []
+        visited = set()
         x = start_index
-        while x not in path:
+        while x not in visited:
             path.append(x)
+            visited.add(x)
             if len(path) < 2:
                 options = graph[x]
             else:
-                options = filter(lambda e: e != path[-2], graph[x])
-            try:
-                x = next(iter(options))
-            except StopIteration:
+                options = [e for e in graph[x] if e != path[-2]]
+            if not options:
                 break
+            x = options[0]
         if x != start_index:
             continue
         if len(path) > len(cur_path):
