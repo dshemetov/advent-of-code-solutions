@@ -41,7 +41,7 @@ def timed(func: Callable) -> Callable:
 @memory.cache
 def get_answer(year: int, day: int, part: str) -> tuple[AnswerType, float]:
     try:
-        solution_module = import_module(f"advent.advent{year}.p{day}")
+        solution_module = import_module(f"advent.advent{year}.p{day:02d}")
         solution_method = getattr(solution_module, f"solve_{part}")
     except ModuleNotFoundError as e:
         raise ModuleNotFoundError("Problem not implemented yet.") from e
