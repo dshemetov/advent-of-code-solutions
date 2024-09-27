@@ -1,13 +1,9 @@
-import cProfile
 import os
-from pathlib import Path
-import pstats
 import time
 import traceback
 from datetime import date
 from importlib import import_module
-from typing import Any
-from collections.abc import Callable
+from pathlib import Path
 
 import typer
 from dotenv import load_dotenv, set_key
@@ -26,18 +22,6 @@ DayOption = typer.Option(None, "--day", "-d", help="The day of the problem.")
 PartOption = typer.Option(None, "--part", "-p", help="The part of the problem.")
 
 
-def timed(func: Callable) -> Callable:
-    """Times the function and returns the elapsed time."""
-
-    def new_func(*args, **kwargs) -> tuple[Any, float]:
-        t = time.perf_counter()
-        out = func(*args, **kwargs)
-        time_elapsed = time.perf_counter() - t
-        return out, time_elapsed
-
-    return new_func
-
-
 @memory.cache
 def get_answer(year: int, day: int, part: str) -> tuple[AnswerType, float]:
     try:
@@ -45,8 +29,9 @@ def get_answer(year: int, day: int, part: str) -> tuple[AnswerType, float]:
         solution_method = getattr(solution_module, f"solve_{part}")
     except ModuleNotFoundError as e:
         raise ModuleNotFoundError("Problem not implemented yet.") from e
-    timed_solution_method = timed(solution_method)
-    answer, time_taken = timed_solution_method(get_puzzle_input(year, day))
+    t = time.perf_counter()
+    answer = solution_method(get_puzzle_input(year, day))
+    time_taken = time.perf_counter() - t
     return answer, time_taken
 
 
@@ -59,7 +44,8 @@ def get_answer_cache(year: int, day: int, part: str, clear_cache: bool) -> tuple
             answer, time_taken = get_answer(year, day, part)
             if answer != prev_answer:
                 print(
-                    f"Warning, new result differs from cached for {year}.{day}.{part}. New is {answer}, old was {prev_answer}."
+                    f"Warning, new result differs from cached for {year}.{day}.{part}.\n"
+                    f"New:{answer}.\nOld:{prev_answer}."
                 )
         else:
             answer, time_taken = get_answer(year, day, part)
@@ -77,7 +63,6 @@ def get_solutions(
     part: str = PartOption,
     clear_cache: bool = typer.Option(False, "--clear-cache", "-c", help="Clear the solution cache for this problem."),
     silent: bool = typer.Option(True, "--silent", "-s", help="Silence warnings."),
-    profile: bool = typer.Option(False, "--profile", "-P", help="Profile the solution."),
 ):
     """Prints the solution for a problem or problems."""
     days = range(1, 26) if day is None else [day]
@@ -87,14 +72,7 @@ def get_solutions(
     for day in days:
         for part in parts:
             try:
-                if profile:
-                    with cProfile.Profile() as pr:
-                        pr.enable()
-                        ans, time_taken, prev_time_taken = get_answer_cache(year, day, part, clear_cache)
-                        pr.create_stats()
-                        pstats.Stats(pr).sort_stats("cumtime").print_stats(f"p{day}.py")
-                else:
-                    ans, time_taken, prev_time_taken = get_answer_cache(year, day, part, clear_cache)
+                ans, time_taken, prev_time_taken = get_answer_cache(year, day, part, clear_cache)
             except ModuleNotFoundError:
                 if not silent:
                     print(f"Problem {year}.{day}.{part} not implemented yet.")
@@ -189,15 +167,16 @@ def make_table(year: int):
 
 
 @app.command("generate-templates")
-def generate_templates(year: int):
+def generate_templates(year: int = YearOption, day: int = DayOption):
     """Generates templates for the given year."""
+    days = range(1, 26) if day is None else [day]
     template_text = Path("src/advent/template.py").read_text()
 
     # Make directory if it doesn't exist
     Path(f"src/advent/advent{year}").mkdir(parents=True, exist_ok=True)
 
-    # Generate templates for all days
-    for day in range(1, 26):
+    # Generate templates
+    for day in days:
         day_header = f'"""{day}. https://adventofcode.com/{year}/day/{day}"""\n\n'
         day_file = f"src/advent/advent{year}/p{day:02d}.py"
         if not Path(day_file).exists():
