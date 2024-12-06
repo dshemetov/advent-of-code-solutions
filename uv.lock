@@ -6,6 +6,7 @@ name = "advent"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "beautifulsoup4" },
     { name = "cython" },
     { name = "joblib" },
     { name = "jupyter" },
@@ -24,6 +25,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "beautifulsoup4", specifier = ">=4.12.0" },
     { name = "cython", specifier = ">=3.0.11" },
     { name = "joblib", specifier = ">=1.4.2" },
     { name = "jupyter", specifier = ">=1.0.0" },
