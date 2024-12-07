@@ -1,4 +1,12 @@
-"""6. https://adventofcode.com/2024/day/6"""
+"""6. https://adventofcode.com/2024/day/6
+
+Part (b) is the interesting part. Initial solution ran in about 1.5s, but I left
+many optimizations on the table. Turns out the bounds checking when moving the
+guard forward took the most time. I removed some duplicate computations there,
+which brought time down to 1s. Evin suggested compressing the grid to sorted
+arrays of obstacles and using binary search to jump to the next obstacle
+instead. That brought it down to 0.1s.
+"""
 
 from bisect import bisect_left, bisect_right, insort
 
@@ -79,6 +87,7 @@ def solve_b(s: str) -> int:
         else:
             pos = (pos[0] + d[0], pos[1] + d[1])
             visited.add(pos)
+    visited.remove(start_pos)
 
     # Compress the grid to just the obstacles
     obstacles = {(i, j) for i in range(m) for j in range(n) if grid[i][j] == "#"}
@@ -118,7 +127,7 @@ def solve_b(s: str) -> int:
         return None, None, None
 
     total = 0
-    for change_pos in visited - {start_pos}:
+    for change_pos in visited:
         if grid[change_pos[0]][change_pos[1]] == "#":
             continue
         d = (-1, 0)
@@ -137,6 +146,81 @@ def solve_b(s: str) -> int:
         obstacles.remove(change_pos)
         xs[change_pos[1]].remove(change_pos)
         ys[change_pos[0]].remove(change_pos)
+
+    return total
+
+
+def solve_b_slow(s: str) -> int:
+    """
+    Examples:
+    >>> solve_b(test_string)
+    6
+    """
+    s = s.strip("\n")
+    grid = [list(row) for row in s.split("\n")]
+    m, n = len(grid), len(grid[0])
+
+    start_pos = None
+    for i in range(m):
+        for j in range(n):
+            if grid[i][j] == "^":
+                start_pos = (i, j)
+                break
+        if start_pos:
+            break
+    grid[start_pos[0]][start_pos[1]] = "."
+
+    visited = set()
+    d = (-1, 0)
+    pos = start_pos
+    while 0 <= pos[0] + d[0] < m and 0 <= pos[1] + d[1] < n:
+        if grid[pos[0] + d[0]][pos[1] + d[1]] == "#":
+            match d:
+                case (-1, 0):
+                    d = (0, 1)
+                case (0, 1):
+                    d = (1, 0)
+                case (1, 0):
+                    d = (0, -1)
+                case (0, -1):
+                    d = (-1, 0)
+        else:
+            pos = (pos[0] + d[0], pos[1] + d[1])
+            visited.add(pos)
+    visited.remove(start_pos)
+
+    total = 0
+    for change_pos in visited:
+        if grid[change_pos[0]][change_pos[1]] == "#":
+            continue
+        grid[change_pos[0]][change_pos[1]] = "#"
+        pos = start_pos
+        visited_obstacles = set()
+        d = (-1, 0)
+        loop = False
+        next_pos = (pos[0] + d[0], pos[1] + d[1])
+        while 0 <= next_pos[0] < m and 0 <= next_pos[1] < n:
+            if grid[next_pos[0]][next_pos[1]] == "#":
+                pos_dir = (pos[0], pos[1], next_pos[0], next_pos[1])
+                if pos_dir in visited_obstacles:
+                    loop = True
+                    break
+                visited_obstacles.add(pos_dir)
+                match d:
+                    case (-1, 0):
+                        d = (0, 1)
+                    case (0, 1):
+                        d = (1, 0)
+                    case (1, 0):
+                        d = (0, -1)
+                    case (0, -1):
+                        d = (-1, 0)
+            else:
+                pos = next_pos
+            next_pos = (pos[0] + d[0], pos[1] + d[1])
+        if loop:
+            total += 1
+        grid[change_pos[0]][change_pos[1]] = "."
 
     return total
 
