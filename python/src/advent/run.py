@@ -5,6 +5,7 @@ from datetime import date
 from importlib import import_module
 from pathlib import Path
 
+import requests
 import typer
 from dotenv import load_dotenv, set_key
 from joblib import Memory
@@ -177,7 +178,11 @@ def generate_templates(year: int = YearOption, day: int = DayOption):
 
     # Generate templates
     for day in days:
-        day_header = f'"""{day}. https://adventofcode.com/{year}/day/{day}"""\n\n'
+        url = f"https://adventofcode.com/{year}/day/{day}"
+        # r = requests.get(url)
+        # r.raise_for_status()
+
+        day_header = f'"""{day}. {url}"""\n\n'
         day_file = f"src/advent/advent{year}/p{day:02d}.py"
         if not Path(day_file).exists():
             Path(day_file).write_text(day_header + template_text)

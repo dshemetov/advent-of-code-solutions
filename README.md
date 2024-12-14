@@ -2,9 +2,9 @@
 
 [Advent of Code](https://adventofcode.com/) is a great set of Christmas-themed coding challenges.
 
-## Usage
+## Python Usage
 
-Uses [`uv`](https://github.com/astral-sh/uv) for project management.
+Commands expected to be run in the `python` directory.
 
 ```sh
 # Install uv (Linux/MacOS)
@@ -32,6 +32,10 @@ advent solve -y 2021 -d 2 -c
 advent solve --help
 ```
 
+## Julia Usage
+
+Soon.
+
 ## Stats
 
 ## Background
@@ -41,6 +45,7 @@ After a few days of only playing SSX Tricky and drinking peppermint schnapps, we
 Evin got functional with JavaScript and I was just getting started with Python.
 Doing puzzles while cozy with friends is one of my favorite things to do.
 
+- AoC 2024: 7/50 Python, a few in Julia.
 - AoC 2023: 7/50 Python.
 - AoC 2022: 12/50 Python (with Numba and Cython).
 - AoC 2021: 43/50 Python.
