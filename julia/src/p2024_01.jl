@@ -1,9 +1,16 @@
 module p2024_01
-include("Advent.jl")
-using .Advent
+include("utils.jl")
 
 
-function string_to_matrix(s::String)
+function solve(part::Char, s::String=test_string)
+    if part == 'a'
+        return solve_a(s)
+    elseif part == 'b'
+        return solve_b(s)
+    end
+end
+
+function string_to_matrix(s::String=test_string)
     s |>
     strip |>
     (x -> split(x, "\n")) |>
@@ -13,19 +20,7 @@ function string_to_matrix(s::String)
     transpose
 end
 
-"""
-```jldoctest
-solve_a(test_string)
-
-# output
-
-11
-```
-"""
-function solve_a(s::Union{String,Nothing})
-    if isnothing(s)
-        s = get_input_string(2024, 1)
-    end
+function solve_a(s::String=test_string)
     m = string_to_matrix(s)
     m[:, 1] = sort(m[:, 1])
     m[:, 2] = sort(m[:, 2])
@@ -36,19 +31,7 @@ function Counter(a::AbstractArray)
     Dict(x => count(e -> e == x, a) for x in unique(a))
 end
 
-"""
-```jldoctest
-solve_b(test_string)
-
-# output
-
-31
-```
-"""
-function solve_b(s::Union{String,Nothing})
-    if isnothing(s)
-        s = get_input_string(2024, 1)
-    end
+function solve_b(s::String=test_string)
     m = string_to_matrix(s)
     c = Counter(m[:, 2])
     sum(abs.(x * get!(c, x, 0) for x in m[:, 1]))

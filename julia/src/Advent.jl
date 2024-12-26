@@ -1,40 +1,48 @@
 module Advent
-export get_input_string
+export solve
 
-using DotEnv
-using DuckDB
-using HTTP
+using DataFrames
+include("utils.jl")
 
-# create a new in-memory database
-con = DBInterface.connect(DuckDB.DB, "puzzles.db")
+# Include all the problem modules
+files = readdir(@__DIR__)
+pattern = r"^p(\d{4})_(\d{2})\.jl"
+problem_files = filter(x -> match(pattern, x) !== nothing, files)
+foreach(include, problem_files)
+problem_modules = [Symbol("p$(year)_$(lpad(problem, 2, '0'))") for year in 2020:2024, problem in 1:25 if isdefined(Advent, Symbol("p$(year)_$(lpad(problem, 2, '0'))"))]
 
-# create a table
-DBInterface.execute(con, "CREATE TABLE IF NOT EXISTS inputs (year INTEGER, day INTEGER, input VARCHAR)")
+function solve(problem_year::Int, problem_number::Int, part::Char, test::Bool=true)
+    padded_number = lpad(problem_number, 2, '0')
+    module_name = Symbol("p$(problem_year)_$(padded_number)")
 
-# insert data by executing a prepared statement
-stmt = DBInterface.prepare(con, "INSERT INTO inputs VALUES(?, ?, ?)")
-
-function db_cache_write(year::Int, day::Int, input::String)
-    DBInterface.execute(stmt, (year, day, input))
+    if test
+        return @eval @timed $(module_name).solve($(part))
+    else
+        return @eval @timed $(module_name).solve($(part), get_input_string(problem_year, problem_number))
+    end
 end
 
-function db_cache_read(year::Int, day::Int)
-    results = DBInterface.execute(con, "SELECT input FROM inputs WHERE year = $year AND day = $day") |> collect
-    if length(results) > 0
-        return results[1][1]
-    end
-    return nothing
+function solve(problem_year::Int, problem_number::Int, test::Bool=true)
+    part1 = solve(problem_year, problem_number, 'a', test)
+    part2 = solve(problem_year, problem_number, 'b', test)
+    println("Part 1: $(part1.value) in $(part1.time) seconds")
+    println("Part 2: $(part2.value) in $(part2.time) seconds")
 end
 
-function get_input_string(year, day)
-    if (input = db_cache_read(year, day)) !== nothing
-        return input
+function solve(problem_year::Int, test::Bool=true)
+    df = DataFrame(year=Int[], problem=Int[], part=Char[], value=Int[], time=Float64[])
+    for file in problem_files
+        m = match(pattern, file)
+        year = parse(Int, m.captures[1])
+        if year != problem_year
+            continue
+        end
+        problem = parse(Int, m.captures[2])
+        part1 = solve(year, problem, 'a')
+        push!(df, (year, problem, 'a', part1.value, part1.time))
+        part2 = solve(year, problem, 'b')
+        push!(df, (year, problem, 'b', part2.value, part2.time))
     end
-    DotEnv.load!(".env")
-    url = "https://adventofcode.com/$year/day/$day/input"
-    headers = ["cookie" => """session=$(ENV["AOC_TOKEN"])"""]
-    s = HTTP.request("GET", url, headers).body |> String
-    db_cache_write(year, day, s)
-    s
+    println(df)
 end
 end
