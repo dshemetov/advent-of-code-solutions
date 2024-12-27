@@ -9,18 +9,20 @@ con = DBInterface.connect(DuckDB.DB, "puzzles.db")
 # create a table
 DBInterface.execute(con, "CREATE TABLE IF NOT EXISTS inputs (year INTEGER, day INTEGER, input VARCHAR)")
 
-# insert data by executing a prepared statement
-stmt = DBInterface.prepare(con, "INSERT INTO inputs VALUES(?, ?, ?)")
-
-function db_cache_write(year::Int, day::Int, input::String)
+function db_cache_write(year::Int, day::Int, input::AbstractString)
+    new_con = DBInterface.connect(DuckDB.DB, "puzzles.db")
+    stmt = DBInterface.prepare(new_con, "INSERT INTO inputs VALUES(?, ?, ?)")
     DBInterface.execute(stmt, (year, day, input))
+    DBInterface.close(new_con)
 end
 
 function db_cache_read(year::Int, day::Int)
-    results = DBInterface.execute(con, "SELECT input FROM inputs WHERE year = $year AND day = $day") |> collect
+    new_con = DBInterface.connect(DuckDB.DB, "puzzles.db")
+    results = DBInterface.execute(new_con, "SELECT input FROM inputs WHERE year = $year AND day = $day") |> collect
     if length(results) > 0
         return results[1][1]
     end
+    DBInterface.close(new_con)
     return nothing
 end
 
@@ -34,5 +36,15 @@ function get_input_string(year, day)
     s = HTTP.request("GET", url, headers).body |> String |> chomp
     db_cache_write(year, day, s)
     s
+end
+
+function string_to_matrix(s::AbstractString)
+    s |>
+    strip |>
+    (x -> split(x, "\n")) |>
+    (x -> [split(e) for e in x]) |>
+    (x -> [parse.(Int, e) for e in x]) |>
+    stack |>
+    transpose
 end
 end

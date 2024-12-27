@@ -3,6 +3,7 @@ export solve
 
 using DataFrames
 include("utils.jl")
+using .utils: get_input_string
 
 # Include all the problem modules
 files = readdir(@__DIR__)
@@ -18,7 +19,8 @@ function solve(problem_year::Int, problem_number::Int, part::Char, test::Bool=tr
     if test
         return @eval @timed $(module_name).solve($(part))
     else
-        return @eval @timed $(module_name).solve($(part), get_input_string(problem_year, problem_number))
+        input = get_input_string(problem_year, problem_number)
+        return @eval @timed $(module_name).solve($(part), $(input))
     end
 end
 
@@ -38,9 +40,9 @@ function solve(problem_year::Int, test::Bool=true)
             continue
         end
         problem = parse(Int, m.captures[2])
-        part1 = solve(year, problem, 'a')
+        part1 = solve(year, problem, 'a', test)
         push!(df, (year, problem, 'a', part1.value, part1.time))
-        part2 = solve(year, problem, 'b')
+        part2 = solve(year, problem, 'b', test)
         push!(df, (year, problem, 'b', part2.value, part2.time))
     end
     println(df)

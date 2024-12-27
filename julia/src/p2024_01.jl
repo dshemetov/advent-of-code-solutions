@@ -1,8 +1,9 @@
 module p2024_01
 include("utils.jl")
+using .utils: string_to_matrix
 
 
-function solve(part::Char, s::String=test_string)
+function solve(part::Char, s::AbstractString=test_string)
     if part == 'a'
         return solve_a(s)
     elseif part == 'b'
@@ -10,17 +11,7 @@ function solve(part::Char, s::String=test_string)
     end
 end
 
-function string_to_matrix(s::String=test_string)
-    s |>
-    strip |>
-    (x -> split(x, "\n")) |>
-    (x -> [split(e) for e in x]) |>
-    (x -> [parse.(Int, e) for e in x]) |>
-    stack |>
-    transpose
-end
-
-function solve_a(s::String=test_string)
+function solve_a(s::AbstractString=test_string)
     m = string_to_matrix(s)
     m[:, 1] = sort(m[:, 1])
     m[:, 2] = sort(m[:, 2])
@@ -31,7 +22,7 @@ function Counter(a::AbstractArray)
     Dict(x => count(e -> e == x, a) for x in unique(a))
 end
 
-function solve_b(s::String=test_string)
+function solve_b(s::AbstractString=test_string)
     m = string_to_matrix(s)
     c = Counter(m[:, 2])
     sum(abs.(x * get!(c, x, 0) for x in m[:, 1]))
