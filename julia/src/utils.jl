@@ -1,4 +1,3 @@
-module utils
 using DotEnv
 using DuckDB
 using HTTP
@@ -33,18 +32,56 @@ function get_input_string(year, day)
     DotEnv.load!(".env")
     url = "https://adventofcode.com/$year/day/$day/input"
     headers = ["cookie" => """session=$(ENV["AOC_TOKEN"])"""]
-    s = HTTP.request("GET", url, headers).body |> String |> chomp
+    s = HTTP.request("GET", url, headers).body |> String
     db_cache_write(year, day, s)
     s
 end
 
 function string_to_matrix(s::AbstractString)
-    s |>
-    strip |>
-    (x -> split(x, "\n")) |>
-    (x -> [split(e) for e in x]) |>
-    (x -> [parse.(Int, e) for e in x]) |>
-    stack |>
-    transpose
+    stack([parse.(Int, split(x)) for x in split(s, "\n")], dims=1)
 end
+
+function bisect_left(arr, x; key=(x -> x))
+    return searchsortedlast(arr, x, by=key)
+end
+
+function bisect_right(arr, x; key=(x -> x))
+    return searchsortedfirst(arr, x, by=key)
+end
+
+function insort!(arr, x; key=(x -> x))
+    insert!(arr, searchsortedfirst(arr, x, by=key), x)
+end
+
+function get_template(year, day)
+    solution_template = """
+function solve(input::Question{$year,$day,'a'})
+    if input.s == ""
+        s = test_string_$(year)_$day
+    else
+        s = input.s
+    end
+    return 0
+end
+
+function solve(input::Question{$year,$day,'b'})
+    if input.s == ""
+        s = test_string_$(year)_$day
+    else
+        s = input.s
+    end
+    return 0
+end
+
+test_string_$(year)_$day = ""
+    """
+    return solution_template
+end
+
+function write_template(year, day)
+    template = get_template(year, day)
+    filename = joinpath(@__DIR__, "solutions/p$(year)_$(lpad(day, 2, '0')).jl")
+    open(filename, "w") do f
+        write(f, template)
+    end
 end

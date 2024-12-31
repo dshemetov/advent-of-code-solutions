@@ -1,16 +1,11 @@
-module p2024_02
-include("utils.jl")
+"""2. https://adventofcode.com/2024/day/2"""
 
-
-function solve(part::Char, s::AbstractString=test_string)
-    if part == 'a'
-        return solve_a(s)
-    elseif part == 'b'
-        return solve_b(s)
+function solve(input::Question{2024,2,'a'})
+    if input.s == ""
+        s = test_string_2024_02
+    else
+        s = input.s
     end
-end
-
-function solve_a(s::AbstractString=test_string)::Int
     s = strip(s, '\n')
     lines = [parse.(Int, split(line)) for line in split(s, '\n')]
     diffs = [diff(line) for line in lines]
@@ -20,7 +15,12 @@ function solve_a(s::AbstractString=test_string)::Int
     return sum((all_increasing .| all_decreasing) .& changes_bounded)
 end
 
-function solve_b(s::AbstractString=test_string)::Int
+function solve(input::Question{2024,2,'b'})
+    if input.s == ""
+        s = test_string_2024_02
+    else
+        s = input.s
+    end
     s = strip(s, '\n')
     lines = [parse.(Int, split(line)) for line in split(s, '\n')]
     diffs = [diff(line) for line in lines]
@@ -47,7 +47,7 @@ function solve_b(s::AbstractString=test_string)::Int
 end
 
 # Example usage
-test_string = """
+test_string_2024_02 = """
 7 6 4 2 1
 1 2 7 8 9
 9 7 6 2 1
@@ -55,6 +55,3 @@ test_string = """
 8 6 4 4 1
 1 3 6 7 9
 """
-solve_b(utils.get_input_string(2024, 2))
-
-end

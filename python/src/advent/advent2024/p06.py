@@ -97,8 +97,8 @@ def solve_b(s: str) -> int:
     def get_next_obstacle(pos: tuple[int, int], d: tuple[int, int]) -> tuple[tuple[int, int], tuple[int, int]]:
         match d:
             case (-1, 0):
-                col = pos[1]
                 row = pos[0]
+                col = pos[1]
                 idx = bisect_left(xs[col], (row, col))
                 if idx > 0:
                     obstacle = xs[col][idx - 1]
@@ -111,8 +111,8 @@ def solve_b(s: str) -> int:
                     obstacle = ys[row][idx]
                     return (obstacle[0], obstacle[1] - 1), obstacle, (1, 0)
             case (1, 0):
-                col = pos[1]
                 row = pos[0]
+                col = pos[1]
                 idx = bisect_right(xs[col], (row, col))
                 if idx < len(xs[col]):
                     obstacle = xs[col][idx]
@@ -136,11 +136,9 @@ def solve_b(s: str) -> int:
         insort(ys[change_pos[0]], change_pos, key=lambda y: y[1])
         pos, obstacle, d = get_next_obstacle(start_pos, d)
         visited_obstacles = set()
-        while (pos, obstacle) not in visited_obstacles:
+        while pos and (pos, obstacle) not in visited_obstacles:
             visited_obstacles.add((pos, obstacle))
             pos, obstacle, d = get_next_obstacle(pos, d)
-            if pos is None:
-                break
         if (pos, obstacle) in visited_obstacles:
             total += 1
         obstacles.remove(change_pos)

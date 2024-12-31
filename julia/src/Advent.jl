@@ -3,48 +3,56 @@ export solve
 
 using DataFrames
 include("utils.jl")
-using .utils: get_input_string
 
-# Include all the problem modules
-files = readdir(@__DIR__)
-pattern = r"^p(\d{4})_(\d{2})\.jl"
-problem_files = filter(x -> match(pattern, x) !== nothing, files)
-foreach(include, problem_files)
-problem_modules = [Symbol("p$(year)_$(lpad(problem, 2, '0'))") for year in 2020:2024, problem in 1:25 if isdefined(Advent, Symbol("p$(year)_$(lpad(problem, 2, '0'))"))]
-
-function solve(problem_year::Int, problem_number::Int, part::Char, test::Bool=true)
-    padded_number = lpad(problem_number, 2, '0')
-    module_name = Symbol("p$(problem_year)_$(padded_number)")
-
-    if test
-        return @eval @timed $(module_name).solve($(part))
-    else
-        input = get_input_string(problem_year, problem_number)
-        return @eval @timed $(module_name).solve($(part), $(input))
-    end
+# Dispatch to the right function by using parametric types
+# https://discourse.julialang.org/t/how-to-dispatch-by-value/43266
+struct Question{Y,D,P}
+    s::AbstractString
 end
 
-function solve(problem_year::Int, problem_number::Int, test::Bool=true)
-    part1 = solve(problem_year, problem_number, 'a', test)
-    part2 = solve(problem_year, problem_number, 'b', test)
+# Include all the solution files
+solution_files = readdir(joinpath(@__DIR__, "solutions"), join=true)
+foreach(include, solution_files)
+
+function solve(year::Int, day::Int, part::Char, test::Bool=true)
+    if test
+        arg = Question{year,day,part}("")
+    else
+        input = get_input_string(year, day)
+        arg = Question{year,day,part}(input)
+    end
+    return @timed solve(arg)
+end
+
+function solve(year::Int, day::Int, test::Bool=true)
+    part1 = solve(year, day, 'a', test)
+    part2 = solve(year, day, 'b', test)
     println("Part 1: $(part1.value) in $(part1.time) seconds")
     println("Part 2: $(part2.value) in $(part2.time) seconds")
 end
 
-function solve(problem_year::Int, test::Bool=true)
-    df = DataFrame(year=Int[], problem=Int[], part=Char[], value=Int[], time=Float64[])
-    for file in problem_files
+function solve(year::Int, test::Bool=true)
+    df = DataFrame(year=Int[], day=Int[], part=Char[], value=Int[], time=Float64[])
+    pattern = r"p(\d{4})_(\d{2}).jl"
+    for file in solution_files
         m = match(pattern, file)
-        year = parse(Int, m.captures[1])
-        if year != problem_year
+        y = parse(Int, m.captures[1])
+        if year != y
             continue
         end
-        problem = parse(Int, m.captures[2])
-        part1 = solve(year, problem, 'a', test)
-        push!(df, (year, problem, 'a', part1.value, part1.time))
-        part2 = solve(year, problem, 'b', test)
-        push!(df, (year, problem, 'b', part2.value, part2.time))
+        day = parse(Int, m.captures[2])
+        part1 = solve(year, day, 'a', test)
+        push!(df, (year, day, 'a', part1.value, part1.time))
+        part2 = solve(year, day, 'b', test)
+        push!(df, (year, day, 'b', part2.value, part2.time))
     end
+    # # Sort the DataFrame by year, day, and part
+    # sort!(df, [:year, :day, :part])
     println(df)
+    println()
+    println("Total time: $(sum(df.time)) seconds")
 end
+
+solve(Question{2024,8,'a'}(""))
+
 end
