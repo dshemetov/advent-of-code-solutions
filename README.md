@@ -34,9 +34,25 @@ advent solve --help
 
 ## Julia Usage
 
-Soon.
+Open the Julia REPL in the `julia` directory and run the following commands.
+
+```julia
+# Install dependencies
+using Pkg
+Pkg.activate(".")
+Pkg.instantiate()
+
+# Run the test case for 2024 day 2 part b
+using Advent
+Advent.solve(2024, 2, 'b')
+
+# Get the actual solutions for every 2024 problem
+Advent.solve(2024, false)
+```
 
 ## Stats
+
+TODO.
 
 ## Background
 

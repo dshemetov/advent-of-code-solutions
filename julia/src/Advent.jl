@@ -53,6 +53,6 @@ function solve(year::Int, test::Bool=true)
     println("Total time: $(sum(df.time)) seconds")
 end
 
-solve(Question{2024,8,'a'}(""))
+# solve(Question{2024,9,'a'}(""))
 
 end
