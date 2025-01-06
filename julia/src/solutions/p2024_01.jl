@@ -7,7 +7,7 @@ function solve(input::Question{2024,1,'a'})
         s = input.s
     end
     s = strip(s, '\n')
-    m = string_to_matrix(s)
+    m = string_to_matrix(s, "")
     m[:, 1] = sort(m[:, 1])
     m[:, 2] = sort(m[:, 2])
     sum(abs.(m[:, 1] - m[:, 2]))
@@ -24,7 +24,7 @@ function solve(input::Question{2024,1,'b'})
         s = input.s
     end
     s = strip(s, '\n')
-    m = string_to_matrix(s)
+    m = string_to_matrix(s, "")
     c = Counter(m[:, 2])
     sum(abs.(x * get!(c, x, 0) for x in m[:, 1]))
 end

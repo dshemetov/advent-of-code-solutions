@@ -37,9 +37,11 @@ function get_input_string(year, day)
     s
 end
 
-function string_to_matrix(s::AbstractString, dlm="")
-    if dlm == ""
+function string_to_matrix(s::AbstractString, dlm=nothing)
+    if dlm == nothing
         return stack([parse.(Int, collect(x)) for x in split(s, "\n")], dims=1)
+    elseif dlm == ""
+        return stack([parse.(Int, split(x)) for x in split(s, "\n")], dims=1)
     else
         return stack([parse.(Int, split(x, dlm)) for x in split(s, "\n")], dims=1)
     end
