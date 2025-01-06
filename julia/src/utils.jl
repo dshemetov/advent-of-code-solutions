@@ -37,8 +37,13 @@ function get_input_string(year, day)
     s
 end
 
-function string_to_matrix(s::AbstractString)
-    stack([parse.(Int, split(x)) for x in split(s, "\n")], dims=1)
+function string_to_matrix(s::AbstractString, dlm="")
+    if dlm == ""
+        return stack([parse.(Int, collect(x)) for x in split(s, "\n")], dims=1)
+    else
+        return stack([parse.(Int, split(x, dlm)) for x in split(s, "\n")], dims=1)
+    end
+
 end
 
 function bisect_left(arr, x; key=(x -> x))

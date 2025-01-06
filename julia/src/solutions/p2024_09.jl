@@ -1,13 +1,15 @@
+import Base: length, <, -
+
 struct Range
     start::Int
     stop::Int
 end
 
-function Base.length(r::Range)
+function length(r::Range)
     return r.stop - r.start + 1
 end
 
-function Base.:-(r1::Range, r2::Range)
+function -(r1::Range, r2::Range)
     # new memory, old memory, new file
     if length(r1) > length(r2)
         return Range(r1.start + length(r2), r1.stop), Range(r1.start, r1.start + length(r2) - 1), nothing
@@ -18,7 +20,7 @@ function Base.:-(r1::Range, r2::Range)
     end
 end
 
-function Base.:<(r1::Range, r2::Range)
+function <(r1::Range, r2::Range)
     return r1.stop < r2.start
 end
 
