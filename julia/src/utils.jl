@@ -45,7 +45,10 @@ function string_to_matrix(s::AbstractString, dlm=nothing)
     else
         return stack([parse.(Int, split(x, dlm)) for x in split(s, "\n")], dims=1)
     end
+end
 
+function eachmatch_vector(s::AbstractString, regex::Regex)
+    return [m.match for m in eachmatch(regex, s)]
 end
 
 function bisect_left(arr, x; key=(x -> x))
@@ -90,5 +93,14 @@ function write_template(year, day)
     filename = joinpath(@__DIR__, "solutions/p$(year)_$(lpad(day, 2, '0')).jl")
     open(filename, "w") do f
         write(f, template)
+    end
+end
+
+function print_grid(grid)
+    for row in eachrow(grid)
+        for cell in row
+            print(cell)
+        end
+        println()
     end
 end
