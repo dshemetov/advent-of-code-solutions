@@ -12,15 +12,7 @@ function solve(input::Question{2024,15,'a'})
     path = replace(path, '\n' => "")
     m, n = size(grid)
 
-    cur = (0, 0)
-    for i in 1:m
-        for j in 1:n
-            if grid[i, j] == '@'
-                cur = (i, j)
-            end
-        end
-    end
-
+    cur = Tuple(findfirst(==('@'), grid))
     dirs = Dict('>' => (0, 1), '<' => (0, -1), '^' => (-1, 0), 'v' => (1, 0))
     for i in eachindex(path)
         dir = dirs[path[i]]
@@ -72,15 +64,7 @@ function solve(input::Question{2024,15,'b'})
     path = replace(path, '\n' => "")
     m, n = size(grid)
 
-    cur = (0, 0)
-    for i in 1:m
-        for j in 1:n
-            if grid[i, j] == '@'
-                cur = (i, j)
-            end
-        end
-    end
-
+    cur = Tuple(findfirst(==('@'), grid))
     dirs = Dict('>' => (0, 1), '<' => (0, -1), '^' => (-1, 0), 'v' => (1, 0))
     for i in eachindex(path)
         dir = dirs[path[i]]

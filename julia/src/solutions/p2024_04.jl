@@ -11,26 +11,16 @@ function solve(input::Question{2024,4,'a'})
     grid = stack([collect(row) for row in split(s, '\n')], dims=1)
     m, n = size(grid)
     total = 0
-    word = "XMAS"
+    word = ['X', 'M', 'A', 'S']
     directions = [(0, 1), (1, 0), (1, 1), (-1, 1)]
 
     for i in 1:m
         for j in 1:n
             for d in directions
                 for sgn in [1, -1]
-                    match = true
-                    for k in 1:4
-                        x, y = i + sgn * (k - 1) * d[1], j + sgn * (k - 1) * d[2]
-                        if x < 1 || y < 1 || x > m || y > n
-                            match = false
-                            break
-                        end
-                        if grid[x, y] != word[k]
-                            match = false
-                            break
-                        end
-                    end
-                    if match
+                    grid_word = [grid[i+sgn*(k-1)*d[1], j+sgn*(k-1)*d[2]] for k in 1:4
+                                 if 1 <= i + sgn * (k - 1) * d[1] <= m && 1 <= j + sgn * (k - 1) * d[2] <= n]
+                    if grid_word == word
                         total += 1
                     end
                 end

@@ -9,18 +9,7 @@ function solve(input::Question{2024,6,'a'})
     m, n = size(grid)
 
     # Find start position
-    pos = nothing
-    for i in 1:m
-        for j in 1:n
-            if grid[i, j] == '^'
-                pos = [i, j]
-                break
-            end
-        end
-        if pos !== nothing
-            break
-        end
-    end
+    pos = collect(Tuple(findfirst(==('^'), grid)))
     grid[pos[1], pos[2]] = '.'
 
     turn_map = Dict{Vector{Int},Vector{Int}}(
@@ -54,18 +43,7 @@ function solve(input::Question{2024,6,'b'})
     m, n = size(grid)
 
     # Find start position
-    start_pos = nothing
-    for i in 1:m
-        for j in 1:n
-            if grid[i, j] == '^'
-                start_pos = [i, j]
-                break
-            end
-        end
-        if start_pos !== nothing
-            break
-        end
-    end
+    start_pos = collect(Tuple(findfirst(==('^'), grid)))
     grid[start_pos[1], start_pos[2]] = '.'
 
     pos = start_pos
