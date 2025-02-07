@@ -1,14 +1,8 @@
-
-
 function solve(input::Question{2024,15,'a'})
-    if input.s == ""
-        s = test_string_2024_15_a
-    else
-        s = input.s
-    end
+    s = isempty(input.s) ? test_string_2024_15_a : input.s
     s = strip(s, '\n')
     grid, path = split(s, "\n\n")
-    grid = stack([collect(x) for x in split(grid, "\n")], dims=1)
+    grid = string_to_char_matrix(grid)
     path = replace(path, '\n' => "")
     m, n = size(grid)
 
@@ -16,18 +10,17 @@ function solve(input::Question{2024,15,'a'})
     dirs = Dict('>' => (0, 1), '<' => (0, -1), '^' => (-1, 0), 'v' => (1, 0))
     for i in eachindex(path)
         dir = dirs[path[i]]
-        blocked = false
         cur_ = cur
-        while !blocked
+        while true
             cur_ = cur_ .+ dir
             if grid[cur_[1], cur_[2]] == '#'
-                blocked = true
+                break
             end
             if grid[cur_[1], cur_[2]] == '.'
                 break
             end
         end
-        if blocked
+        if grid[cur_[1], cur_[2]] == '#'
             continue
         end
         xmin, xmax = min(cur[1], cur_[1]), max(cur[1], cur_[1])
@@ -39,28 +32,16 @@ function solve(input::Question{2024,15,'a'})
 end
 
 function score(grid)
-    score = 0
     m, n = size(grid)
-    for i in 1:m
-        for j in 1:n
-            if grid[i, j] == 'O' || grid[i, j] == '['
-                score += (i - 1) * 100 + (j - 1)
-            end
-        end
-    end
-    return score
+    return sum((i - 1) * 100 + (j - 1) for i in 1:m, j in 1:n if grid[i, j] in ['O', '['])
 end
 
 function solve(input::Question{2024,15,'b'})
-    if input.s == ""
-        s = test_string_2024_15_b
-    else
-        s = input.s
-    end
+    s = isempty(input.s) ? test_string_2024_15_b : input.s
     s = strip(s, '\n')
     s = replace(s, "#" => "##", "@" => "@.", "O" => "[]", "." => "..")
     grid, path = split(s, "\n\n")
-    grid = stack([collect(x) for x in split(grid, "\n")], dims=1)
+    grid = string_to_char_matrix(grid)
     path = replace(path, '\n' => "")
     m, n = size(grid)
 
@@ -90,7 +71,7 @@ function solve(input::Question{2024,15,'b'})
 end
 
 function bfs(grid, s, d)
-    explored = Set()
+    explored = Set{typeof(s)}()
     unexplored = Set([s])
     while !isempty(unexplored)
         cur = pop!(unexplored)
@@ -98,21 +79,17 @@ function bfs(grid, s, d)
         if grid[cur_[1], cur_[2]] == '#'
             return Set()
         end
-        if grid[cur_[1], cur_[2]] == '['
+        if grid[cur_[1], cur_[2]] in ['[', ']']
+            next_nodes = [cur_]
             if d[1] == 0 # moving right-left
-                union!(unexplored, Set([cur_]))
             else
-                union!(unexplored, Set([cur_, tuple(cur_ .+ [0, 1]...)]))
+                other_offset = grid[cur_[1], cur_[2]] == '[' ? (0, 1) : (0, -1)
+                cur_other = cur .+ other_offset
+                push!(next_nodes, cur_other)
             end
         end
-        if grid[cur_[1], cur_[2]] == ']'
-            if d[1] == 0 # moving right-left
-                union!(unexplored, Set([cur_]))
-            else
-                union!(unexplored, Set([cur_, tuple(cur_ .+ [0, -1]...)]))
-            end
-        end
-        union!(explored, Set([cur]))
+        union!(unexplored, Set(next_nodes))
+        push!(explored, cur)
     end
     return explored
 end

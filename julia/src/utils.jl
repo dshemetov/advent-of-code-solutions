@@ -47,6 +47,10 @@ function string_to_matrix(s::AbstractString, dlm=nothing)
     end
 end
 
+function string_to_char_matrix(s::AbstractString)
+    return stack([collect(x) for x in split(s, "\n")], dims=1)
+end
+
 function eachmatch_vector(s::AbstractString, regex::Regex)
     return [m.match for m in eachmatch(regex, s)]
 end
