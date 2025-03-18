@@ -71,7 +71,7 @@ function solve(input::Question{2024,15,'b'})
 end
 
 function bfs(grid, s, d)
-    explored = Set{typeof(s)}()
+    explored = Set()
     unexplored = Set([s])
     while !isempty(unexplored)
         cur = pop!(unexplored)
@@ -79,17 +79,21 @@ function bfs(grid, s, d)
         if grid[cur_[1], cur_[2]] == '#'
             return Set()
         end
-        if grid[cur_[1], cur_[2]] in ['[', ']']
-            next_nodes = [cur_]
+        if grid[cur_[1], cur_[2]] == '['
             if d[1] == 0 # moving right-left
+                union!(unexplored, Set([cur_]))
             else
-                other_offset = grid[cur_[1], cur_[2]] == '[' ? (0, 1) : (0, -1)
-                cur_other = cur .+ other_offset
-                push!(next_nodes, cur_other)
+                union!(unexplored, Set([cur_, tuple(cur_ .+ [0, 1]...)]))
             end
         end
-        union!(unexplored, Set(next_nodes))
-        push!(explored, cur)
+        if grid[cur_[1], cur_[2]] == ']'
+            if d[1] == 0 # moving right-left
+                union!(unexplored, Set([cur_]))
+            else
+                union!(unexplored, Set([cur_, tuple(cur_ .+ [0, -1]...)]))
+            end
+        end
+        union!(explored, Set([cur]))
     end
     return explored
 end
