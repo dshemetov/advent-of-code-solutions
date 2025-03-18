@@ -1,10 +1,3 @@
-mutable struct Robot
-    x::Int
-    y::Int
-    vx::Int
-    vy::Int
-end
-
 function solve(input::Question{2024,14,'a'})
     if input.s == ""
         s = test_string_2024_14
@@ -17,16 +10,14 @@ function solve(input::Question{2024,14,'a'})
     end
     s = strip(s, '\n')
     nums = [parse.(Int, eachmatch_vector(line, r"-?\d+")) for line in split(s, '\n')]
-    robots = [Robot(n...) for n in nums]
+    pos = hcat([[n[1], n[2]] for n in nums]...)'  # m x 2 matrix of positions
+    vel = hcat([[n[3], n[4]] for n in nums]...)'  # m x 2 matrix of velocities
 
     for _ in 1:100
-        for robot in robots
-            robot.x = mod(robot.x + robot.vx, width)
-            robot.y = mod(robot.y + robot.vy, height)
-        end
+        pos .= mod.(pos .+ vel, [width height])
     end
 
-    return get_score(robots, width, height)
+    return get_score(pos, width, height)
 end
 
 function solve(input::Question{2024,14,'b'})
@@ -41,49 +32,41 @@ function solve(input::Question{2024,14,'b'})
     end
     s = strip(s, '\n')
     nums = [parse.(Int, eachmatch_vector(line, r"-?\d+")) for line in split(s, '\n')]
-    robots = [Robot(n...) for n in nums]
+    pos = hcat([[n[1], n[2]] for n in nums]...)'  # m x 2 matrix of positions
+    vel = hcat([[n[3], n[4]] for n in nums]...)'  # m x 2 matrix of velocities
 
     smallest_score = Inf
     step_of_smallest_score = 0
     for i in 1:10000
-        for robot in robots
-            robot.x = mod(robot.x + robot.vx, width)
-            robot.y = mod(robot.y + robot.vy, height)
-        end
-        score = check_line(robots)
+        pos .= mod.(pos .+ vel, [width height])
+        score = check_line(pos)
         if score < smallest_score
             smallest_score = score
             step_of_smallest_score = i
-            println("New smallest score: $smallest_score at step $step_of_smallest_score")
+            # println("New smallest score: $smallest_score at step $step_of_smallest_score")
         end
     end
 
     return step_of_smallest_score
 end
 
-function check_line(robots)
+function check_line(pos)
     # Let's make a score function that counts how many robots are on a diagonal
     # line with a slope of 1
-    pairs = Set{Tuple{Int,Int}}((robot.x, robot.y) for robot in robots)
-    score = 0
-    for pair in pairs
-        if (pair[1] + 1, pair[2] + 1) in pairs || (pair[1] - 1, pair[2] - 1) in pairs
-            score += 1
-        end
-    end
-    return -score
+    pairs = Set(Tuple(row) for row in eachrow(pos))
+    return -sum([1 for pair in pairs if (pair .+ (1, 1) in pairs) || (pair .- (1, 1) in pairs)], init = 0)
 end
 
-function get_score(robots, width, height)
+function get_score(pos, width, height)
     quadrants = [0, 0, 0, 0]
-    for robot in robots
-        if robot.x < div(width, 2) && robot.y < div(height, 2)
+    for i in 1:size(pos, 1)
+        if pos[i, 1] < div(width, 2) && pos[i, 2] < div(height, 2)
             quadrants[1] += 1
-        elseif robot.x < div(width, 2) && robot.y > div(height, 2)
+        elseif pos[i, 1] < div(width, 2) && pos[i, 2] > div(height, 2)
             quadrants[2] += 1
-        elseif robot.x > div(width, 2) && robot.y < div(height, 2)
+        elseif pos[i, 1] > div(width, 2) && pos[i, 2] < div(height, 2)
             quadrants[3] += 1
-        elseif robot.x > div(width, 2) && robot.y > div(height, 2)
+        elseif pos[i, 1] > div(width, 2) && pos[i, 2] > div(height, 2)
             quadrants[4] += 1
         end
     end
@@ -91,12 +74,7 @@ function get_score(robots, width, height)
 end
 
 function view_robots(robots, width, height)
-    grid = Matrix{Char}(undef, height, width)
-    for y in 0:height-1
-        for x in 0:width-1
-            grid[y+1, x+1] = '.'
-        end
-    end
+    grid = fill('.', height, width)
 
     for robot in robots
         grid[robot.y+1, robot.x+1] = 'R'
@@ -119,3 +97,4 @@ p=7,3 v=-1,2
 p=2,4 v=2,-3
 p=9,5 v=-3,-3
 """
+
