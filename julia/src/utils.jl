@@ -2,26 +2,26 @@ using DotEnv
 using DuckDB
 using HTTP
 
-# create a new in-memory database
-con = DBInterface.connect(DuckDB.DB, "puzzles.db")
-
-# create a table
-DBInterface.execute(con, "CREATE TABLE IF NOT EXISTS inputs (year INTEGER, day INTEGER, input VARCHAR)")
+function db_make_table()
+    con = DBInterface.connect(DuckDB.DB, "puzzles.db")
+    DBInterface.execute(con, "CREATE TABLE IF NOT EXISTS inputs (year INTEGER, day INTEGER, input VARCHAR)")
+    DBInterface.close(con)
+end
 
 function db_cache_write(year::Int, day::Int, input::AbstractString)
-    new_con = DBInterface.connect(DuckDB.DB, "puzzles.db")
-    stmt = DBInterface.prepare(new_con, "INSERT INTO inputs VALUES(?, ?, ?)")
+    con = DBInterface.connect(DuckDB.DB, "puzzles.db")
+    stmt = DBInterface.prepare(con, "INSERT INTO inputs VALUES(?, ?, ?)")
     DBInterface.execute(stmt, (year, day, input))
-    DBInterface.close(new_con)
+    DBInterface.close(con)
 end
 
 function db_cache_read(year::Int, day::Int)
-    new_con = DBInterface.connect(DuckDB.DB, "puzzles.db")
-    results = DBInterface.execute(new_con, "SELECT input FROM inputs WHERE year = $year AND day = $day") |> collect
+    con = DBInterface.connect(DuckDB.DB, "puzzles.db")
+    results = DBInterface.execute(con, "SELECT input FROM inputs WHERE year = $year AND day = $day") |> collect
     if length(results) > 0
         return results[1][1]
     end
-    DBInterface.close(new_con)
+    DBInterface.close(con)
     return nothing
 end
 
@@ -38,7 +38,7 @@ function get_input_string(year, day)
 end
 
 function string_to_matrix(s::AbstractString, dlm=nothing)
-    if dlm == nothing
+    if dlm === nothing
         return stack([parse.(Int, collect(x)) for x in split(s, "\n")], dims=1)
     elseif dlm == ""
         return stack([parse.(Int, split(x)) for x in split(s, "\n")], dims=1)
@@ -102,9 +102,6 @@ end
 
 function print_grid(grid)
     for row in eachrow(grid)
-        for cell in row
-            print(cell)
-        end
-        println()
+        println(join(row))
     end
 end
