@@ -39,27 +39,29 @@ function solve(input::Question{2024,14,'b'})
     step_of_smallest_score = 0
     for i in 1:10000
         pos .= mod.(pos .+ vel, [width height])
-        score = check_line(pos)
+        score = check_cluster(pos)
         if score < smallest_score
             smallest_score = score
             step_of_smallest_score = i
             # println("New smallest score: $smallest_score at step $step_of_smallest_score")
+            # view_robots(pos, width, height)
         end
     end
 
     return step_of_smallest_score
 end
 
-function check_line(pos)
+# TODO: This can be less brutal
+function check_cluster(pos)
     # Let's make a score function that counts how many robots are on a diagonal
     # line with a slope of 1
     pairs = Set(Tuple(row) for row in eachrow(pos))
-    return -sum([1 for pair in pairs if (pair .+ (1, 1) in pairs) || (pair .- (1, 1) in pairs)], init = 0)
+    return -sum([1 for pair in pairs if (pair .+ (1, 1) in pairs) || (pair .- (1, 1) in pairs)], init=0)
 end
 
 function get_score(pos, width, height)
     quadrants = [0, 0, 0, 0]
-    for i in 1:size(pos, 1)
+    for i in axes(pos, 1)
         if pos[i, 1] < div(width, 2) && pos[i, 2] < div(height, 2)
             quadrants[1] += 1
         elseif pos[i, 1] < div(width, 2) && pos[i, 2] > div(height, 2)
@@ -73,11 +75,11 @@ function get_score(pos, width, height)
     return prod(quadrants)
 end
 
-function view_robots(robots, width, height)
+function view_robots(pos, width, height)
     grid = fill('.', height, width)
 
-    for robot in robots
-        grid[robot.y+1, robot.x+1] = 'R'
+    for i in axes(pos, 1)
+        grid[pos[i, 2]+1, pos[i, 1]+1] = 'R'
     end
 
     print_grid(grid)
